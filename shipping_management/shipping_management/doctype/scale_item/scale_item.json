@@ -1,0 +1,409 @@
+{
+ "actions": [],
+ "autoname": "autoincrement",
+ "creation": "2023-07-29 22:31:05.650899",
+ "default_view": "List",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "details",
+  "desc",
+  "column_break_scjid",
+  "status",
+  "section_break_glkhr",
+  "type",
+  "vehicle",
+  "driver",
+  "column_break_zlxzc",
+  "date",
+  "transporter",
+  "column_break_1pamq",
+  "company",
+  "bill_type",
+  "send_to_supplier",
+  "section_break_73rpu",
+  "item",
+  "column_break_oelmk",
+  "pot",
+  "get_pot",
+  "column_break_vcrf3",
+  "target_weight",
+  "section_break_0bb8g",
+  "from_addr",
+  "column_break_rt7w0",
+  "to_addr",
+  "weight_list",
+  "\u88c5\u8d27\u78c5\u5355_section",
+  "load_net_weight",
+  "load_gross_weight",
+  "load_blank_weight",
+  "column_break_cl0hp",
+  "load_image_upload",
+  "load_image",
+  "\u5378\u8f66\u78c5\u5355_section",
+  "offload_net_weight",
+  "offload_gross_weight",
+  "offload_blank_weight",
+  "column_break_qmy9k",
+  "offload_image_upload",
+  "offload_image",
+  "\u5173\u8054\u4fe1\u606f_tab",
+  "transport_fee",
+  "section_break_jo6pq",
+  "purchase_order",
+  "purchase_receipt",
+  "column_break_0pcxq",
+  "sales_order",
+  "sales_invoice",
+  "delivery_note",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "details",
+   "fieldtype": "Tab Break",
+   "label": "\u57fa\u672c\u4fe1\u606f"
+  },
+  {
+   "fieldname": "desc",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "label": "\u63cf\u8ff0",
+   "read_only_depends_on": "eval: !cur_frm.is_new()",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_scjid",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "ignore_user_permissions": 1,
+   "in_standard_filter": 1,
+   "label": "\u8f66\u8f86\u72b6\u6001",
+   "options": "0 \u65b0\u914d\n1 \u5df2\u914d\u7f50\n2 \u6b63\u5728\u88c5\u8d27\n3 \u5df2\u88c5\u8d27\n4 \u6b63\u5728\u5378\u8d27\n5 \u5df2\u5378\u8d27\n6 \u5df2\u5b8c\u6210\n9 \u5df2\u53d6\u6d88",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_glkhr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u7c7b\u522b",
+   "options": "Ship Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "vehicle",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u8f66\u53f7",
+   "options": "Vehicle",
+   "reqd": 1
+  },
+  {
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u53f8\u673a",
+   "options": "Driver"
+  },
+  {
+   "fieldname": "column_break_zlxzc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
+   "label": "\u8ba1\u5212\u65e5\u671f",
+   "reqd": 1
+  },
+  {
+   "fieldname": "transporter",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "\u627f\u8fd0\u5546",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_1pamq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "\u516c\u53f8",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "bill_type",
+   "fieldtype": "Link",
+   "label": " \u7ed3\u7b97\u7c7b\u578b",
+   "mandatory_depends_on": "eval: doc.type == 'OUT' || doc.type == 'DIRC'",
+   "options": "Scale Type"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "fieldname": "send_to_supplier",
+   "fieldtype": "Check",
+   "in_standard_filter": 1,
+   "label": "\u5df2\u62a5\u7ed9\u4f9b\u5e94\u5546"
+  },
+  {
+   "fieldname": "section_break_73rpu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u7269\u6599",
+   "options": "Item"
+  },
+  {
+   "fieldname": "column_break_oelmk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "pot",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u7f50",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "get_pot",
+   "fieldtype": "Button",
+   "label": "\u67e5\u770b\u5e93\u5b58"
+  },
+  {
+   "fieldname": "column_break_vcrf3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "target_weight",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "\u8ba1\u5212\u8fd0\u91cf",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_0bb8g",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "from_addr",
+   "fieldtype": "Small Text",
+   "label": "\u63d0\u8d27\u5730"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Scale Item",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_rt7w0",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_addr",
+   "fieldtype": "Small Text",
+   "label": "\u9001\u8d27\u5730"
+  },
+  {
+   "fieldname": "weight_list",
+   "fieldtype": "Tab Break",
+   "label": "\u78c5\u5355\u4fe1\u606f"
+  },
+  {
+   "fieldname": "\u88c5\u8d27\u78c5\u5355_section",
+   "fieldtype": "Section Break",
+   "label": "\u88c5\u8d27\u78c5\u5355"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "load_net_weight",
+   "fieldtype": "Float",
+   "label": "\u51c0\u91cd",
+   "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "load_gross_weight",
+   "fieldtype": "Float",
+   "label": "\u6bdb\u91cd",
+   "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "load_blank_weight",
+   "fieldtype": "Float",
+   "label": "\u7a7a\u91cd",
+   "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
+  },
+  {
+   "fieldname": "column_break_cl0hp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "load_image_upload",
+   "fieldtype": "Attach Image",
+   "label": "\u88c5\u8f66\u78c5\u5355\u4e0a\u4f20"
+  },
+  {
+   "fieldname": "load_image",
+   "fieldtype": "Image",
+   "label": "\u88c5\u8f66\u78c5\u5355",
+   "options": "load_image_upload"
+  },
+  {
+   "fieldname": "\u5378\u8f66\u78c5\u5355_section",
+   "fieldtype": "Section Break",
+   "label": "\u5378\u8f66\u78c5\u5355"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "offload_net_weight",
+   "fieldtype": "Float",
+   "label": "\u51c0\u91cd",
+   "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "offload_gross_weight",
+   "fieldtype": "Float",
+   "label": "\u6bdb\u91cd",
+   "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "offload_blank_weight",
+   "fieldtype": "Float",
+   "label": "\u7a7a\u91cd",
+   "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
+  },
+  {
+   "fieldname": "column_break_qmy9k",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "offload_image_upload",
+   "fieldtype": "Attach Image",
+   "label": "\u5378\u8f66\u78c5\u5355\u4e0a\u4f20"
+  },
+  {
+   "fieldname": "offload_image",
+   "fieldtype": "Image",
+   "label": "\u5378\u8f66\u78c5\u5355",
+   "options": "offload_image_upload"
+  },
+  {
+   "fieldname": "\u5173\u8054\u4fe1\u606f_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u5173\u8054\u4fe1\u606f"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "transport_fee",
+   "fieldtype": "Link",
+   "label": "\u8fd0\u8d39\u5355",
+   "options": "Transport Fee"
+  },
+  {
+   "fieldname": "section_break_jo6pq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": " \u91c7\u8d2d\u5355",
+   "options": "Purchase Order"
+  },
+  {
+   "fieldname": "purchase_receipt",
+   "fieldtype": "Data",
+   "label": "\u91c7\u8d2d\u5165\u5e93\u5355"
+  },
+  {
+   "fieldname": "column_break_0pcxq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "\u9500\u552e\u5355",
+   "options": "Sales Order"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "delivery_note",
+   "fieldtype": "Data",
+   "label": "\u9500\u552e\u51fa\u5e93\u5355"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "\u9500\u552e\u8d39\u7528\u6e05\u5355",
+   "options": "Sales Invoice"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2023-07-30 04:38:34.656018",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Scale Item",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "desc",
+ "track_changes": 1
+}

@@ -1,0 +1,154 @@
+{
+ "actions": [],
+ "autoname": "naming_series:",
+ "creation": "2023-07-29 23:01:02.904667",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "column_break_zturb",
+  "transporter",
+  "column_break_nhurg",
+  "naming_series",
+  "start_date",
+  "end_date",
+  "column_break_xzlu9",
+  "transaction_date",
+  "section_break_o2klm",
+  "price",
+  "column_break_ptebi",
+  "total_amount",
+  "section_break_vwa5k",
+  "\u83b7\u53d6\u5386\u53f2\u8fd0\u8f93\u660e\u7ec6",
+  "items",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u516c\u53f8",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_zturb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transporter",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u627f\u8fd0\u5546",
+   "options": "Supplier",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_nhurg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "TF-.YYYY.-.MM.-"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "\u5f00\u59cb\u65e5\u671f",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "\u7ed3\u675f\u65e5\u671f",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_xzlu9",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transaction_date",
+   "fieldtype": "Date",
+   "label": "\u65e5\u671f",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_o2klm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "\u5355\u4ef7",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_ptebi",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Float",
+   "label": "\u603b\u8ba1\u8fd0\u8d39"
+  },
+  {
+   "fieldname": "section_break_vwa5k",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "\u83b7\u53d6\u5386\u53f2\u8fd0\u8f93\u660e\u7ec6",
+   "fieldtype": "Button",
+   "label": "\u83b7\u53d6\u5386\u53f2\u8fd0\u8f93\u660e\u7ec6"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "\u660e\u7ec6",
+   "options": "Transport Fee Detail"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Transport Fee",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2023-07-29 23:01:02.904667",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Transport Fee",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
