@@ -203,7 +203,7 @@ class ScaleItem(Document):
 		pass
 
 	def before_update_after_submit(self):
-		frappe.msgprint("before_update_after_submit")
+		#frappe.msgprint("before_update_after_submit")
 		if self.type == 'IN':
 			self.calculate_weight()
 			self.change_status()
