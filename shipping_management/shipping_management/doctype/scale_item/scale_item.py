@@ -4,12 +4,14 @@
 import frappe
 from frappe.model.document import Document
 from frappe.model.mapper import get_mapped_doc
-from frappe.utils import cint, cstr, flt
+from frappe.utils import cint, cstr, flt, nowdate
 from erpnext.setup.doctype.item_group.item_group import get_item_group_defaults
 from erpnext.stock.doctype.item.item import get_item_defaults
 from frappe.contacts.doctype.address.address import get_company_address
 from frappe.model.utils import get_fetch_values
 from frappe import _, msgprint
+from erpnext.stock.utils import get_stock_balance
+
 
 class ScaleItem(Document):
 
@@ -97,6 +99,30 @@ class ScaleItem(Document):
 	def validate_pot(self):
 		item_code = self.item  # Replace with your actual item code
 		warehouse = self.pot  # Assuming the warehouse name is in a field named 'warehouse'
+
+
+		#set filters for get_all
+		filters = {
+			"item_code": item_code,
+			"warehouse": warehouse,
+			"company": self.company,
+			"priority": 1,
+			"disable": 0,
+		}
+
+		capacity_data = frappe.db.get_all(
+		"Putaway Rule",
+		fields=["item_code", "warehouse", "stock_capacity", "company"],
+		filters=filters,
+		)
+
+		if not capacity_data:
+			frappe.throw(f"没有找到对应的库位容量数据，请检查【罐】信息是否正确, 或者【入库规则->容量】中没有对应的数据")
+		else:
+			stock_capacity = capacity_data[0].stock_capacity
+
+		balance_qty = get_stock_balance(item_code, warehouse, nowdate()) or 0
+
 	
 		if warehouse:
 		
@@ -110,20 +136,16 @@ class ScaleItem(Document):
 			documents = frappe.db.sql(query, (self.pot,), as_dict=True)
 			total_target_qty = sum([doc.target_weight for doc in documents])
 	
-			actual_qty = frappe.db.get_value("Bin", {"item_code": item_code, "warehouse": warehouse}, "actual_qty")
-			warehouse_capacity =  frappe.db.get_value("Warehouse",{"name": warehouse},"capacity")
-
-			if actual_qty is not None:
-				if not self.is_new():
-					ori_doc=  self.get_doc_before_save()
-					ori_target_weight = ori_doc.target_weight
-					if (actual_qty + total_target_qty - ori_target_weight + self.target_weight) > warehouse_capacity:
-						frappe.throw(f'总入罐数量已经超过罐体容量： {warehouse_capacity}')
-				else:
-					if (actual_qty + total_target_qty + self.target_weight) > warehouse_capacity:
-						frappe.throw(f'总入罐数量已经超过罐体容量： {warehouse_capacity}')
+			if not self.is_new():
+				ori_doc=  self.get_doc_before_save()
+				ori_target_weight = ori_doc.target_weight
+				if (balance_qty + total_target_qty - ori_target_weight + self.target_weight) > stock_capacity:
+					plan_qty = total_target_qty - ori_target_weight + self.target_weight
+					frappe.throw(f'总入罐数量已经超过罐体容量： {stock_capacity},  当前库存： {balance_qty},  计划入库量： {plan_qty}' )
 			else:
-				frappe.msgprint('无相关库存信息，忽略罐容量检查')
+				if (balance_qty + total_target_qty + self.target_weight) > stock_capacity:
+					plan_qty = total_target_qty + self.target_weight
+					frappe.throw(f'总入罐数量已经超过罐体容量： {stock_capacity},  当前库存： {balance_qty},  计划入库量： {plan_qty}' )
 
 	def validate_status(self):
 		print("validate status")
@@ -139,7 +161,8 @@ class ScaleItem(Document):
 			self.change_status()  
 			self.check_weight()
 			self.validate_load()
-			self.validate_pot()
+			if self.pot:
+				self.validate_pot()
 			if self.purchase_order:
 				self.validate_qty_in()
 			else:
@@ -177,15 +200,16 @@ class ScaleItem(Document):
 			self.submit()
 	
 	def on_update_after_submit(self):
-		self.validate_pot()
-		print("von update alidate pot")
+		pass
 
 	def before_update_after_submit(self):
+		frappe.msgprint("before_update_after_submit")
 		if self.type == 'IN':
 			self.calculate_weight()
 			self.change_status()
 			self.check_weight()
-			self.validate_pot()
+			if self.pot:
+				self.validate_pot()
 			print("validate pot")
 			self.validate_status()
 		
