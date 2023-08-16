@@ -386,6 +386,7 @@ def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 
 	def	update_parent(source, target, source_parent):
 		target.scale_item = source_doc.name
+		target.set_warehouse = source_doc.pot
 
 	mapper = {
 		"Sales Order": {"doctype": "Delivery Note", 
