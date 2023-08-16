@@ -273,6 +273,7 @@ def make_purchase_receipt(source_name, target_doc=None):
 	def update_parent(obj, target,source_parent):
 		print(target)
 		target.scale_item = source_doc.name
+		target.set_warehouse = source_doc.pot
 		
 	def update_item(obj, target, source_parent):
 		print(source_doc)
