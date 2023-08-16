@@ -12,16 +12,28 @@
   "transporter",
   "column_break_nhurg",
   "naming_series",
+  "section_break_dbqwd",
   "start_date",
+  "column_break_dljqx",
   "end_date",
   "column_break_xzlu9",
   "transaction_date",
   "section_break_o2klm",
   "price",
   "column_break_ptebi",
+  "total_qty",
+  "column_break_bkiix",
   "total_amount",
   "section_break_vwa5k",
-  "\u83b7\u53d6\u5386\u53f2\u8fd0\u8f93\u660e\u7ec6",
+  "loss_price",
+  "column_break_3pkwp",
+  "loss_weight",
+  "column_break_dhqbr",
+  "loss_amount",
+  "section_break_i2f6c",
+  "total",
+  "section_break_ran1u",
+  "fetch_ship_order_items",
   "items",
   "amended_from"
  ],
@@ -95,18 +107,14 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "0",
    "fieldname": "total_amount",
-   "fieldtype": "Float",
+   "fieldtype": "Currency",
    "label": "\u603b\u8ba1\u8fd0\u8d39"
   },
   {
    "fieldname": "section_break_vwa5k",
    "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "\u83b7\u53d6\u5386\u53f2\u8fd0\u8f93\u660e\u7ec6",
-   "fieldtype": "Button",
-   "label": "\u83b7\u53d6\u5386\u53f2\u8fd0\u8f93\u660e\u7ec6"
   },
   {
    "fieldname": "items",
@@ -122,12 +130,71 @@
    "options": "Transport Fee",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "loss_price",
+   "fieldtype": "Currency",
+   "label": "\u4e8f\u79e4\u5355\u4ef7"
+  },
+  {
+   "fieldname": "column_break_3pkwp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "loss_weight",
+   "fieldtype": "Float",
+   "label": "\u4e8f\u79e4\u5428\u6570"
+  },
+  {
+   "fieldname": "column_break_dhqbr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "loss_amount",
+   "fieldtype": "Currency",
+   "label": "\u4e8f\u79e4\u603b\u91d1\u989d"
+  },
+  {
+   "fieldname": "section_break_i2f6c",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total",
+   "fieldtype": "Currency",
+   "label": "\u7ed3\u7b97\u91d1\u989d"
+  },
+  {
+   "fieldname": "section_break_ran1u",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_dljqx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_qty",
+   "fieldtype": "Float",
+   "label": "\u603b\u8ba1\u8fd0\u91cf"
+  },
+  {
+   "fieldname": "column_break_bkiix",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_dbqwd",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "fetch_ship_order_items",
+   "fieldtype": "Button",
+   "label": "\u83b7\u53d6\u5386\u53f2\u8fd0\u8f93\u660e\u7ec6"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-07-29 23:01:02.904667",
+ "modified": "2023-08-10 17:10:48.743693",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Transport Fee",

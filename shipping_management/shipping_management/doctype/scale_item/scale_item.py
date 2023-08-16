@@ -9,6 +9,7 @@ from erpnext.setup.doctype.item_group.item_group import get_item_group_defaults
 from erpnext.stock.doctype.item.item import get_item_defaults
 from frappe.contacts.doctype.address.address import get_company_address
 from frappe.model.utils import get_fetch_values
+from frappe import _, msgprint
 
 class ScaleItem(Document):
 
@@ -19,14 +20,12 @@ class ScaleItem(Document):
 			self.offload_net_weight = self.offload_gross_weight - self.offload_blank_weight
 
 	def check_weight(self):
-		if self.status == "3 已装货" and (self.load_gross_weight or self.load_blank_weight):
-			if self.status == "3 已装货":
-				if self.load_net_weight != (self.load_gross_weight - self.load_blank_weight):
-					frappe.throw("装货净重不等于毛重减空重，请检查磅单信息")
-		if self.status == "5 已卸货" and (self.offload_gross_weight or self.offload_blank_weight):
-			if self.status == "5 已卸货":  
-				if self.offload_net_weight != (self.offload_gross_weight - self.offload_blank_weight):
-					frappe.throw("卸货净重不等于毛重减空重，请检查磅单信息")
+		if self.status == "3 已装货" and (self.load_gross_weight and self.load_blank_weight):
+			if self.load_net_weight != (self.load_gross_weight - self.load_blank_weight):
+				frappe.throw("装货净重不等于毛重减空重，请检查磅单信息")
+		if self.status == "5 已卸货" and (self.offload_gross_weight and self.offload_blank_weight):
+			if self.offload_net_weight != (self.offload_gross_weight - self.offload_blank_weight):
+				frappe.throw("卸货净重不等于毛重减空重，请检查磅单信息")
 
 	def change_status(self):
 		print("change status")
@@ -87,10 +86,13 @@ class ScaleItem(Document):
 		if sales_invoice.items[0].qty  < total_qty:
 			frappe.throw(f"总配车吨数超过销售费用清单 {self.sales_invoice} 的总量")
 
-	#def validate_load(self):
+	def validate_load(self):
 	#	vehicle_doc = frappe.get_doc('Vehicle',self.vehicle)
 	#	if self.target_weight > vehicle_doc.load_capacity:
-	#    	frappe.throw(_(f"目标运输量超过核定载重量，请再次检查【目标运输量】"), frappe.CannotEditDocumentError)
+	#		frappe.throw(_(f"目标运输量超过核定载重量，请再次检查【目标运输量】"), frappe.CannotEditDocumentError)
+		if not self.target_weight:
+			frappe.throw(_(f"【计划运量】不能为0"))
+
 
 	def validate_pot(self):
 		item_code = self.item  # Replace with your actual item code
@@ -136,7 +138,7 @@ class ScaleItem(Document):
 			self.calculate_weight()
 			self.change_status()  
 			self.check_weight()
-			#validate_load(self)
+			self.validate_load()
 			self.validate_pot()
 			if self.purchase_order:
 				self.validate_qty_in()
@@ -149,6 +151,7 @@ class ScaleItem(Document):
 			self.calculate_weight()
 			self.change_status()
 			self.check_weight()
+			self.validate_load()
 			if self.sales_order:
 				self.validate_qty_out()
 
@@ -161,10 +164,10 @@ class ScaleItem(Document):
 			self.calculate_weight()
 			self.change_status()
 			self.check_weight()
+			self.validate_load()
 			if self.sales_order and self.purchase_order:
 				self.validate_qty_in()
 				self.validate_qty_out()
-
 			else:
 				frappe.throw('无销售订单或者采购订单信息')
 		#销售直送处理逻辑开始sales direct process logic end
@@ -393,3 +396,151 @@ def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 	target_doc.set_onload("ignore_price_list", True)
 
 	return target_doc
+
+@frappe.whitelist()
+def save_scale_weight():
+	try:
+		id = frappe.form_dict.get('id')
+		gross_weight = float(frappe.form_dict.get('gross_weight') if frappe.form_dict.get('gross_weight') !='' else 0)
+		blank_weight = float(frappe.form_dict.get('blank_weight') if frappe.form_dict.get('blank_weight') !='' else 0)
+		net_weight = float(frappe.form_dict.get('net_weight') if frappe.form_dict.get('net_weight')!='' else 0)
+		blank_dt = frappe.form_dict.get('blank_dt')
+		gross_dt = frappe.form_dict.get('gross_dt')
+		frappe.log_error("gross_dt",gross_dt)
+		doc=frappe.get_doc('Scale Item', id)
+	
+		if doc.type == 'IN':
+			if gross_weight:
+				doc.offload_gross_weight = gross_weight
+			if blank_weight:
+				doc.offload_blank_weight = blank_weight
+			if net_weight:
+				doc.offload_net_weight = net_weight
+			if gross_dt:
+				doc.offload_gross_dt = gross_dt
+			if blank_dt:
+				doc.offload_blank_dt = blank_dt	
+	
+			doc.save()
+	
+		elif doc.type == 'OUT':
+			if gross_weight != 0:
+				doc.load_gross_weight = gross_weight
+			if blank_weight != 0:
+				doc.load_blank_weight = blank_weight
+			if net_weight != 0:
+				doc.load_net_weight = net_weight
+			if gross_dt:
+				doc.load_gross_dt = gross_dt
+			if blank_dt:
+				doc.load_blank_dt = blank_dt	
+	
+			doc.save()
+	
+		elif type == 'TRAN':
+			frappe.log_error("TRAN process")
+	
+		elif type == 'DRIC':
+			frappe.log_error("TRAN process")
+	
+		frappe.response["message"] = {
+			"status": "success",
+			"ID":doc.name
+		}
+	
+	except Exception as e:
+		frappe.log_error('scale API update failed', str(e))
+		frappe.response["message"] = {
+			"status": "error",
+			"message": str(e)
+		}
+
+@frappe.whitelist()
+def get_scale_item():
+	try:
+	
+		parent_warehouse = frappe.form_dict.get('parent_warehouse')
+		checkall = frappe.form_dict.get('checkall')
+		warehouse_query = """
+			SELECT name FROM `tabWarehouse` WHERE parent_warehouse = %s
+		"""
+		warehouses = frappe.db.sql(warehouse_query, (parent_warehouse,), as_dict=True)
+		warehouse_names = [warehouse.name for warehouse in warehouses]
+		frappe.log_error("warehouse list" , warehouse_names)
+
+		scale_item_list = []
+		for warehouse_name in warehouse_names:
+			if  checkall == 'False':
+				scale_item_query = """
+					SELECT
+						si.desc,
+						si.pot,
+						si.date,
+						si.vehicle,
+						si.name as ID,
+						d.full_name as driver,
+						si.status,
+						si.target_weight,
+						si.type,
+						si.load_net_weight,
+						si.load_gross_weight,
+						si.load_blank_weight,
+						si.offload_net_weight,
+						si.offload_gross_weight,
+						si.offload_blank_weight,
+						si.load_blank_dt,
+						si.load_gross_dt,
+						si.offload_gross_dt,
+						si.offload_blank_dt,
+						d.pid as driver_id
+					FROM `tabScale Item` AS si
+					LEFT JOIN `tabDriver` AS d ON si.driver = d.name
+					WHERE
+						 ((si.type = "IN" and si.status NOT IN ("6 已完成", "9 已取消", "5 已卸货"))
+						 OR
+						 (si.type = "OUT" and si.status IN ("0 新配","1 已配罐")))
+						AND si.pot = %s
+				"""
+			else:
+				scale_item_query = """
+					SELECT
+						si.desc,
+						si.pot,
+						si.date,
+						si.vehicle,
+						si.name as ID,
+						d.full_name as driver,
+						si.status,
+						si.target_weight,
+						si.type,
+						si.load_net_weight,
+						si.load_gross_weight,
+						si.load_blank_weight,
+						si.offload_net_weight,
+						si.offload_gross_weight,
+						si.offload_blank_weight,
+						si.load_blank_dt,
+						si.load_gross_dt,
+						si.offload_gross_dt,
+						si.offload_blank_dt,
+						d.pid as driver_id
+					FROM `tabScale Item` AS si
+					LEFT JOIN `tabDriver` AS d ON si.driver = d.name
+					WHERE
+						 (si.status NOT IN ("6 已完成", "9 已取消"))
+						AND si.pot = %s
+				""" 
+			scale_item = frappe.db.sql(scale_item_query, (warehouse_name,), as_dict=True)
+			scale_item_list.extend(scale_item)
+
+		frappe.response["message"] = {
+			"status": "success",
+			"items": scale_item_list
+		}
+
+	except Exception as e:
+		frappe.log_error('details get failed', str(e))
+		frappe.response["message"] = {
+			"status": "error",
+			"message": str(e)
+		}

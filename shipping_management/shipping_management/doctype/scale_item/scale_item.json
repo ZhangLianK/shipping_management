@@ -332,9 +332,8 @@
   {
    "allow_on_submit": 1,
    "fieldname": "transport_fee",
-   "fieldtype": "Link",
-   "label": "\u8fd0\u8d39\u5355",
-   "options": "Transport Fee"
+   "fieldtype": "Data",
+   "label": "\u8fd0\u8d39\u5355"
   },
   {
    "fieldname": "section_break_jo6pq",
@@ -348,6 +347,7 @@
    "options": "Purchase Order"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "purchase_receipt",
    "fieldtype": "Data",
    "label": "\u91c7\u8d2d\u5165\u5e93\u5355"
@@ -380,7 +380,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-07-30 04:38:34.656018",
+ "modified": "2023-08-10 17:19:24.002472",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
