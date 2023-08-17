@@ -195,21 +195,52 @@ frappe.ui.form.on('Transport Fee', {
 	refresh(frm) {
 		if (frm.doc.docstatus == 1) {
 			frm.add_custom_button(__('Create Purchase Order'), function () {
-				let route_options = {
-					transport_fee: frm.doc.name,
-					supplier: frm.doc.transporter,
-					taxes_and_charges: '增值税进项（9%） - 鸿锟'
-				};
-				frappe.new_doc("Purchase Order", route_options, doc => {
-					doc.transaction_date = frappe.datetime.get_today();
-					doc.purchase_type = 'P02';
-					let tf_doc = frappe.get_doc('Transport Fee', doc.transport_fee);
-					doc.items[0].item_code = '运费';
-					doc.items[0].qty = tf_doc.total_qty;
-					doc.items[0].rate = tf_doc.price;
-					doc.items[0].schedule_date = frappe.datetime.get_today();
-					doc.items[0].uom = 'Tonne';
+
+				let d = new frappe.ui.Dialog({
+					title: '请输入税率模板',
+					fields: [
+						{
+							label: '税率模板',
+							fieldname: 'purchase_tax_template',
+							fieldtype: 'Link',
+							options: 'Purchase Taxes and Charges Template'
+						}
+					],
+					size: 'small', // small, large, extra-large 
+					primary_action_label: '提交',
+					primary_action(values) {
+						frappe.db.get_doc('Purchase Taxes and Charges Template', values.purchase_tax_template)
+							.then(tax_doc => {
+								if (!tax_doc) {
+									frappe.throw(__('税率模板不存在！'));
+								}
+								else {
+
+
+									let route_options = {
+										transport_fee: frm.doc.name,
+										supplier: frm.doc.transporter,
+										taxes_and_charges: tax_doc.name,
+									};
+									frappe.new_doc("Purchase Order", route_options, doc => {
+										doc.transaction_date = frappe.datetime.get_today();
+										doc.purchase_type = 'P02';
+										frappe.db.get_doc('Transport Fee', doc.transport_fee)
+											.then(tf_doc => {
+												;
+												doc.items[0].item_code = '运费';
+												doc.items[0].qty = tf_doc.total_qty;
+												doc.items[0].rate = tf_doc.total / tf_doc.total_qty;
+												doc.items[0].schedule_date = frappe.datetime.get_today();
+												doc.items[0].uom = 'Tonne'
+											});
+										//get default purchase tax template
+									});
+								}
+							});
+					}
 				});
+				d.show();
 			});
 		}
 	}
