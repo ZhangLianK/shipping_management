@@ -229,6 +229,8 @@ frappe.ui.form.on('Transport Fee', {
 											.then(tf_doc => {
 												;
 												doc.items[0].item_code = '运费';
+												doc.items[0].item_name = '运费';
+												doc.items[0].description = '运费';
 												doc.items[0].qty = tf_doc.total_qty;
 												doc.items[0].rate = tf_doc.total / tf_doc.total_qty;
 												doc.items[0].schedule_date = frappe.datetime.get_today();
