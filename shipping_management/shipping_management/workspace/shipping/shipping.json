@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"OGVjfP75Ac\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Shipping</span>\",\"col\":12}},{\"id\":\"LPI-6dKJCC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Scale Item\",\"col\":3}},{\"id\":\"slWnqAPc9w\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u7269\u6d41\u8ba1\u91cf\u5355\u660e\u7ec6\u62a5\u544a\",\"col\":3}},{\"id\":\"VNW33MrpVV\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"tj04nqaBMo\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u65b0\u914d\u8f66\",\"col\":4}},{\"id\":\"pnCFQsR-xo\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5df2\u88c5\u8f66\",\"col\":4}},{\"id\":\"5He0PpmiLp\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5df2\u5378\u8f66\",\"col\":4}},{\"id\":\"7tf5FRmGKD\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5165\u5e93\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}},{\"id\":\"FognSN8k_s\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u51fa\u5e93\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}},{\"id\":\"a5ff4rm9Ji\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5916\u5356\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}}]",
+ "content": "[{\"id\":\"OGVjfP75Ac\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Shipping</span>\",\"col\":12}},{\"id\":\"LPI-6dKJCC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Scale Item\",\"col\":3}},{\"id\":\"slWnqAPc9w\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u7269\u6d41\u8ba1\u91cf\u5355\u660e\u7ec6\u62a5\u544a\",\"col\":3}},{\"id\":\"bir3onWbvJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u62a5\u53f7\u5355\",\"col\":3}},{\"id\":\"VNW33MrpVV\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"tj04nqaBMo\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u65b0\u914d\u8f66\",\"col\":4}},{\"id\":\"pnCFQsR-xo\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5df2\u88c5\u8f66\",\"col\":4}},{\"id\":\"5He0PpmiLp\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5df2\u5378\u8f66\",\"col\":4}},{\"id\":\"7tf5FRmGKD\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5165\u5e93\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}},{\"id\":\"FognSN8k_s\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u51fa\u5e93\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}},{\"id\":\"a5ff4rm9Ji\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5916\u5356\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}}]",
  "creation": "2023-07-29 21:48:53.064421",
  "docstatus": 0,
  "doctype": "Workspace",
@@ -11,7 +11,7 @@
  "is_hidden": 0,
  "label": "Shipping",
  "links": [],
- "modified": "2023-08-13 22:31:48.551067",
+ "modified": "2023-08-20 01:56:02.230687",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping",
@@ -60,6 +60,13 @@
    "doc_view": "List",
    "label": "Scale Item",
    "link_to": "Scale Item",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "\u62a5\u53f7\u5355",
+   "link_to": "Scale List",
    "type": "DocType"
   }
  ],

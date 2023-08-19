@@ -1,0 +1,75 @@
+{
+ "actions": [],
+ "autoname": "field:scale_item",
+ "creation": "2023-08-19 23:28:25.391757",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "scale_item",
+  "vehicle",
+  "driver",
+  "driver_id",
+  "phone",
+  "qty"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "scale_item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u8ba1\u91cf\u5355\u53f7",
+   "options": "Scale Item",
+   "unique": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "vehicle",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u8f66\u53f7"
+  },
+  {
+   "columns": 1,
+   "fieldname": "driver",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u53f8\u673a"
+  },
+  {
+   "columns": 2,
+   "fieldname": "driver_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u8eab\u4efd\u8bc1"
+  },
+  {
+   "columns": 1,
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u624b\u673a"
+  },
+  {
+   "columns": 1,
+   "fieldname": "qty",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u6570\u91cf"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-08-19 23:43:32.153632",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Scale List Items",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

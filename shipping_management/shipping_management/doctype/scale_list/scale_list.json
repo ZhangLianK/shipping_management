@@ -1,0 +1,133 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2023-08-19 23:30:21.841011",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "purchase_order",
+  "card_number",
+  "column_break_hmwow",
+  "item",
+  "naming_series",
+  "section_break_hvjcs",
+  "supplier_address",
+  "column_break_ias1h",
+  "address",
+  "section_break_0oyex",
+  "get_scale_list_item",
+  "items",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "card_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u63d0\u8d27\u5361\u53f7"
+  },
+  {
+   "columns": 1,
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7269\u6599",
+   "options": "Item"
+  },
+  {
+   "columns": 2,
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u91c7\u8d2d\u5355\u53f7",
+   "options": "Purchase Order"
+  },
+  {
+   "columns": 2,
+   "fieldname": "supplier_address",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u4f9b\u8d27\u5355\u4f4d"
+  },
+  {
+   "columns": 2,
+   "fieldname": "address",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u63d0\u8d27\u5355\u4f4d"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "\u8f66\u8f86\u660e\u7ec6",
+   "options": "Scale List Items"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Scale List",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_hmwow",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "SL-.YYYY.MM.-"
+  },
+  {
+   "fieldname": "section_break_hvjcs",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_ias1h",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_0oyex",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "get_scale_list_item",
+   "fieldtype": "Button",
+   "label": "\u83b7\u53d6\u672a\u62a5\u53f7\u7269\u6d41\u5355"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-08-20 02:08:57.260608",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Scale List",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}
