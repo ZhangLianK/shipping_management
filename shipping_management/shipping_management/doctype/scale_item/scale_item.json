@@ -81,9 +81,11 @@
   },
   {
    "allow_on_submit": 1,
+   "columns": 1,
    "fieldname": "status",
    "fieldtype": "Select",
    "ignore_user_permissions": 1,
+   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "\u8f66\u8f86\u72b6\u6001",
    "options": "0 \u65b0\u914d\n1 \u5df2\u914d\u7f50\n2 \u6b63\u5728\u88c5\u8d27\n3 \u5df2\u88c5\u8d27\n4 \u6b63\u5728\u5378\u8d27\n5 \u5df2\u5378\u8d27\n6 \u5df2\u5b8c\u6210\n9 \u5df2\u53d6\u6d88",
@@ -94,6 +96,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "columns": 1,
    "fieldname": "type",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -103,6 +106,7 @@
    "reqd": 1
   },
   {
+   "columns": 1,
    "fieldname": "vehicle",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -112,6 +116,7 @@
    "reqd": 1
   },
   {
+   "columns": 1,
    "fieldname": "driver",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -164,7 +169,7 @@
    "default": "0",
    "fieldname": "send_to_supplier",
    "fieldtype": "Check",
-   "in_standard_filter": 1,
+   "hidden": 1,
    "label": "\u5df2\u62a5\u7ed9\u4f9b\u5e94\u5546"
   },
   {
@@ -172,6 +177,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "columns": 1,
    "fieldname": "item",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -202,6 +208,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "columns": 1,
    "fieldname": "target_weight",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -380,7 +387,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-08-10 17:19:24.002472",
+ "modified": "2023-08-20 12:05:50.619704",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
@@ -400,7 +407,6 @@
    "write": 1
   }
  ],
- "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
