@@ -136,16 +136,16 @@ class ScaleItem(Document):
 			documents = frappe.db.sql(query, (self.pot,), as_dict=True)
 			total_target_qty = sum([doc.target_weight for doc in documents])
 	
-			if not self.is_new():
-				ori_doc=  self.get_doc_before_save()
-				ori_target_weight = ori_doc.target_weight
-				if (balance_qty + total_target_qty - ori_target_weight + self.target_weight) > stock_capacity:
-					plan_qty = total_target_qty - ori_target_weight + self.target_weight
-					frappe.throw(f'总入罐数量已经超过罐体容量： {stock_capacity},  当前库存： {balance_qty},  计划入库量： {plan_qty}' )
-			else:
-				if (balance_qty + total_target_qty + self.target_weight) > stock_capacity:
-					plan_qty = total_target_qty + self.target_weight
-					frappe.throw(f'总入罐数量已经超过罐体容量： {stock_capacity},  当前库存： {balance_qty},  计划入库量： {plan_qty}' )
+			#if not self.is_new():
+			#	ori_doc=  self.get_doc_before_save()
+			#	ori_target_weight = ori_doc.target_weight
+			#	if (balance_qty + total_target_qty - ori_target_weight + self.target_weight) > stock_capacity:
+			#		plan_qty = total_target_qty - ori_target_weight + self.target_weight
+			#		frappe.throw(f'总入罐数量已经超过罐体容量： {stock_capacity},  当前库存： {balance_qty},  计划入库量： {plan_qty}' )
+			#else:
+			if (balance_qty + total_target_qty + self.target_weight) > stock_capacity:
+				plan_qty = total_target_qty + self.target_weight
+				frappe.throw(f'总入罐数量已经超过罐体容量： {stock_capacity},  当前库存： {balance_qty},  相关物流单计划入库总量： {plan_qty}' )
 
 	def validate_status(self):
 		print("validate status")
@@ -483,94 +483,75 @@ def save_scale_weight():
 
 @frappe.whitelist()
 def get_scale_item():
-	try:
-	
-		parent_warehouse = frappe.form_dict.get('parent_warehouse')
-		checkall = frappe.form_dict.get('checkall')
-		warehouse_query = """
-			SELECT name FROM `tabWarehouse` WHERE parent_warehouse = %s
-		"""
-		warehouses = frappe.db.sql(warehouse_query, (parent_warehouse,), as_dict=True)
-		warehouse_names = [warehouse.name for warehouse in warehouses]
-		frappe.log_error("warehouse list" , warehouse_names)
+    try:
+        # Extract parameters from form_dict
+        parent_warehouse = frappe.form_dict.get('parent_warehouse')
+        checkall = frappe.form_dict.get('checkall')
+        vehicle = frappe.form_dict.get('vehicle')
+        
+        # Fetch warehouse names based on parent_warehouse
+        warehouse_query = "SELECT name FROM `tabWarehouse` WHERE parent_warehouse = %s"
+        warehouses = frappe.db.sql(warehouse_query, (parent_warehouse,), as_dict=True)
+        warehouse_names = [f"'{warehouse.name}'" for warehouse in warehouses]  # Wrap names in quotes
+        
+        frappe.log_error("warehouse list", warehouse_names)
 
-		scale_item_list = []
-		for warehouse_name in warehouse_names:
-			if  checkall == 'False':
-				scale_item_query = """
-					SELECT
-						si.desc,
-						si.pot,
-						i.item_name as item,
-						si.date,
-						si.vehicle,
-						si.name as ID,
-						d.full_name as driver,
-						si.status,
-						si.target_weight,
-						si.type,
-						si.load_net_weight,
-						si.load_gross_weight,
-						si.load_blank_weight,
-						si.offload_net_weight,
-						si.offload_gross_weight,
-						si.offload_blank_weight,
-						si.load_blank_dt,
-						si.load_gross_dt,
-						si.offload_gross_dt,
-						si.offload_blank_dt,
-						d.pid as driver_id
-					FROM `tabScale Item` AS si
-					LEFT JOIN `tabDriver` AS d ON si.driver = d.name
-					LEFT OUTER JOIN `tabItem` AS i ON si.item = i.name
-					WHERE
-						 ((si.type = "IN" and si.status NOT IN ("6 已完成", "9 已取消", "5 已卸货"))
-						 OR
-						 (si.type = "OUT" and si.status IN ("0 新配","1 已配罐")))
-						AND si.pot = %s
-				"""
-			else:
-				scale_item_query = """
-					SELECT
-						si.desc,
-						si.pot,
-						i.item_name as item,
-						si.date,
-						si.vehicle,
-						si.name as ID,
-						d.full_name as driver,
-						si.status,
-						si.target_weight,
-						si.type,
-						si.load_net_weight,
-						si.load_gross_weight,
-						si.load_blank_weight,
-						si.offload_net_weight,
-						si.offload_gross_weight,
-						si.offload_blank_weight,
-						si.load_blank_dt,
-						si.load_gross_dt,
-						si.offload_gross_dt,
-						si.offload_blank_dt,
-						d.pid as driver_id
-					FROM `tabScale Item` AS si
-					LEFT JOIN `tabDriver` AS d ON si.driver = d.name
-					LEFT OUTER JOIN `tabItem` AS i ON si.item = i.name
-					WHERE
-						 (si.status NOT IN ("6 已完成", "9 已取消"))
-						AND si.pot = %s
-				""" 
-			scale_item = frappe.db.sql(scale_item_query, (warehouse_name,), as_dict=True)
-			scale_item_list.extend(scale_item)
+        # Construct the WHERE clause based on checkall, warehouse_names, and vehicle
+        status_conditions = ""
+        if checkall == 'False':
+            status_conditions = '((si.type = "IN" and si.status NOT IN ("6 已完成", "9 已取消", "5 已卸货")) OR (si.type = "OUT" and si.status IN ("0 新配","1 已配罐")))'
+        else:
+            status_conditions = '(si.type IN ("IN", "OUT") and si.status NOT IN ("6 已完成", "9 已取消"))'
+        
+        # Embed the warehouse names directly into the warehouse_conditions string
+        warehouse_conditions = f"si.pot IN ({', '.join(warehouse_names)})"
+        
+        # Add vehicle condition if it exists in form_dict
+        vehicle_condition = f"AND si.vehicle = '{vehicle}'" if vehicle else ""
+        
+        combined_filter = f"{status_conditions} AND {warehouse_conditions} {vehicle_condition}"
+        
+        # SQL query to fetch scale items based on the combined filter
+        scale_item_query = f"""
+            SELECT
+                si.desc,
+                si.pot,
+                i.item_name as item,
+                si.date,
+                si.vehicle,
+                si.name as ID,
+                d.full_name as driver,
+                si.status,
+                si.target_weight,
+                si.type,
+                si.load_net_weight,
+                si.load_gross_weight,
+                si.load_blank_weight,
+                si.offload_net_weight,
+                si.offload_gross_weight,
+                si.offload_blank_weight,
+                si.load_blank_dt,
+                si.load_gross_dt,
+                si.offload_gross_dt,
+                si.offload_blank_dt,
+                d.pid as driver_id
+            FROM `tabScale Item` AS si
+            LEFT JOIN `tabDriver` AS d ON si.driver = d.name
+            LEFT OUTER JOIN `tabItem` AS i ON si.item = i.name
+            WHERE {combined_filter}
+        """ 
+        
+        scale_item = frappe.db.sql(scale_item_query, as_dict=True)
 
-		frappe.response["message"] = {
-			"status": "success",
-			"items": scale_item_list
-		}
+        # Return results
+        frappe.response["message"] = {
+            "status": "success",
+            "items": scale_item
+        }
 
-	except Exception as e:
-		frappe.log_error('details get failed', str(e))
-		frappe.response["message"] = {
-			"status": "error",
-			"message": str(e)
-		}
+    except Exception as e:
+        frappe.log_error('details get failed', str(e))
+        frappe.response["message"] = {
+            "status": "error",
+            "message": str(e)
+        }
