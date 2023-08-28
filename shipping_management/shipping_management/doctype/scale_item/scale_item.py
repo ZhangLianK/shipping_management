@@ -501,6 +501,7 @@ def get_scale_item():
 					SELECT
 						si.desc,
 						si.pot,
+						i.item_name as item,
 						si.date,
 						si.vehicle,
 						si.name as ID,
@@ -521,6 +522,7 @@ def get_scale_item():
 						d.pid as driver_id
 					FROM `tabScale Item` AS si
 					LEFT JOIN `tabDriver` AS d ON si.driver = d.name
+					LEFT OUTER JOIN `tabItem` AS i ON si.item = i.name
 					WHERE
 						 ((si.type = "IN" and si.status NOT IN ("6 已完成", "9 已取消", "5 已卸货"))
 						 OR
@@ -532,6 +534,7 @@ def get_scale_item():
 					SELECT
 						si.desc,
 						si.pot,
+						i.item_name as item,
 						si.date,
 						si.vehicle,
 						si.name as ID,
@@ -552,6 +555,7 @@ def get_scale_item():
 						d.pid as driver_id
 					FROM `tabScale Item` AS si
 					LEFT JOIN `tabDriver` AS d ON si.driver = d.name
+					LEFT OUTER JOIN `tabItem` AS i ON si.item = i.name
 					WHERE
 						 (si.status NOT IN ("6 已完成", "9 已取消"))
 						AND si.pot = %s
