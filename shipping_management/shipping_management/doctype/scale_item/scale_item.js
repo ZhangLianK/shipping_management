@@ -8,6 +8,12 @@ frappe.ui.form.on('Scale Item', {
         if (frm.is_new()) {
             frm.set_value('status', '0 新配');
         }
+        // remove purchsae receipt and delivery note and transport fee field value when doc is new
+        if (frm.is_new()) {
+            frm.set_value('purchase_receipt', '');
+            frm.set_value('delivery_note', '');
+            frm.set_value('transport_fee', '');
+        }
 
 
         // set filter for pot field selection
