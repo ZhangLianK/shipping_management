@@ -4,6 +4,12 @@
 frappe.ui.form.on('Scale Item', {
 
     refresh: function (frm) {
+        //set status field to 0 when doc is new
+        if (frm.is_new()) {
+            frm.set_value('status', '0 新配');
+        }
+
+
         // set filter for pot field selection
         frm.set_query('pot', function () {
             return {
