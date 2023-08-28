@@ -23,10 +23,10 @@ class ScaleItem(Document):
 
 	def check_weight(self):
 		if self.status == "3 已装货" and (self.load_gross_weight and self.load_blank_weight):
-			if self.load_net_weight != (self.load_gross_weight - self.load_blank_weight):
+			if flt(self.load_net_weight) != flt(self.load_gross_weight) - flt(self.load_blank_weight):
 				frappe.throw("装货净重不等于毛重减空重，请检查磅单信息")
 		if self.status == "5 已卸货" and (self.offload_gross_weight and self.offload_blank_weight):
-			if self.offload_net_weight != (self.offload_gross_weight - self.offload_blank_weight):
+			if flt(self.offload_net_weight) != flt(self.offload_gross_weight) - flt(self.offload_blank_weight):
 				frappe.throw("卸货净重不等于毛重减空重，请检查磅单信息")
 
 	def change_status(self):
@@ -499,7 +499,7 @@ def get_scale_item():
         # Construct the WHERE clause based on checkall, warehouse_names, and vehicle
         status_conditions = ""
         if checkall == 'False':
-            status_conditions = '((si.type = "IN" and si.status NOT IN ("6 已完成", "9 已取消", "5 已卸货")) OR (si.type = "OUT" and si.status IN ("0 新配","1 已配罐")))'
+            status_conditions = '((si.type = "IN" and si.status NOT IN ("6 已完成", "9 已取消", "5 已卸货")) OR (si.type = "OUT" and si.status IN ("0 新配","1 已配罐","2 正在装货")))'
         else:
             status_conditions = '(si.type IN ("IN", "OUT") and si.status NOT IN ("6 已完成", "9 已取消"))'
         

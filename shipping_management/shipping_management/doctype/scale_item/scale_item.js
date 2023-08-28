@@ -13,6 +13,16 @@ frappe.ui.form.on('Scale Item', {
             frm.set_value('purchase_receipt', '');
             frm.set_value('delivery_note', '');
             frm.set_value('transport_fee', '');
+            frm.set_value('load_net_weight', '');
+            frm.set_value('offload_net_weight', '');
+            frm.set_value('load_gross_weight', '');
+            frm.set_value('offload_gross_weight', '');
+            frm.set_value('load_blank_weight', '');
+            frm.set_value('offload_blank_weight', '');
+            frm.set_value('load_gross_dt', '');
+            frm.set_value('offload_gross_dt', '');
+            frm.set_value('load_blank_dt', '');
+            frm.set_value('offload_blank_dt', '');
         }
 
 
