@@ -37,15 +37,23 @@
   "weight_list",
   "\u88c5\u8d27\u78c5\u5355_section",
   "load_net_weight",
+  "section_break_sovad",
   "load_gross_weight",
   "load_blank_weight",
   "column_break_cl0hp",
+  "load_gross_dt",
+  "load_blank_dt",
+  "column_break_ltsmb",
   "load_image_upload",
   "load_image",
   "\u5378\u8f66\u78c5\u5355_section",
   "offload_net_weight",
+  "section_break_m2czl",
   "offload_gross_weight",
   "offload_blank_weight",
+  "column_break_wjsze",
+  "offload_gross_dt",
+  "offload_blank_dt",
   "column_break_qmy9k",
   "offload_image_upload",
   "offload_image",
@@ -382,12 +390,56 @@
    "in_standard_filter": 1,
    "label": "\u9500\u552e\u8d39\u7528\u6e05\u5355",
    "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "section_break_sovad",
+   "fieldtype": "Section Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "load_gross_dt",
+   "fieldtype": "Datetime",
+   "label": "\u6bdb\u91cd\u65f6\u95f4",
+   "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "load_blank_dt",
+   "fieldtype": "Datetime",
+   "label": "\u7a7a\u91cd\u65f6\u95f4",
+   "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
+  },
+  {
+   "fieldname": "column_break_ltsmb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_m2czl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_wjsze",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "offload_gross_dt",
+   "fieldtype": "Datetime",
+   "label": "\u6bdb\u91cd\u65f6\u95f4",
+   "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "offload_blank_dt",
+   "fieldtype": "Datetime",
+   "label": "\u7a7a\u91cd\u65f6\u95f4",
+   "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-08-20 12:05:50.619704",
+ "modified": "2023-08-28 14:33:10.304431",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
