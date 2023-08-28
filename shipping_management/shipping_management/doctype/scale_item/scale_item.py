@@ -11,7 +11,7 @@ from frappe.contacts.doctype.address.address import get_company_address
 from frappe.model.utils import get_fetch_values
 from frappe import _, msgprint
 from erpnext.stock.utils import get_stock_balance
-
+import math
 
 class ScaleItem(Document):
 
@@ -23,10 +23,10 @@ class ScaleItem(Document):
 
 	def check_weight(self):
 		if self.status == "3 已装货" and (self.load_gross_weight and self.load_blank_weight):
-			if flt(self.load_net_weight) != flt(self.load_gross_weight) - flt(self.load_blank_weight):
+			if not math.isclose(flt(self.load_net_weight), flt(self.load_gross_weight) - flt(self.load_blank_weight)):
 				frappe.throw("装货净重不等于毛重减空重，请检查磅单信息")
 		if self.status == "5 已卸货" and (self.offload_gross_weight and self.offload_blank_weight):
-			if flt(self.offload_net_weight) != flt(self.offload_gross_weight) - flt(self.offload_blank_weight):
+			if not math.isclose(flt(self.offload_net_weight) , flt(self.offload_gross_weight) - flt(self.offload_blank_weight)):
 				frappe.throw("卸货净重不等于毛重减空重，请检查磅单信息")
 
 	def change_status(self):
