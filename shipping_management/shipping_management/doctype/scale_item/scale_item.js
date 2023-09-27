@@ -4,6 +4,13 @@
 frappe.ui.form.on('Scale Item', {
 
     refresh: function (frm) {
+        //set the pot to company's default transit warehouse if the type is DIRC
+        if (frm.doc.type == 'DIRC' && frm.doc.company) {
+            frappe.db.get_value('Company', frm.doc.company, 'default_transit_warehouse', function (r) {
+                frm.set_value('pot', r.default_transit_warehouse);
+            });
+        }
+
         //set status field to 0 when doc is new
         if (frm.is_new()) {
             frm.set_value('status', '0 新配');

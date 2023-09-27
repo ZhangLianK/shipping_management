@@ -242,8 +242,12 @@ class ScaleItem(Document):
 			sales_invoice.save()
 	
 	def on_cancel(self):
-		if self.status[0] >= '3' and frappe.session.user != 'Administrator':
-			frappe.throw(("当前状态无法取消！"), frappe.ValidationError)
+		#get all users that have role of "Scale Manager"
+		scale_manager = frappe.get_all("Has Role", filters={'role': 'Scale Manager Dummy'}, fields=['parent'])
+		scale_manager_list = [item.parent for item in scale_manager]
+
+		if self.status[0] >= '3' and frappe.session.user != 'Administrator' and frappe.session.user not in scale_manager_list:
+			frappe.throw(("当前状态无法取消！如果需要取消，请联系部门负责人！"), frappe.ValidationError)
 		else:
 			if self.purchase_order:
 				purchase_order = frappe.get_doc("Purchase Order", self.purchase_order)
@@ -339,6 +343,8 @@ def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 
 	source_doc = frappe.get_doc("Scale Item", source_name)
 	source = source_doc.sales_order
+	source_si = source_doc.sales_invoice
+	source_si_doc = frappe.get_doc("Sales Invoice", source_si)
 
 	def set_missing_values(source, target):
 		target.run_method("set_missing_values")
@@ -365,15 +371,15 @@ def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 		if	source_doc.bill_type == 'ZT':
 			target.qty = flt(source_doc.load_net_weight)
 			target.amount = flt(source_doc.offload_net_weight)  * flt(source.rate)
-			target.base_amount = (
-			flt(source_doc.load_net_weight) * flt(source.rate) 
-		)
+			target.base_amount = (flt(source_doc.load_net_weight) * flt(source.rate))
+			target.against_sales_invoice = source_si
+			target.si_detail = source_si_doc.items[0].name
 		if	source_doc.bill_type == 'SD':
 			target.qty = flt(source_doc.offload_net_weight)
 			target.amount = flt(source_doc.offload_net_weight)  * flt(source.rate)
-			target.base_amount = (
-			flt(source_doc.offload_net_weight) * flt(source.rate) 
-		)
+			target.base_amount = (flt(source_doc.offload_net_weight) * flt(source.rate))
+			target.against_sales_invoice = source_si
+			target.si_detail = source_si_doc.items[0].name
 
 		item = get_item_defaults(target.item_code, source_parent.company)
 		item_group = get_item_group_defaults(target.item_code, source_parent.company)

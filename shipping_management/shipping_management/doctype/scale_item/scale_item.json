@@ -150,8 +150,7 @@
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "\u627f\u8fd0\u5546",
-   "options": "Supplier",
-   "reqd": 1
+   "options": "Supplier"
   },
   {
    "fieldname": "column_break_1pamq",
@@ -439,7 +438,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-08-28 14:33:10.304431",
+ "modified": "2023-09-27 21:44:31.007680",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
