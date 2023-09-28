@@ -13,7 +13,7 @@ class TransportFee(Document):
 	def validate_details(self):
 		for item in self.items:
 			scale_item = frappe.get_doc("Scale Item",item.scale_item)
-			if scale_item.transport_fee is not None:
+			if not scale_item.transport_fee:
 				frappe.throw(_(f"明细行：{item.idx} 已经做过费用结算，请再次核对"))
 
 	def on_submit(self):
