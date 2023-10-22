@@ -13,7 +13,7 @@ class TransportFee(Document):
 	def validate_details(self):
 		for item in self.items:
 			scale_item = frappe.get_doc("Scale Item",item.scale_item)
-			if not scale_item.transport_fee:
+			if scale_item.transport_fee:
 				frappe.throw(_(f"明细行：{item.idx} 已经做过费用结算，请再次核对"))
 
 	def on_submit(self):
@@ -48,7 +48,7 @@ def get_scale_item_to_clear():
 			
 		scale_items = frappe.get_all(
 			'Scale Item',
-			fields=["date", "vehicle", "offload_net_weight", "name","target_weight","load_net_weight"],
+			fields=["date", "vehicle", "offload_net_weight", "name","target_weight","load_net_weight","price"],
 			filters={
 				"date": ["between", (start_date, end_date)],
 				"status": "6 已完成",
@@ -65,6 +65,7 @@ def get_scale_item_to_clear():
 				"date": scale_item.date,
 				"vehicle": scale_item.vehicle,
 				"qty": scale_item.target_weight,
+				"price": scale_item.price,
 				"scale_item": scale_item.name,
 				"load_net_weight":scale_item.load_net_weight,
 				"offload_net_weight":scale_item.offload_net_weight,
@@ -73,13 +74,15 @@ def get_scale_item_to_clear():
 			items.append(item)
 			
 		total_qty = sum(item['qty'] for item in items)
+		total_amount = sum(item['price']*item['qty'] for item in items)
 		loss_weight = sum(item['variance'] for item in items if item['variance'] < 0)
 			
 		frappe.response["message"] = {
 			"status": "success",
 			"items": items,
 			"total_qty": total_qty,
-			"loss_weight":loss_weight
+			"loss_weight":loss_weight,
+			"total_amount": total_amount
 		}
 
 	except Exception as e:

@@ -30,6 +30,8 @@
   "get_pot",
   "column_break_vcrf3",
   "target_weight",
+  "column_break_goao4",
+  "price",
   "section_break_0bb8g",
   "from_addr",
   "column_break_rt7w0",
@@ -433,12 +435,22 @@
    "fieldtype": "Datetime",
    "label": "\u7a7a\u91cd\u65f6\u95f4",
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
+  },
+  {
+   "fieldname": "column_break_goao4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "price",
+   "fieldtype": "Float",
+   "label": "\u8fd0\u4ef7"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-09-27 21:44:31.007680",
+ "modified": "2023-10-21 14:18:01.664336",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

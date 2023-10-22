@@ -70,10 +70,15 @@ frappe.ui.form.on('Scale Item', {
             || (frm.doc.status == '5 已卸货' && frm.doc.type == 'OUT' && frm.doc.delivery_note)
             || (frm.doc.status == '5 已卸货' && frm.doc.type == 'DIRC' && frm.doc.purchase_receipt) && frm.doc.delivery_note) {
             frm.add_custom_button(__('Complete'), function () {
-                frm.set_value('status', '6 已完成')
+                if (!frm.doc.price){
+                    frappe.throw(__('未输入运输价格！请输入运输价格后再进行完成操作！'));
+                } 
+                else {
+                    frm.set_value('status', '6 已完成')
                     .then(() => {
                         frm.save('Update');
-                    });
+                    });            
+                }
             });
         }
         // add custom button to create purchase receipt
@@ -247,5 +252,65 @@ frappe.ui.form.on('Scale Item', {
             frappe.validated = false;
 
         }
-    }
+    },
+    load_gross_weight: function (frm) {
+        if  (!frm.doc.load_gross_weight) {
+            frm.set_value('load_net_weight', '');
+            frm.refresh_field('load_net_weight');
+        }
+        if (frm.doc.load_gross_weight && frm.doc.load_blank_weight) {
+            frm.set_value('load_net_weight', frm.doc.load_gross_weight - frm.doc.load_blank_weight);
+            frm.refresh_field('load_net_weight');
+        }
+    },
+    load_blank_weight: function (frm) {
+        if (!frm.doc.load_blank_weight) {
+            frm.set_value('load_net_weight', '');
+            frm.refresh_field('load_net_weight');
+        }
+        if (frm.doc.load_gross_weight && frm.doc.load_blank_weight) {
+            frm.set_value('load_net_weight', frm.doc.load_gross_weight - frm.doc.load_blank_weight);
+            frm.refresh_field('load_net_weight');
+        }
+    },
+    offload_gross_weight: function (frm) {
+        if (!frm.doc.offload_gross_weight) {
+            frm.set_value('offload_net_weight', '');
+            frm.refresh_field('offload_net_weight');
+        }
+        if (frm.doc.offload_gross_weight && frm.doc.offload_blank_weight) {
+            frm.set_value('offload_net_weight', frm.doc.offload_gross_weight - frm.doc.offload_blank_weight);
+            frm.refresh_field('offload_net_weight');
+        }
+    },
+    offload_blank_weight: function (frm) {
+        if (!frm.doc.offload_blank_weight) {
+            frm.set_value('offload_net_weight', '');
+            frm.refresh_field('offload_net_weight');
+        }
+        if (frm.doc.offload_gross_weight && frm.doc.offload_blank_weight) {
+            frm.set_value('offload_net_weight', frm.doc.offload_gross_weight - frm.doc.offload_blank_weight);
+            frm.refresh_field('offload_net_weight');
+        }
+    },
+    offload_net_weight: function (frm) {
+        if (frm.doc.offload_gross_weight && frm.doc.offload_blank_weight) {
+            if (frm.doc.offload_net_weight != frm.doc.offload_gross_weight - frm.doc.offload_blank_weight) {
+                frappe.throw(__('卸货净重与毛重减皮重不符，请检查！'));
+            }
+        }
+        if (frm.doc.offload_net_weight < 0) {
+            frappe.throw(__('卸货净重不能为负数，请检查！'));
+        }
+    },
+    load_net_weight: function (frm) {
+        if (frm.doc.load_gross_weight && frm.doc.load_blank_weight) {
+            if (frm.doc.load_net_weight != frm.doc.load_gross_weight - frm.doc.load_blank_weight) {
+                frappe.throw(__('装货净重与毛重减皮重不符，请检查！'));
+            }
+        }
+        if (frm.doc.load_net_weight < 0) {
+            frappe.throw(__('装货净重不能为负数，请检查！'));
+        }
+    },
 });

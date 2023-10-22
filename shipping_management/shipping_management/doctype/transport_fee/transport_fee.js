@@ -14,16 +14,14 @@ frappe.ui.form.on('Transport Fee', {
 		fetch_ship_order_items(frm);
 	},
 
-	price: function (frm) {
-		frm.doc.total_amount = frm.doc.price * frm.doc.total_qty;
+//	price: function (frm) {
+//		frm.doc.total_amount = frm.doc.price * frm.doc.total_qty;
+//		frm.doc.total = frm.doc.total_amount + frm.doc.loss_amount;
+//		frm.refresh_field('total_amount');
+//		frm.refresh_field('total');
+//	},
+	total_amount: function (frm) {
 		frm.doc.total = frm.doc.total_amount + frm.doc.loss_amount;
-		frm.refresh_field('total_amount');
-		frm.refresh_field('total');
-	},
-	total_qty: function (frm) {
-		frm.doc.total_amount = frm.doc.price * frm.doc.total_qty;
-		frm.doc.total = frm.doc.total_amount + frm.doc.loss_amount;
-		frm.refresh_field('total_amount');
 		frm.refresh_field('total');
 	},
 	loss_weight: function (frm) {
@@ -33,10 +31,10 @@ frappe.ui.form.on('Transport Fee', {
 		frm.refresh_field('total');
 	},
 
-	items: function (frm) {
-		frm.doc.total_amount = frm.doc.price * frm.doc.total_qty;
-		frm.refresh_field('total_amount');
-	},
+//	items: function (frm) {
+//		frm.doc.total_amount = frm.doc.price * frm.doc.total_qty;
+//		frm.refresh_field('total_amount');
+//	},
 	loss_price: function (frm) {
 		frm.doc.loss_amount = frm.doc.loss_price * frm.doc.loss_weight;
 		frm.doc.total = frm.doc.total_amount + frm.doc.loss_amount;
@@ -47,12 +45,6 @@ frappe.ui.form.on('Transport Fee', {
 		frm.doc.total = frm.doc.total_amount + frm.doc.loss_amount;
 		frm.refresh_field('total');
 	},
-	total_amount: function (frm) {
-		frm.doc.total = frm.doc.total_amount + frm.doc.loss_amount;
-		frm.refresh_field('total');
-	},
-
-
 
 });
 
@@ -88,18 +80,21 @@ function fetch_ship_order_items(frm) {
 						item.offload_net_weight = scale_item.offload_net_weight;
 						item.variance = scale_item.variance;
 						item.scale_item = scale_item.scale_item;
+						item.price = scale_item.price;
 					}
 
 					frm.doc.total_qty = response.message.total_qty;
+					frm.doc.total_amount = response.message.total_amount;
 					frm.doc.loss_weight = response.message.loss_weight;
 					// Refresh the form to display the updated items
 					frm.refresh_field('loss_weight');
 					frm.refresh_field('items');
 					frm.refresh_field('total_qty');
-					if (frm.doc.price && frm.doc.total_qty) {
-						frm.doc.total_amount = frm.doc.price * frm.doc.total_qty;
-						frm.refresh_field('total_amount');
-					}
+					frm.refresh_field('total_amount');
+					//if (frm.doc.price && frm.doc.total_qty) {
+					//	frm.doc.total_amount = frm.doc.price * frm.doc.total_qty;
+					//	frm.refresh_field('total_amount');
+					//}
 
 					if (frm.doc.loss_price && frm.doc.loss_weight) {
 						frm.doc.loss_amount = frm.doc.loss_price * frm.doc.loss_weight;

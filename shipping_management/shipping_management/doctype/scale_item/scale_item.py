@@ -157,9 +157,9 @@ class ScaleItem(Document):
 	def before_save(self):
 		#采购收货处理逻辑开始purchase receipt process logic start
 		if self.type == 'IN':
-			self.calculate_weight()
+			#self.calculate_weight()
 			self.change_status()  
-			self.check_weight()
+			#self.check_weight()
 			self.validate_load()
 			if self.pot:
 				self.validate_pot()
@@ -171,9 +171,9 @@ class ScaleItem(Document):
 
 		#销售出货处理逻辑开始sales shipment process logic start
 		if self.type == 'OUT':
-			self.calculate_weight()
+			#self.calculate_weight()
 			self.change_status()
-			self.check_weight()
+			#self.check_weight()
 			self.validate_load()
 			if self.sales_order:
 				self.validate_qty_out()
@@ -184,9 +184,9 @@ class ScaleItem(Document):
 
 		#销售直送处理逻辑开始sales direct process logic start
 		if self.type == 'DIRC':
-			self.calculate_weight()
+			#self.calculate_weight()
 			self.change_status()
-			self.check_weight()
+			#self.check_weight()
 			self.validate_load()
 			if self.sales_order and self.purchase_order:
 				self.validate_qty_in()
@@ -205,24 +205,24 @@ class ScaleItem(Document):
 	def before_update_after_submit(self):
 		#frappe.msgprint("before_update_after_submit")
 		if self.type == 'IN':
-			self.calculate_weight()
+			#self.calculate_weight()
 			self.change_status()
-			self.check_weight()
+			#self.check_weight()
 			if self.pot:
 				self.validate_pot()
 			print("validate pot")
 			self.validate_status()
 		
 		if self.type == 'OUT':
-			self.calculate_weight()
+			#self.calculate_weight()
 			self.change_status()
-			self.check_weight()
+			#self.check_weight()
 			self.validate_status()
 
 		if self.type == 'DIRC':
-			self.calculate_weight()
+			#self.calculate_weight()
 			self.change_status()
-			self.check_weight()
+			#self.check_weight()
 			self.validate_status()
 	
 	def on_submit(self):

@@ -1,0 +1,246 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:plant",
+ "creation": "2023-10-10 20:31:40.829200",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "plant",
+  "column_break_zlgq7",
+  "ship_type",
+  "section_break_hltam",
+  "screen",
+  "section_break_jiasa",
+  "vehicle",
+  "column_break_xp0as",
+  "scale_item",
+  "column_break_ungzv",
+  "pot",
+  "section_break_hsuqb",
+  "gross_weight_btn",
+  "gross_weight",
+  "gross_dt",
+  "column_break_7wznt",
+  "btn_blank_weight",
+  "blank_weight",
+  "blank_dt",
+  "column_break_zmafe",
+  "save_weight",
+  "net_weight",
+  "com_setting_tab",
+  "baudrate",
+  "buffersize",
+  "databits",
+  "parity",
+  "stopbits",
+  "flowcontrol",
+  "term_window",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "com_setting_tab",
+   "fieldtype": "Tab Break",
+   "label": "COM Setting"
+  },
+  {
+   "fieldname": "baudrate",
+   "fieldtype": "Int",
+   "label": "baudRate"
+  },
+  {
+   "fieldname": "buffersize",
+   "fieldtype": "Int",
+   "label": "bufferSize"
+  },
+  {
+   "fieldname": "databits",
+   "fieldtype": "Int",
+   "label": "dataBits"
+  },
+  {
+   "fieldname": "parity",
+   "fieldtype": "Select",
+   "label": "parity",
+   "options": "none\neven\nodd"
+  },
+  {
+   "fieldname": "stopbits",
+   "fieldtype": "Int",
+   "label": "stopBits"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Serial Port Reader",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "flowcontrol",
+   "fieldtype": "Select",
+   "label": "flowControl",
+   "options": "none\nhardware"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "screen",
+   "fieldtype": "HTML",
+   "label": "\u4eea\u8868\u793a\u6570"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "scale_item",
+   "fieldtype": "Link",
+   "label": "\u8ba1\u91cf\u5355",
+   "options": "Scale Item"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "vehicle",
+   "fieldtype": "Link",
+   "label": "\u8f66\u8f86",
+   "options": "Vehicle"
+  },
+  {
+   "fieldname": "section_break_hltam",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_jiasa",
+   "fieldtype": "Section Break",
+   "label": "\u8bf7\u8f93\u5165\u8f66\u724c\u53f7\uff0c\u5e76\u9009\u53d6\u8ba1\u91cf\u5355\u53ca\u6cb9\u7f50\u4fe1\u606f"
+  },
+  {
+   "fieldname": "column_break_zlgq7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "ship_type",
+   "fieldtype": "Link",
+   "label": "\u7c7b\u522b",
+   "options": "Ship Type"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "gross_weight",
+   "fieldtype": "Float",
+   "label": "\u6bdb\u91cd"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "blank_weight",
+   "fieldtype": "Float",
+   "label": "\u76ae\u91cd"
+  },
+  {
+   "fieldname": "section_break_hsuqb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_7wznt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_xp0as",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "gross_weight_btn",
+   "fieldtype": "Button",
+   "label": "\u8bfb\u53d6\u6bdb\u91cd"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "gross_dt",
+   "fieldtype": "Datetime",
+   "label": "\u6bdb\u91cd\u65f6\u95f4"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "btn_blank_weight",
+   "fieldtype": "Button",
+   "label": "\u8bfb\u53d6\u76ae\u91cd"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "blank_dt",
+   "fieldtype": "Datetime",
+   "label": "\u76ae\u91cd\u65f6\u95f4"
+  },
+  {
+   "fieldname": "column_break_ungzv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "pot",
+   "fieldtype": "Link",
+   "label": "\u7f50",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "column_break_zmafe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "save_weight",
+   "fieldtype": "Button",
+   "label": "\u4fdd\u5b58\u91cd\u91cf\u4fe1\u606f"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "net_weight",
+   "fieldtype": "Float",
+   "label": "\u51c0\u91cd"
+  },
+  {
+   "fieldname": "term_window",
+   "fieldtype": "Text",
+   "label": "Term Window"
+  },
+  {
+   "fieldname": "plant",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u5382\u533a",
+   "options": "Warehouse",
+   "reqd": 1,
+   "unique": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2023-10-21 07:49:23.865151",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Serial Port Reader",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

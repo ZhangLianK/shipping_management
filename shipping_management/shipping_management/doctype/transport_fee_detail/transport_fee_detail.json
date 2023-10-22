@@ -11,6 +11,7 @@
   "date",
   "vehicle",
   "qty",
+  "price",
   "load_net_weight",
   "offload_net_weight",
   "variance"
@@ -72,12 +73,20 @@
    "in_list_view": 1,
    "label": "\u76c8\u4e8f",
    "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "price",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "\u8fd0\u4ef7",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-08-10 16:48:40.555783",
+ "modified": "2023-10-21 14:53:06.260720",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Transport Fee Detail",
