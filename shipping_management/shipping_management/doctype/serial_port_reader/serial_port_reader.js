@@ -36,7 +36,7 @@ frappe.ui.form.on('Serial Port Reader', {
 			return {
 				filters: {
 					is_group: 0,
-					"parent_warehouse": frm.doc.warehouse
+					"parent_warehouse": frm.doc.plant
 				}
 			};
 		});
