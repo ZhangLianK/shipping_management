@@ -283,8 +283,8 @@ async function openClose(frm) {
 				var buffersize = parseInt(frm.doc.buffersize);
 				var databits = parseInt(frm.doc.databits);
 				var stopbits = parseInt(frm.doc.stopbits);
-				var parity = parseInt(frm.doc.parity);
-				var flowcontrol = parseInt(frm.doc.flowcontrol);
+				var parity = frm.doc.parity;
+				var flowcontrol = frm.doc.flowcontrol;
 
 
                 // Open the serial port with the selected baud rate
