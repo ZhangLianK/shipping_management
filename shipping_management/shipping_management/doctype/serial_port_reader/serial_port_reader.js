@@ -8,6 +8,8 @@ let reader;
 let openCloseBtn;
 let receivedData = "";
 
+
+
 frappe.ui.form.on('Serial Port Reader', {
 	// refresh: function(frm) {
 
@@ -58,6 +60,10 @@ frappe.ui.form.on('Serial Port Reader', {
         frm.add_custom_button('Print Label', function() {
             // Action when button is clicked
             var doc = frm.doc;
+            if (!doc.scale_item||!doc.ship_type){
+                frappe.msgprint("请先选择物流计量单");
+                return;
+            }
 
             // Prepare your HTML content with real data
             var html_content = `
@@ -103,26 +109,26 @@ frappe.ui.form.on('Serial Port Reader', {
 
     <div class="header">
         <div style="float: left;"><h3 stype ="text-align: right">称重计量单</h3>
-                        <h4 stype ="text-align: right">{}</h4>
+                        <h4 stype ="text-align: right">${doc.plant}</h4>
 
         </div>
         <div style="float: right;">
-            <p style="text-align: right;">单号: {}</p>
-            <p style="text-align: right;">{}</p>
+            <p style="text-align: right;">单号: ${doc.scale_item}</p>
+            <p style="text-align: right;">${doc.pot}</p>
         </div>
     </div>
     <table style="width:100%">
       <tr>
         <th>车号</th>
-        <td>{}</td>
+        <td>${doc.vehicle}</td>
         <th>毛重</th>
-        <td>{}</td>
+        <td>${doc.gross_weight}</td>
       </tr>
       <tr>
         <th>货名</th>
-        <td>{}</td>
+        <td>${doc.item_code}</td>
               <th>毛重时间</th>
-        <td>{}</td>
+        <td>${doc.gross_dt}</td>
 
       </tr>
       <tr>
@@ -130,24 +136,24 @@ frappe.ui.form.on('Serial Port Reader', {
         <td>______</td>
 
         <th>皮重</th>
-        <td>{}</td>
+        <td>${doc.blank_weight}</td>
       </tr>
       <tr>
         <th>收货单位</th>
         <td>______</td>
               <th>皮重时间</th>
-        <td>{}</td>
+        <td>${doc.blank_dt}</td>
       </tr>
       <tr>
         <th>打印时间</th>
-        <td>{}</td>
+        <td>${get_date_time()}</td>
             <th>净重</th>
-        <td>{}</td>
+        <td>${doc.net_weight}</td>
       </tr>
     </table>
 
     <div class="signature">
-        <p style="float: left;">过磅员: {}</p>
+        <p style="float: left;">过磅员: ${frappe.session.user}</p>
         <p style="float: right">司机: ________</p>
     </div>
 
@@ -155,7 +161,7 @@ frappe.ui.form.on('Serial Port Reader', {
     </html>`;
 
             // Replace placeholders with actual data from the form
-            html_content = html_content.replace('{}', doc.name); // repeat for other fields
+            //html_content = html_content.replace('{}', doc.name); // repeat for other fields
 
             // Call the print function
             print_html_label(html_content);
@@ -235,12 +241,22 @@ frappe.ui.form.on('Serial Port Reader', {
 	},
 	scale_item: function(frm) {
 		frappe.db.get_doc("Scale Item", frm.doc.scale_item).then(doc => {
+            if (doc.type!=frm.doc.ship_type) {
+                frappe.throw("物流计量单类型与当前类型不一致");
+            }
+            if (doc.pot )   {
+                frappe.throw("物流计量单已经过磅,请勿重复操作！重复操作将会覆盖原有数据！");
+            }
 			if (doc.type=="IN") {
 				frm.doc.gross_weight=doc.offload_gross_weight;
 				frm.doc.gross_dt=doc.offload_gross_dt;
 				frm.doc.blank_weight=doc.offload_blank_weight;
 				frm.doc.blank_dt=doc.offload_blank_dt;
 				frm.doc.net_weight=doc.offload_net_weight;
+                frm.doc.driver=doc.driver;
+                frm.doc.item_code = doc.item;
+                frm.doc.ship_type = doc.type;
+                frm.doc.vehicle = doc.vehicle;
 				frm.refresh();
 			}
 			else if (doc.type=="OUT") {
@@ -249,10 +265,26 @@ frappe.ui.form.on('Serial Port Reader', {
 				frm.doc.blank_weight=doc.load_blank_weight;
 				frm.doc.blank_dt=doc.load_blank_dt;
 				frm.doc.net_weight=doc.load_net_weight;
+                frm.doc.driver=doc.driver;
+                frm.doc.item_code = doc.item;
+                frm.doc.ship_type = doc.type;
+                frm.doc.vehicle = doc.vehicle;
 				frm.refresh();
 			}
 		});
-	}
+	},
+    gross_weight: function(frm) {
+        if(frm.doc.blank_weight&&frm.doc.gross_weight) {
+            frm.doc.net_weight=frm.doc.gross_weight-frm.doc.blank_weight;
+            frm.refresh_field('net_weight');
+        }
+    },
+    blank_weight: function(frm) {
+        if(frm.doc.blank_weight&&frm.doc.gross_weight) {
+            frm.doc.net_weight=frm.doc.gross_weight-frm.doc.blank_weight;
+            frm.refresh_field('net_weight');
+        }
+    }
 });
 
 
@@ -402,4 +434,20 @@ function print_html_label(html_content) {
         w.print();
         //w.close();
     };
+}
+//get date time in local timezone with format yyyy-mm-dd hh-mm-ss
+function get_date_time() {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth()+1;
+    if (month<10) month = '0' + month;
+    var day = date.getDate();
+    if (day<10) day = '0' + day;
+    var hour = date.getHours();
+    if (hour<10) hour = '0' + hour;
+    var minute = date.getMinutes();
+    if (minute<10) minute = '0' + minute;
+    var second = date.getSeconds();
+    if (second<10) second = '0' + second;
+    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 }

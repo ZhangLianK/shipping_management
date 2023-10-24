@@ -9,16 +9,19 @@
  "engine": "InnoDB",
  "field_order": [
   "plant",
-  "column_break_zlgq7",
+  "section_break_do9bk",
   "ship_type",
+  "column_break_zlgq7",
+  "pot",
   "section_break_hltam",
   "screen",
   "section_break_jiasa",
   "vehicle",
+  "item_code",
   "column_break_xp0as",
   "scale_item",
+  "driver",
   "column_break_ungzv",
-  "pot",
   "section_break_hsuqb",
   "gross_weight_btn",
   "gross_weight",
@@ -215,12 +218,29 @@
    "options": "Warehouse",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fetch_from": "scale_item.driver",
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "label": "\u53f8\u673a",
+   "options": "Driver"
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "label": "\u7269\u6599",
+   "options": "Item"
+  },
+  {
+   "fieldname": "section_break_do9bk",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-10-21 07:49:23.865151",
+ "modified": "2023-10-24 15:09:48.537835",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",
