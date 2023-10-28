@@ -11,38 +11,38 @@ let receivedData = "";
 
 
 frappe.ui.form.on('Serial Port Reader', {
-	// refresh: function(frm) {
+    // refresh: function(frm) {
 
-	// }
-	
+    // }
 
-	refresh: function(frm) {
-		frm.set_query("scale_item", function() {
-			return {
-				filters: {
-					"status": ['not in', ['6 已完成', '9 已取消']],
-					"docstatus": 1 ,
-					"vehicle": frm.doc.vehicle,
-					"type":frm.doc.ship_type
-				}
-			};
-		});
-		frm.set_query("warehouse", function() {
-			return {
-				filters: {
-					is_group: 1
-				}
-			};
-		});
-		frm.set_query("pot", function() {
-			return {
-				filters: {
-					is_group: 0,
-					"parent_warehouse": frm.doc.plant
-				}
-			};
-		});
-		
+
+    refresh: function (frm) {
+        frm.set_query("scale_item", function () {
+            return {
+                filters: {
+                    "status": ['not in', ['6 已完成', '9 已取消']],
+                    "docstatus": 1,
+                    "vehicle": frm.doc.vehicle,
+                    "type": frm.doc.ship_type
+                }
+            };
+        });
+        frm.set_query("warehouse", function () {
+            return {
+                filters: {
+                    is_group: 1
+                }
+            };
+        });
+        frm.set_query("pot", function () {
+            return {
+                filters: {
+                    is_group: 0,
+                    "parent_warehouse": frm.doc.plant
+                }
+            };
+        });
+
         clearTerminal(frm);
         // Assuming 'Open/Close Port' is a toggle action.
         openCloseBtn = frm.add_custom_button('Open Port', function () {
@@ -57,10 +57,10 @@ frappe.ui.form.on('Serial Port Reader', {
         });
 
 
-        frm.add_custom_button('Print Label', function() {
+        frm.add_custom_button('Print Label', function () {
             // Action when button is clicked
             var doc = frm.doc;
-            if (!doc.scale_item||!doc.ship_type){
+            if (!doc.scale_item || !doc.ship_type) {
                 frappe.msgprint("请先选择物流计量单");
                 return;
             }
@@ -68,27 +68,33 @@ frappe.ui.form.on('Serial Port Reader', {
             // Prepare your HTML content with real data
             var html_content = `
             <!DOCTYPE html>
-    <html xmlns="http://www.w3.org/1999/html">
+    <html xmlns="http://www.w3.org/1999/html" lang="zh" >
     <head>
         <title>称重计量单</title>
         <style>
             body {
-                margin:auto;
+                margin-top: 1rem;
                 width: 210mm;
-                height:93mm;
+                height: 70mm;
+                padding-top: 5%;
+                padding-left: 10%;
+                padding-right: 10%;
+            }
+            table {
+                width: 100%;
             }
             table, th, td {
-                border: 1px solid black;
+                border: 0.1rem solid black;
                 border-collapse: collapse;
             }
             th {
                 width: 20%;
-                padding: 10px;
+                padding-left: 1%;
                 text-align: left;
             }
             td {
                 width: 30%;
-                padding: 10px;
+                padding-left: 1%;
                 text-align: left;
             }
             .header {
@@ -101,23 +107,93 @@ frappe.ui.form.on('Serial Port Reader', {
             .signature {
                 display: flex;
                 justify-content: space-between;
-                margin-top: 10px;
+                margin-top: 0.5rem;
+            }
+            .hd_txt {
+                text-align: left;
+            }
+            .shd_txt {
+                text-align: right;
+            }
+            .hd {
+                float: left;
+            }
+            .shd {
+                float: right;
+            }
+
+            @media print {
+                @page {
+                    size: 210mm 70mm;
+                }
+                body {
+                    margin-top: 1rem;
+                    padding-top: 5%;
+                    padding-left: 10%;
+                    padding-right: 10%;
+                    page-break-inside: avoid;
+                }
+                nav {
+                    display: none;
+                }
+                table {
+                    width: 100%;
+                }
+                table, th, td {
+                    border: 0.1rem solid black;
+                    border-collapse: collapse;
+                }
+                th {
+                    width: 20%;
+                    padding-left: 1%;
+                    text-align: left;
+                }
+                td {
+                    width: 30%;
+                    padding-left: 1%;
+                    text-align: left;
+                }
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .title {
+                    text-align: center;
+                }
+                .signature {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 0.5rem;
+                }
+                .hd_txt {
+                    text-align: left;
+                }
+                .shd_txt {
+                    text-align: right;
+                }
+                .hd {
+                    float: left;
+                }
+                .shd {
+                    float: right;
+                }
             }
         </style>
     </head>
     <body>
-
+    <div id = "printableArea">
     <div class="header">
-        <div style="float: left;"><h3 stype ="text-align: right">称重计量单</h3>
-                        <h4 stype ="text-align: right">${doc.plant}</h4>
+        <div class = "hd">
+            <h3 class="hd_txt">称重计量单</h3>
+            <p class="hd_txt">${doc.plant}</p>
 
         </div>
-        <div style="float: right;">
-            <p style="text-align: right;">单号: ${doc.scale_item}</p>
-            <p style="text-align: right;">${doc.pot}</p>
+        <div class = "shd">
+            <p class = "shd_txt">单号: ${doc.scale_item}</p>
+            <p class="shd_txt">${doc.pot}</p>
         </div>
     </div>
-    <table style="width:100%">
+    <table>
       <tr>
         <th>车号</th>
         <td>${doc.vehicle}</td>
@@ -153,10 +229,10 @@ frappe.ui.form.on('Serial Port Reader', {
     </table>
 
     <div class="signature">
-        <p style="float: left;">过磅员: ${frappe.session.user}</p>
-        <p style="float: right">司机: ________</p>
+        <p class="hd">过磅员: ${frappe.session.user}</p>
+        <p class="shd">司机: _________________</p>
     </div>
-
+    </div>
     </body>
     </html>`;
 
@@ -167,121 +243,121 @@ frappe.ui.form.on('Serial Port Reader', {
             print_html_label(html_content);
         });
 
-	},
-	onload: function (frm) {
+    },
+    onload: function (frm) {
         // Replace 'your_html_fieldname' with the actual fieldname of your HTML field.
         frm.fields_dict.screen.df.options = `
             <div style="background-color: black; color: white; height:100px; text-align: center;font-size:60px">
                 <p>23000</p>
             </div>`;
     },
-	gross_weight_btn: function(frm) {
-		// Get the current data displayed in the 'screen' field's HTML
-		const screenHTML = frm.fields_dict['screen'].wrapper.innerHTML;
+    gross_weight_btn: function (frm) {
+        // Get the current data displayed in the 'screen' field's HTML
+        const screenHTML = frm.fields_dict['screen'].wrapper.innerHTML;
 
-		// Extract the content within the <p> tag
-		const parser = new DOMParser();
-		const htmlDocument = parser.parseFromString(screenHTML, 'text/html');
-		const pContent = htmlDocument.querySelector('p').textContent;
-		const regex = /(\d+\.\d+|\d+)/; // Adjust based on your exact data format
-		const match = regex.exec(pContent);
+        // Extract the content within the <p> tag
+        const parser = new DOMParser();
+        const htmlDocument = parser.parseFromString(screenHTML, 'text/html');
+        const pContent = htmlDocument.querySelector('p').textContent;
+        const regex = /(\d+\.\d+|\d+)/; // Adjust based on your exact data format
+        const match = regex.exec(pContent);
 
-		if (match !== null) {
-			// If a match is found, update the 'data' field
-			frm.set_value('gross_weight', match[0]/1000);
-			frm.refresh_field('gross_weight');
+        if (match !== null) {
+            // If a match is found, update the 'data' field
+            frm.set_value('gross_weight', match[0] / 1000);
+            frm.refresh_field('gross_weight');
 
-			// Update the 'timestamp' field with the current time
-			frm.set_value('gross_dt', frappe.datetime.now_datetime());
-			frm.refresh_field('gross_dt');
-		}
-	},
-	btn_blank_weight: function(frm) {
-		// Get the current data displayed in the 'screen' field's HTML
-		const screenHTML = frm.fields_dict['screen'].wrapper.innerHTML;
+            // Update the 'timestamp' field with the current time
+            frm.set_value('gross_dt', frappe.datetime.now_datetime());
+            frm.refresh_field('gross_dt');
+        }
+    },
+    btn_blank_weight: function (frm) {
+        // Get the current data displayed in the 'screen' field's HTML
+        const screenHTML = frm.fields_dict['screen'].wrapper.innerHTML;
 
-		// Extract the content within the <p> tag
-		const parser = new DOMParser();
-		const htmlDocument = parser.parseFromString(screenHTML, 'text/html');
-		const pContent = htmlDocument.querySelector('p').textContent;
-		const regex = /(\d+\.\d+|\d+)/; // Adjust based on your exact data format
-		const match = regex.exec(pContent);
+        // Extract the content within the <p> tag
+        const parser = new DOMParser();
+        const htmlDocument = parser.parseFromString(screenHTML, 'text/html');
+        const pContent = htmlDocument.querySelector('p').textContent;
+        const regex = /(\d+\.\d+|\d+)/; // Adjust based on your exact data format
+        const match = regex.exec(pContent);
 
-		if (match !== null) {
-			// If a match is found, update the 'data' field
-			frm.set_value('blank_weight', match[0]/1000);
-			frm.refresh_field('blank_weight');
+        if (match !== null) {
+            // If a match is found, update the 'data' field
+            frm.set_value('blank_weight', match[0] / 1000);
+            frm.refresh_field('blank_weight');
 
-			// Update the 'timestamp' field with the current time
-			frm.set_value('blank_dt', frappe.datetime.now_datetime());
-			frm.refresh_field('blank_dt');
-		}
-	},
-	save_weight: function(frm) {
-		frappe.call({
-			method: "shipping_management.shipping_management.doctype.serial_port_reader.serial_port_reader.save_weight",
-			args: {
-				"scale_item": frm.doc.scale_item,
-				"gross_weight": frm.doc.gross_weight,
-				"gross_dt": frm.doc.gross_dt,
-				"blank_weight": frm.doc.blank_weight,
-				"blank_dt": frm.doc.blank_dt,
-				"net_weight": frm.doc.net_weight,
-				"pot": frm.doc.pot,
-			},
-			callback: function(r) {
-				if(r.message=='success') {
-					frappe.msgprint("保存成功");
-				}
-				else {
-					frappe.msgprint(r.message);
-				}
-			}
-		});
-	},
-	scale_item: function(frm) {
-		frappe.db.get_doc("Scale Item", frm.doc.scale_item).then(doc => {
-            if (doc.type!=frm.doc.ship_type) {
+            // Update the 'timestamp' field with the current time
+            frm.set_value('blank_dt', frappe.datetime.now_datetime());
+            frm.refresh_field('blank_dt');
+        }
+    },
+    save_weight: function (frm) {
+        frappe.call({
+            method: "shipping_management.shipping_management.doctype.serial_port_reader.serial_port_reader.save_weight",
+            args: {
+                "scale_item": frm.doc.scale_item,
+                "gross_weight": frm.doc.gross_weight,
+                "gross_dt": frm.doc.gross_dt,
+                "blank_weight": frm.doc.blank_weight,
+                "blank_dt": frm.doc.blank_dt,
+                "net_weight": frm.doc.net_weight,
+                "pot": frm.doc.pot,
+            },
+            callback: function (r) {
+                if (r.message == 'success') {
+                    frappe.msgprint("保存成功");
+                }
+                else {
+                    frappe.msgprint(r.message);
+                }
+            }
+        });
+    },
+    scale_item: function (frm) {
+        frappe.db.get_doc("Scale Item", frm.doc.scale_item).then(doc => {
+            if (doc.type != frm.doc.ship_type) {
                 frappe.throw("物流计量单类型与当前类型不一致");
             }
-            if (doc.pot )   {
+            if (doc.pot) {
                 frappe.throw("物流计量单已经过磅,请勿重复操作！重复操作将会覆盖原有数据！");
             }
-			if (doc.type=="IN") {
-				frm.doc.gross_weight=doc.offload_gross_weight;
-				frm.doc.gross_dt=doc.offload_gross_dt;
-				frm.doc.blank_weight=doc.offload_blank_weight;
-				frm.doc.blank_dt=doc.offload_blank_dt;
-				frm.doc.net_weight=doc.offload_net_weight;
-                frm.doc.driver=doc.driver;
+            if (doc.type == "IN") {
+                frm.doc.gross_weight = doc.offload_gross_weight;
+                frm.doc.gross_dt = doc.offload_gross_dt;
+                frm.doc.blank_weight = doc.offload_blank_weight;
+                frm.doc.blank_dt = doc.offload_blank_dt;
+                frm.doc.net_weight = doc.offload_net_weight;
+                frm.doc.driver = doc.driver;
                 frm.doc.item_code = doc.item;
                 frm.doc.ship_type = doc.type;
                 frm.doc.vehicle = doc.vehicle;
-				frm.refresh();
-			}
-			else if (doc.type=="OUT") {
-				frm.doc.gross_weight=doc.load_gross_weight;
-				frm.doc.gross_dt=doc.load_gross_dt;
-				frm.doc.blank_weight=doc.load_blank_weight;
-				frm.doc.blank_dt=doc.load_blank_dt;
-				frm.doc.net_weight=doc.load_net_weight;
-                frm.doc.driver=doc.driver;
+                frm.refresh();
+            }
+            else if (doc.type == "OUT") {
+                frm.doc.gross_weight = doc.load_gross_weight;
+                frm.doc.gross_dt = doc.load_gross_dt;
+                frm.doc.blank_weight = doc.load_blank_weight;
+                frm.doc.blank_dt = doc.load_blank_dt;
+                frm.doc.net_weight = doc.load_net_weight;
+                frm.doc.driver = doc.driver;
                 frm.doc.item_code = doc.item;
                 frm.doc.ship_type = doc.type;
                 frm.doc.vehicle = doc.vehicle;
-				frm.refresh();
-			}
-		});
-	},
-    gross_weight: function(frm) {
-        if(frm.doc.blank_weight&&frm.doc.gross_weight) {
-            frm.doc.net_weight=frm.doc.gross_weight-frm.doc.blank_weight;
+                frm.refresh();
+            }
+        });
+    },
+    gross_weight: function (frm) {
+        if (frm.doc.blank_weight && frm.doc.gross_weight) {
+            frm.doc.net_weight = frm.doc.gross_weight - frm.doc.blank_weight;
             frm.refresh_field('net_weight');
         }
     },
-    blank_weight: function(frm) {
-        if(frm.doc.blank_weight&&frm.doc.gross_weight) {
-            frm.doc.net_weight=frm.doc.gross_weight-frm.doc.blank_weight;
+    blank_weight: function (frm) {
+        if (frm.doc.blank_weight && frm.doc.gross_weight) {
+            frm.doc.net_weight = frm.doc.gross_weight - frm.doc.blank_weight;
             frm.refresh_field('net_weight');
         }
     }
@@ -312,21 +388,22 @@ async function openClose(frm) {
                 }
                 // Grab the currently selected baud rate from the drop down menu
                 var baudSelected = parseInt(frm.doc.baudrate);
-				var buffersize = parseInt(frm.doc.buffersize);
-				var databits = parseInt(frm.doc.databits);
-				var stopbits = parseInt(frm.doc.stopbits);
-				var parity = frm.doc.parity;
-				var flowcontrol = frm.doc.flowcontrol;
+                var buffersize = parseInt(frm.doc.buffersize);
+                var databits = parseInt(frm.doc.databits);
+                var stopbits = parseInt(frm.doc.stopbits);
+                var parity = frm.doc.parity;
+                var flowcontrol = frm.doc.flowcontrol;
 
 
                 // Open the serial port with the selected baud rate
-                await port.open({ baudRate: baudSelected,
-					bufferSize: buffersize,
-					dataBits: databits,
-					stopBits: stopbits,
-					parity: parity,
-					flowControl: flowcontrol
-				 });
+                await port.open({
+                    baudRate: baudSelected,
+                    bufferSize: buffersize,
+                    dataBits: databits,
+                    stopBits: stopbits,
+                    parity: parity,
+                    flowControl: flowcontrol
+                });
 
                 // Create a textDecoder stream and get its reader, pipe the port reader to it
                 const textDecoder = new TextDecoderStream();
@@ -359,7 +436,7 @@ async function openClose(frm) {
                     receivedData += value;
                     if (receivedData.includes('\n')) {
                         console.log("Full Message Received:", receivedData);
-                        displayInScreen(frm,receivedData);
+                        displayInScreen(frm, receivedData);
                         receivedData = "";
                     }
                 }
@@ -404,18 +481,18 @@ function clearTerminal(frm) {
     frm.refresh_field('term_window');
 }
 
-function displayInScreen(frm,receivedData) {
-        const pattern = /(\d+\.\d+|\d+)/;
-        const match = receivedData.match(pattern);
-        if (match) {
-            const number = parseFloat(match[0]);
-            frm.fields_dict.screen.df.options = `
+function displayInScreen(frm, receivedData) {
+    const pattern = /(\d+\.\d+|\d+)/;
+    const match = receivedData.match(pattern);
+    if (match) {
+        const number = parseFloat(match[0]);
+        frm.fields_dict.screen.df.options = `
                             <div style="background-color: black; color: white; height:100px; text-align: center; font-size:60px">
                                 <p>${number}</p>
                             </div>`;
-            frm.fields_dict.screen.refresh();
+        frm.fields_dict.screen.refresh();
 
-        }
+    }
 }
 
 function print_html_label(html_content) {
@@ -430,8 +507,11 @@ function print_html_label(html_content) {
     w.focus(); // necessary for IE >= 10
 
     // Check if window is loaded
-    w.onload = function() {
+    w.onload = function () {
         w.print();
+        window.addEventListener("afterprint", function () {
+            w.close();
+        }, false);
         //w.close();
     };
 }
@@ -439,15 +519,15 @@ function print_html_label(html_content) {
 function get_date_time() {
     var date = new Date();
     var year = date.getFullYear();
-    var month = date.getMonth()+1;
-    if (month<10) month = '0' + month;
+    var month = date.getMonth() + 1;
+    if (month < 10) month = '0' + month;
     var day = date.getDate();
-    if (day<10) day = '0' + day;
+    if (day < 10) day = '0' + day;
     var hour = date.getHours();
-    if (hour<10) hour = '0' + hour;
+    if (hour < 10) hour = '0' + hour;
     var minute = date.getMinutes();
-    if (minute<10) minute = '0' + minute;
+    if (minute < 10) minute = '0' + minute;
     var second = date.getSeconds();
-    if (second<10) second = '0' + second;
+    if (second < 10) second = '0' + second;
     return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 }
