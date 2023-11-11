@@ -393,6 +393,7 @@ async function openClose(frm) {
                 var stopbits = parseInt(frm.doc.stopbits);
                 var parity = frm.doc.parity;
                 var flowcontrol = frm.doc.flowcontrol;
+                var stopchar = frm.doc.stopchar;
 
 
                 // Open the serial port with the selected baud rate
@@ -434,7 +435,7 @@ async function openClose(frm) {
                     frm.refresh_field('term_window');
                     console.log(value);
                     receivedData += value;
-                    if (receivedData.includes('\n')) {
+                    if (receivedData.includes(stopchar)) {
                         console.log("Full Message Received:", receivedData);
                         displayInScreen(frm, receivedData);
                         receivedData = "";

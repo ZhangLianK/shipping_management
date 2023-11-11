@@ -40,6 +40,7 @@
   "parity",
   "stopbits",
   "flowcontrol",
+  "stopchar",
   "term_window",
   "amended_from"
  ],
@@ -235,12 +236,17 @@
   {
    "fieldname": "section_break_do9bk",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "stopchar",
+   "fieldtype": "Data",
+   "label": "stopChar"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-10-24 15:09:48.537835",
+ "modified": "2023-11-11 13:53:41.560316",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",
