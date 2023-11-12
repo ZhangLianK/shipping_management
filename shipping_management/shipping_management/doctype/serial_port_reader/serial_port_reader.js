@@ -394,6 +394,7 @@ async function openClose(frm) {
                 var parity = frm.doc.parity;
                 var flowcontrol = frm.doc.flowcontrol;
                 var stopchar = frm.doc.stopchar;
+                var reverse = frm.doc.reverse;
 
 
                 // Open the serial port with the selected baud rate
@@ -434,8 +435,18 @@ async function openClose(frm) {
                     frm.doc.term_window = frm.doc.term_window + value; // write the incoming string to the term_window textarea
                     frm.refresh_field('term_window');
                     console.log(value);
-                    receivedData += value;
-                    if (receivedData.includes(stopchar)) {
+                    if (reverse) {
+                        value = Array.from(value).reverse().join("");
+                    }
+                    
+                    if (stopchar) {
+                        receivedData += value;
+                        if (receivedData.includes(stopchar))
+                            console.log("Full Message Received:", receivedData);
+                            displayInScreen(frm, receivedData);
+                            receivedData = "";
+                    }
+                    else  {
                         console.log("Full Message Received:", receivedData);
                         displayInScreen(frm, receivedData);
                         receivedData = "";

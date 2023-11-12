@@ -41,6 +41,7 @@
   "stopbits",
   "flowcontrol",
   "stopchar",
+  "reverse",
   "term_window",
   "amended_from"
  ],
@@ -241,12 +242,18 @@
    "fieldname": "stopchar",
    "fieldtype": "Data",
    "label": "stopChar"
+  },
+  {
+   "default": "0",
+   "fieldname": "reverse",
+   "fieldtype": "Check",
+   "label": "reverse"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-11-11 13:53:41.560316",
+ "modified": "2023-11-12 07:28:39.770751",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",
