@@ -1,0 +1,69 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-25 17:12:48.001798",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "\u9ed8\u8ba4\u8d39\u7528\u5355\u4ef7_section",
+  "yayun_price",
+  "fanfee_price",
+  "round_value"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u516c\u53f8",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "\u9ed8\u8ba4\u8d39\u7528\u5355\u4ef7_section",
+   "fieldtype": "Section Break",
+   "label": "\u9ed8\u8ba4\u8d39\u7528\u5355\u4ef7"
+  },
+  {
+   "fieldname": "yayun_price",
+   "fieldtype": "Float",
+   "label": "\u62bc\u8fd0\u5355\u4ef7"
+  },
+  {
+   "fieldname": "fanfee_price",
+   "fieldtype": "Float",
+   "label": "\u996d\u8d39\u5355\u4ef7"
+  },
+  {
+   "fieldname": "round_value",
+   "fieldtype": "Float",
+   "label": "\u8fd0\u8f93\u65f6\u957f\u53d6\u6574\u6807\u51c6"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2023-11-25 18:06:07.389592",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Shipping Management Setting",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

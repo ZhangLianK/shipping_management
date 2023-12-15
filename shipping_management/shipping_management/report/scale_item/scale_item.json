@@ -87,6 +87,12 @@
    "width": 0
   },
   {
+   "fieldname": "net_variance",
+   "fieldtype": "Float",
+   "label": "\u51c0\u91cd\u76c8\u4e8f",
+   "width": 0
+  },
+  {
    "fieldname": "purchase_order",
    "fieldtype": "Link",
    "label": "\u91c7\u8d2d\u8ba2\u5355",
@@ -119,6 +125,13 @@
    "fieldtype": "Link",
    "label": "\u9500\u552e\u51fa\u8d27\u5355",
    "options": "Delivery Note",
+   "width": 0
+  },
+  {
+   "fieldname": "ship_plan",
+   "fieldtype": "Link",
+   "label": "\u7269\u6d41\u8ba1\u5212",
+   "options": "Ship Plan",
    "width": 0
   }
  ],
@@ -190,11 +203,19 @@
    "mandatory": 0,
    "options": "Sales Invoice",
    "wildcard_filter": 0
+  },
+  {
+   "fieldname": "ship_plan",
+   "fieldtype": "Link",
+   "label": "\u7269\u6d41\u8ba1\u5212",
+   "mandatory": 0,
+   "options": "Ship Plan",
+   "wildcard_filter": 0
   }
  ],
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2023-08-19 17:38:26.368306",
+ "modified": "2023-12-05 21:10:42.080985",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

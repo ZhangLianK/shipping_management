@@ -1,6 +1,6 @@
 {
  "actions": [],
- "autoname": "autoincrement",
+ "autoname": "naming_series:",
  "creation": "2023-07-29 22:31:05.650899",
  "default_view": "List",
  "doctype": "DocType",
@@ -12,6 +12,8 @@
   "desc",
   "column_break_scjid",
   "status",
+  "column_break_7lger",
+  "naming_series",
   "section_break_glkhr",
   "type",
   "vehicle",
@@ -61,6 +63,8 @@
   "offload_image",
   "\u5173\u8054\u4fe1\u606f_tab",
   "transport_fee",
+  "column_break_n3j8m",
+  "ship_plan",
   "section_break_jo6pq",
   "purchase_order",
   "purchase_receipt",
@@ -68,6 +72,21 @@
   "sales_order",
   "sales_invoice",
   "delivery_note",
+  "verification_code",
+  "\u8d39\u7528\u8be6\u60c5_tab",
+  "from_dt",
+  "mileage_start",
+  "start_img",
+  "to_dt",
+  "mileage_end",
+  "end_img",
+  "tangbu_price",
+  "tangbu",
+  "fanfee",
+  "yayun_price",
+  "yayunfee",
+  "fakuan",
+  "gaosufee",
   "amended_from"
  ],
  "fields": [
@@ -106,6 +125,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "columns": 1,
    "fieldname": "type",
    "fieldtype": "Link",
@@ -126,6 +146,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "columns": 1,
    "fieldname": "driver",
    "fieldtype": "Link",
@@ -139,6 +160,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -204,7 +226,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "\u7f50",
+   "label": "\u7f50\uff08\u5e93\u4f4d\uff09",
    "options": "Warehouse"
   },
   {
@@ -217,6 +239,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "columns": 1,
    "fieldname": "target_weight",
    "fieldtype": "Float",
@@ -229,6 +252,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "from_addr",
    "fieldtype": "Small Text",
    "label": "\u63d0\u8d27\u5730"
@@ -247,6 +271,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "to_addr",
    "fieldtype": "Small Text",
    "label": "\u9001\u8d27\u5730"
@@ -445,16 +470,124 @@
    "fieldname": "price",
    "fieldtype": "Float",
    "label": "\u8fd0\u4ef7"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "ship_plan",
+   "fieldtype": "Link",
+   "label": "\u7269\u6d41\u8ba1\u5212",
+   "options": "Ship Plan"
+  },
+  {
+   "fieldname": "column_break_n3j8m",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "\u8d39\u7528\u8be6\u60c5_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u8d39\u7528\u8be6\u60c5"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "from_dt",
+   "fieldtype": "Datetime",
+   "label": "\u5f00\u59cb\u65f6\u95f4"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "to_dt",
+   "fieldtype": "Datetime",
+   "label": "\u7ed3\u675f\u65f6\u95f4"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "tangbu",
+   "fieldtype": "Float",
+   "label": "\u8d9f\u8865"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "yayunfee",
+   "fieldtype": "Float",
+   "label": "\u66ff\u73ed/\u62bc\u8fd0\u8d39"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "fakuan",
+   "fieldtype": "Float",
+   "label": "\u7f5a\u6b3e"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "gaosufee",
+   "fieldtype": "Float",
+   "label": "\u9ad8\u901f\u8d39"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "\u7f16\u53f7",
+   "options": "S.YY.MM.DD.#####"
+  },
+  {
+   "fieldname": "column_break_7lger",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tangbu_price",
+   "fieldtype": "Float",
+   "label": "\u8d9f\u8865\u5355\u4ef7"
+  },
+  {
+   "fieldname": "yayun_price",
+   "fieldtype": "Float",
+   "label": "\u62bc\u8fd0\u5355\u4ef7"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "fanfee",
+   "fieldtype": "Float",
+   "label": "\u996d\u8d39"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "mileage_start",
+   "fieldtype": "Float",
+   "label": "\u91cc\u7a0b\uff08\u5f00\u59cb\uff09"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "mileage_end",
+   "fieldtype": "Float",
+   "label": "\u91cc\u7a0b\uff08\u7ed3\u675f\uff09"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "end_img",
+   "fieldtype": "Attach Image",
+   "label": "\u91cc\u7a0b\u8868\u7ed3\u675f\u7167\u7247"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "start_img",
+   "fieldtype": "Attach Image",
+   "label": "\u91cc\u7a0b\u8868\u5f00\u59cb\u7167\u7247"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "verification_code",
+   "fieldtype": "Data",
+   "label": "\u53f8\u673a\u9a8c\u8bc1\u7801"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-10-21 14:18:01.664336",
+ "modified": "2023-12-15 20:26:07.967706",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
- "naming_rule": "Autoincrement",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {

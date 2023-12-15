@@ -1,0 +1,76 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2023-12-14 20:44:02.202763",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "scale_item",
+  "tangbu",
+  "fanfee",
+  "yayunfee",
+  "fakuan",
+  "gaosufee"
+ ],
+ "fields": [
+  {
+   "fieldname": "scale_item",
+   "fieldtype": "Link",
+   "label": "\u7269\u6d41\u5355\u53f7",
+   "options": "Scale Item"
+  },
+  {
+   "fieldname": "tangbu",
+   "fieldtype": "Float",
+   "label": "\u8d9f\u8865"
+  },
+  {
+   "fieldname": "fanfee",
+   "fieldtype": "Float",
+   "label": "\u996d\u8d39"
+  },
+  {
+   "fieldname": "yayunfee",
+   "fieldtype": "Float",
+   "label": "\u66ff\u73ed/\u62bc\u8fd0\u8d39"
+  },
+  {
+   "fieldname": "fakuan",
+   "fieldtype": "Float",
+   "label": "\u7f5a\u6b3e"
+  },
+  {
+   "fieldname": "gaosufee",
+   "fieldtype": "Float",
+   "label": "\u9ad8\u901f\u8d39"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-14 21:31:48.511648",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Scale Fee",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

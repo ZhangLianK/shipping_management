@@ -1,0 +1,25 @@
+{% extends "templates/web.html" %}
+{% block content %}
+    <div class="container mt-4">
+        <div class="mb-4">
+            <h3>{{ _('物流单列表') }}</h3>
+            <a href="/shipping_list" class="btn btn-primary btn-sm" role="button" aria-pressed="true">刷新</a>
+        </div>
+        <div class="list-group">
+            {% for scale_item in scale_items %}
+                <a href="/shipping_viewer?scale_item={{ scale_item.name }}" style="background:#F4F5F6" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{ scale_item.name }}</h5>
+                        <small>{{ scale_item.date }}</small>
+                    </div>
+                    <br>
+                    <p class="mb-1">状态: {{ scale_item.status }}</p>
+                    <p class="mb-1">车号: {{ scale_item.vehicle }}</p>
+                    <p class="mb-1">装货地: {{ scale_item.from_addr }}</p>
+                    <p class="mb-1">卸货地: {{ scale_item.to_addr }}</p>
+                </a>
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

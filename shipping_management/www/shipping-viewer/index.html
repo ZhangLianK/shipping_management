@@ -1,0 +1,632 @@
+{% extends "templates/web.html" %}
+{% block title %}{{ _('Shipping Management') }}{% endblock %}
+{% block header %}
+<div class="mb-6"><h3>{{ _('物流单信息') }}</h3></div>
+<script type="text/javascript" scr ="/assets/frappe/js/frappe/form/controls/attach.js"></script>
+    
+{% endblock header %}
+{% block page_content %}
+<section class="section section-padding-bottom">
+    <div class="container">
+        <!-- Page Description -->
+        <div class="row mb-4">
+            <p>开始执行运单，请点击【出车（运单开始）】按钮，运单结束后点击【收车（运单结束）】按钮。
+                <br>车辆装车完毕后请点击【装车信息上传】按钮。
+                <br>车辆卸车完毕后请点击【卸车信息上传】按钮。
+                </p>
+        </div>
+        <!-- Buttons for Start and End Actions -->
+        <div class="row mb-4">
+            <!-- Left Aligned Button -->
+            <div class="col text-left">
+                <a id="start" class="btn btn-primary">出车（运单开始）</a>
+            </div>
+            <!-- Right Aligned Button -->
+            <div class="col text-right">
+                <a id="end" class="btn btn-success">收车（运单结束）</a>
+            </div>
+        </div>
+
+        <!-- Info Fields and Load/Offload Information -->
+        <div class="row mb-4">
+            <div class="col-12">
+
+                <!-- Info Fields -->
+                <div class="info-fields mb-4">
+                    <div class="row mb-2 ">
+                        <h4>基本信息</h4>
+                    </div>
+                    <!-- Scale Item -->
+                    <div class="row mb-2 ">
+                        <div class="col-xs-4">
+                            <strong>物流单号:</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{{ scale_item }}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2 ">
+                        <div class="col-xs-4">
+                            <strong>状态:</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{{ status }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Vehicle -->
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>车号:</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if vehicle %} {{ vehicle }} {% endif %}</span>
+                        </div>
+                    </div>
+
+                    <!-- Driver -->
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>司机:</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if driver %} {{ driver }} {% endif %}</span>
+                        </div>
+                    </div>
+
+                    <!-- Driver pid-->
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>身份证:</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if pid %} {{ pid }} {% endif %}</span>
+                        </div>
+                    </div>
+
+                    <!-- Driver cell phone-->
+<!--                     <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>手机号:</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{{ cell_number }}</span>
+                        </div>
+                    </div> -->
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>装货地:</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if from_addr %} {{ from_addr }} {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>卸货地:</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if to_addr %} {{ to_addr }} {% endif %}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-fields mb-4">
+                    <div class="row mb-2 ">
+                        <div class = "col-xs-4">
+                            <h4>装车信息</h4>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <a class="btn btn-info" id="load">装车信息上传</a>
+                        </div>
+                    </div>
+                    <!-- Left Aligned Button -->
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>装车皮重</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if load_blank_weight %} {{ load_blank_weight }} {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>装车毛重</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if load_gross_weight %} {{ load_gross_weight }} {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>装车净重</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if load_net_weight %} {{ load_net_weight }} {% endif %}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-fields mb-4">
+                    <div class="row mb-2 ">
+                        <div class = "col-xs-4">
+                            <h4>卸车信息</h4>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <a class="btn btn-warning" id="offload">卸车信息上传</a>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>卸车皮重</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if offload_blank_weight %} {{ offload_blank_weight }} {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>卸车毛重</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if offload_gross_weight %} {{ offload_gross_weight }} {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>卸车净重</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if offload_net_weight %} {{ offload_net_weight }} {% endif %}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-fields mb-4">
+                    
+
+                    <div class="row mb-2 ">
+                        <div class = "col-xs-4">
+                            <h4>费用信息</h4>
+                        </div>
+                        <div class="col-xs-8 text-right">
+                            <a class="btn" id="fee">费用信息上传</a>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>开始时间</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if from_dt %} {{ from_dt }} {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>结束时间</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if to_dt %} {{ to_dt }} {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>趟补</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if tangbu %} {{ tangbu }} {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>饭费</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if fanfee %} {{ fanfee }} {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>押运费</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if yayunfee %} {{ yayunfee }} {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>罚款</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if fakuan %} {{ fakuan }} {% endif %}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-xs-4">
+                            <strong>高速费</strong>
+                        </div>
+                        <div class="col-xs-8 bg-light">
+                            <span>{% if gaosufee %} {{ gaosufee }} {% endif %}</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>      
+        </div>
+        <!-- ... Your existing info fields and buttons ... -->
+
+        <!-- Bootstrap Modal for End Action Confirmation -->
+        <div class="modal fade" id="endModal" tabindex="-1" role="dialog" aria-labelledby="endModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="endModalLabel">收车确认</h5>
+                    </div>
+                    <div class="modal-body">
+                        <!-- create an form with three field, Scale Item, mileage, image upload with Bootstrap-->
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <strong class="control-label" for="scaleItem">物流单号</strong>
+                                <div class="controls">
+                                    <input type="text" class="form-control" id="scaleItem" value={{scale_item}} readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <strong class="control-label" for="mileage">里程</strong>
+                                <div class="controls">
+                                    <input type="number" class="form-control" id="mileage" placeholder="请输入里程表示数">
+                                </div>
+                            </div>
+                            <!-- ... -->
+                            <div class="form-group">
+                                <strong class="control-label" for="imageUpload">里程表图片上传</strong>
+                                <div class="controls">
+                                    <div id="cameraPopup" style="display: none; position: relative;">
+                                        <video id="video" width="100%" autoplay></video>
+                                        <button id="capturebutton" style="position: absolute; top: 10px; right: 10px;" class="btn btn-primary">拍照</button>
+                                    </div>
+                                    <div>
+                                        <button id="startbutton" class="btn btn-primary">打开摄像头</button>
+                                    </div>
+                                    <div>
+                                        <canvas id="canvas" width="100%"></canvas>
+                                    </div>
+                                </div>   
+                            </div>
+                            <!-- ... -->
+                        </form>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="confirmEnd">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Bootstrap Modal for start Action Confirmation -->
+        <div class="modal fade" id="startModal" tabindex="-1" role="dialog" aria-labelledby="startModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="startModalLabel">出车确认</h5>
+                    </div>
+                    <div class="modal-body">
+                        <!-- create an form with three field, Scale Item, mileage, image upload with Bootstrap-->
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <strong class="control-label" for="scaleItem">物流单号</strong>
+                                <div class="controls">
+                                    <input type="text" class="form-control" id="scaleItem" value={{scale_item}} readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <strong class="control-label" for="mileage">里程</strong>
+                                <div class="controls">
+                                    <input type="number" class="form-control" id="mileage" placeholder="请输入里程表示数">
+                                </div>
+                            </div>
+                            
+                            <!-- ... -->
+                            <div class="form-group">
+                                <strong class="control-label" for="imageUpload">里程表图片上传</strong>
+                                <div class="controls">
+                                    <div id="cameraPopup" style="display: none; position: relative;">
+                                        <video id="video" width="100%" autoplay></video>
+                                        <button id="capturebutton" style="position: absolute; top: 10px; right: 10px;" class="btn btn-primary">拍照</button>
+                                    </div>
+                                    <div>
+                                        <button id="startbutton" class="btn btn-primary">打开摄像头</button>
+                                    </div>
+                                    <div>
+                                        <canvas id="canvas" width="100%"></canvas>
+                                    </div>
+                                </div>   
+                            </div>
+                            <!-- ... -->
+                        </form>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="confirmStart">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{%- block script -%}
+<script>
+    $(document).ready(function(){
+        $("#load").click(function(){
+            //direct to load page
+            let query_params = frappe.utils.get_query_params();
+			let path = '/scale-load/new' + '?' + frappe.utils.get_url_from_dict(query_params);
+            window.location.href = path
+        });
+        $("#offload").click(function(){
+            //direct to load page
+            let query_params = frappe.utils.get_query_params();
+			let path = '/scale-offload/new' + '?' + frappe.utils.get_url_from_dict(query_params);
+            window.location.href = path
+        });
+        $("#fee").click(function(){
+            //direct to load page
+            let query_params = frappe.utils.get_query_params();
+			let path = '/scale-fee/new' + '?' + frappe.utils.get_url_from_dict(query_params);
+            window.location.href = path
+        });
+        // Start Button Click Handler
+        $("#start").click(function(){
+            $('#startModal').modal('show');
+        });
+
+        // End Button Click Handler - Shows Modal
+        $("#end").click(function(){
+            //make sure load net weight and offload net weight is not blank if the status is not '9 已取消'
+            let status = "{{ status }}";
+            let load_net_weight = parseFloat("{{ load_net_weight }}")
+            let offload_net_weight = parseFloat("{{ offload_net_weight }}")
+
+            if (status != '9 已取消'){
+                if (!load_net_weight || !offload_net_weight){
+                    frappe.msgprint("请先上传装车信息和卸车信息!");
+                    return;
+                }
+            }
+            $('#endModal').modal('show');
+        });
+        
+        // Confirm End Button in Modal
+        $("#confirmEnd").click(function() {
+            let mileage_end = $("#endModal #mileage").val();
+            let verification_code = $("#endModal #verification_code").val();
+            //check convas_end is not blank
+            if (canvas_end.getAttribute('status') != 'ok'){
+                frappe.msgprint("请拍摄里程表图片!");
+                return;
+            }
+
+
+            let image_base64_end = canvas_end.toDataURL('image/png').split(',')[1];
+
+            // Example: Stripping the prefix if present
+            if (!mileage_end || !image_base64_end){
+                frappe.msgprint("请填写所有必要信息，里程、验证码和图片");
+                return;
+            }
+
+            frappe.call({
+                method: "shipping_management.shipping_management.doctype.scale_item.scale_item.start_end_shipping",
+                args: {
+                    "action": 'end',
+                    "scale_item": "{{ scale_item }}",
+                    "mileage": mileage_end,
+                    "image_base64": image_base64_end,
+                    "verification_code": verification_code,
+                },
+                callback: function(r) {
+                    if(r.message) {
+                        if (r.message.status == "success"){
+                            frappe.msgprint("运单结束成功！结束时间为" + frappe.datetime.now_datetime());
+                        }
+                        else{
+                            frappe.msgprint(r.message);
+                        }
+                    }
+                    $('#endModal').modal('hide'); // Hide Modal
+                }
+            });
+        });
+        //get verification code
+        $("#get_verification_code").click(function() {
+            let cell_number = $("#startModal #cell_number").val();
+            let scale_item = "{{ scale_item }}";
+
+            if (!cell_number){
+                frappe.msgprint("请填写手机号");
+                return;
+            }
+            frappe.call({
+                method: "shipping_management.shipping_management.doctype.scale_item.scale_item.get_verification_code",
+                args: {
+                    "cell_number": cell_number,
+                    "scale_item": scale_item,
+                },
+                callback: function(r) {
+                    if(r.message) {
+                        if (r.message.status == "success"){
+                            frappe.msgprint("验证码已发送，请注意查收");
+                        }
+                        else{
+                            frappe.msgprint(r.message);
+                        }
+                    }
+                }
+            });
+        });
+        // Confirm Start Button in Modal
+        $("#confirmStart").click(function() {
+            let mileage_start = $("#startModal #mileage").val();
+            let cell_number = $("#startModal #cell_number").val();
+            let verification_code = $("#startModal #verification_code").val();
+            console.log(mileage_start)
+            if (canvas_start.getAttribute('status') != 'ok'){
+                frappe.msgprint("请拍摄里程表图片!");
+                return;
+            }
+            let image_base64_start = canvas_start.toDataURL('image/png').split(',')[1];
+            // Example: Stripping the prefix if present
+
+            if (!mileage_start || !image_base64_start){
+                frappe.msgprint("请填写所有必要信息，里程,手机号，验证码和里程表图片");
+                return;
+            }
+            frappe.call({
+                method: "shipping_management.shipping_management.doctype.scale_item.scale_item.start_end_shipping",
+                args: {
+                    "action": 'start',
+                    "scale_item": "{{ scale_item }}",
+                    "mileage": mileage_start,
+                    "image_base64": image_base64_start,
+                    "cell_number": cell_number,
+                    "verification_code": verification_code,
+                },
+                callback: function(r) {
+                    if(r.message) {
+                        if (r.message.status == "success"){
+                            frappe.msgprint("运单开始！开始时间为" + frappe.datetime.now_datetime());
+                        }
+                        else{
+                            frappe.msgprint(r.message);
+                        }
+                    }
+                    $('#startModal').modal('hide'); // Hide Modal
+                }
+            });
+        });
+
+        // Remove Footer (if needed)
+        $(".web-footer > .container").remove();
+    });
+    //end button camera start
+    let video_end = document.querySelector('#endModal #video');
+    let canvas_end = document.querySelector('#endModal #canvas');
+    let startbutton_end = document.querySelector('#endModal #startbutton');
+    let capturebutton_end = document.querySelector('#endModal #capturebutton');
+    let cameraPopup_end = document.querySelector('#endModal #cameraPopup');
+    let stream_end;
+
+    startbutton_end.addEventListener('click', function(ev){
+      startup_end();
+      ev.preventDefault();
+    }, false);
+  
+    capturebutton_end.addEventListener('click', function(ev){
+      takepicture_end();
+      ev.preventDefault();
+    }, false);
+  
+    function startup_end() {
+      cameraPopup_end.style.display = 'block';
+      navigator.mediaDevices.getUserMedia({video: true})
+      .then(function(mediaStream) {
+        stream_end = mediaStream;
+        video_end.srcObject = mediaStream;
+        video_end.play();
+      })
+      .catch(function(err) {
+        console.log("An error occurred: " + err);
+      });
+  }
+
+function takepicture_end() {
+        // Set the canvas dimensions to match the video.
+        canvas_end.width = video_end.videoWidth;
+        canvas_end.height = video_end.videoHeight;
+
+        var context_img_end = canvas_end.getContext('2d');
+        context_img_end.drawImage(video_end, 0, 0, video_end.videoWidth, video_end.videoHeight);
+        var data_end = canvas_end.toDataURL('image/png');
+        console.log(data_end);
+
+        // Stop all video streams.
+        stream_end.getTracks().forEach(function(track) {
+            track.stop();
+        });
+
+        video_end.srcObject = null;
+        cameraPopup_end.style.display = 'none';
+
+        // Adjust the canvas size to fit the modal.
+        canvas_end.style.width = '100%';
+        canvas_end.style.height = 'auto';
+        canvas_end.setAttribute('status', 'ok');
+}
+//end button camera end
+
+let video_start = document.querySelector('#startModal #video');
+let canvas_start = document.querySelector('#startModal #canvas');
+let startbutton_start = document.querySelector('#startModal #startbutton');
+let capturebutton_start = document.querySelector('#startModal #capturebutton');
+let cameraPopup_start = document.querySelector('#startModal #cameraPopup');
+let stream_start;
+
+startbutton_start.addEventListener('click', function(ev){
+  startup_start();
+  ev.preventDefault();
+}, false);
+
+capturebutton_start.addEventListener('click', function(ev){
+  takepicture_start();
+  ev.preventDefault();
+}, false);
+
+function startup_start() {
+  cameraPopup_start.style.display = 'block';
+  navigator.mediaDevices.getUserMedia({video: true})
+  .then(function(mediaStream) {
+    stream_start = mediaStream;
+    video_start.srcObject = mediaStream;
+    video_start.play();
+  })
+  .catch(function(err) {
+    console.log("An error occurred: " + err);
+  });
+}
+
+function takepicture_start() {
+    // Set the canvas dimensions to match the video.
+    canvas_start.width = video_start.videoWidth;
+    canvas_start.height = video_start.videoHeight;
+
+    var context_img_start = canvas_start.getContext('2d');
+    context_img_start.drawImage(video_start, 0, 0, video_start.videoWidth, video_start.videoHeight);
+    var data_start = canvas_start.toDataURL('image/png');
+    console.log(data_start);
+
+    // Stop all video streams.
+    stream_start.getTracks().forEach(function(track) {
+        track.stop();
+    });
+
+    video_start.srcObject = null;
+    cameraPopup_start.style.display = 'none';
+
+    // Adjust the canvas size to fit the modal.
+    canvas_start.style.width = '100%';
+    canvas_start.style.height = 'auto'
+    canvas_start.setAttribute('status', 'ok');
+}
+</script>
+{%- endblock -%}
+
+{%- block style -%}
+<!-- Add any custom styles here -->
+{%- endblock -%}

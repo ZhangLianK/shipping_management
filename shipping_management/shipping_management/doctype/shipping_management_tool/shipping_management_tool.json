@@ -1,0 +1,130 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-13 00:59:04.954827",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "column_break_xudq5",
+  "date",
+  "section_break_incyt",
+  "ship_plan",
+  "column_break_emxj5",
+  "qty",
+  "column_break_g6dcs",
+  "assigned_qty",
+  "section_break_m1rbr",
+  "from_addr",
+  "column_break_tqed5",
+  "to_addr",
+  "section_break_dj6ub",
+  "scale_child"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u516c\u53f8",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ship_plan",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7269\u6d41\u8ba1\u5212",
+   "options": "Ship Plan",
+   "reqd": 1
+  },
+  {
+   "fieldname": "scale_child",
+   "fieldtype": "Table",
+   "label": "\u7269\u6d41\u5355\u5217\u8868",
+   "options": "Scale Child"
+  },
+  {
+   "fieldname": "section_break_dj6ub",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "ship_plan.qty",
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "label": "\u8ba1\u5212\u603b\u8fd0\u91cf"
+  },
+  {
+   "fieldname": "section_break_m1rbr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "ship_plan.from_addr",
+   "fieldname": "from_addr",
+   "fieldtype": "Small Text",
+   "label": "\u63d0\u8d27\u5730"
+  },
+  {
+   "fieldname": "column_break_tqed5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "ship_plan.to_addr",
+   "fieldname": "to_addr",
+   "fieldtype": "Small Text",
+   "label": "\u9001\u8d27\u5730"
+  },
+  {
+   "fieldname": "column_break_xudq5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "\u8ba1\u5212\u65e5\u671f",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_incyt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_emxj5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_g6dcs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "assigned_qty",
+   "fieldtype": "Float",
+   "label": "\u5df2\u914d\u8f66\u8fd0\u91cf",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2023-11-17 23:04:34.638934",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Shipping Management Tool",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

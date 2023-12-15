@@ -1,0 +1,159 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-25 00:40:07.588037",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "column_break_lfuh3",
+  "driver",
+  "column_break_0bpzt",
+  "from_date",
+  "column_break_qdtse",
+  "to_date",
+  "section_break_k6rn6",
+  "ship_plan",
+  "column_break_ogslf",
+  "date",
+  "column_break_lgsiz",
+  "plan_desc",
+  "section_break_x0fhr",
+  "from_addr",
+  "column_break_cis5i",
+  "to_addr",
+  "section_break_mx4m2",
+  "total",
+  "scale_fees"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u516c\u53f8",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ship_plan",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7269\u6d41\u8ba1\u5212",
+   "options": "Ship Plan"
+  },
+  {
+   "fieldname": "scale_fees",
+   "fieldtype": "Table",
+   "label": "\u8d39\u7528\u8be6\u60c5",
+   "options": "Scale Fees"
+  },
+  {
+   "fetch_from": "ship_plan.date",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "\u8ba1\u5212\u65e5\u671f",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "ship_plan.plan_desc",
+   "fieldname": "plan_desc",
+   "fieldtype": "Data",
+   "label": "\u8ba1\u5212\u6982\u8981",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "ship_plan.to_addr",
+   "fieldname": "from_addr",
+   "fieldtype": "Small Text",
+   "label": "\u63d0\u8d27\u5730"
+  },
+  {
+   "fetch_from": "ship_plan.from_addr",
+   "fieldname": "to_addr",
+   "fieldtype": "Small Text",
+   "label": "\u9001\u8d27\u5730"
+  },
+  {
+   "fieldname": "column_break_lfuh3",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_ogslf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_lgsiz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_x0fhr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_mx4m2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_cis5i",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "label": "\u53f8\u673a",
+   "options": "Driver"
+  },
+  {
+   "fieldname": "section_break_k6rn6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "total",
+   "fieldtype": "Float",
+   "label": "\u603b\u4ef7"
+  },
+  {
+   "fieldname": "column_break_0bpzt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "\u67e5\u8be2\u8d77\u59cb\u65e5"
+  },
+  {
+   "fieldname": "column_break_qdtse",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "\u67e5\u8be2\u7ed3\u675f\u65e5"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2023-12-15 21:00:48.927509",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Shipping Fee Calculation",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -65,6 +65,14 @@ frappe.query_reports["Scale Item"] = {
 			"mandatory": 0,
 			"options": "Sales Invoice",
 			"wildcard_filter": 0
+		},
+		{
+			"fieldname": "ship_plan",
+			"fieldtype": "Link",
+			"label": "\u7269\u6d41\u8ba1\u5212",
+			"mandatory": 0,
+			"options": "Ship Plan",
+			"wildcard_filter": 0
 		}
 	]
 };

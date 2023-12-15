@@ -13,6 +13,8 @@
   "ship_type",
   "column_break_zlgq7",
   "pot",
+  "column_break_uxumw",
+  "verification_code",
   "section_break_hltam",
   "screen",
   "section_break_jiasa",
@@ -136,13 +138,15 @@
    "allow_on_submit": 1,
    "fieldname": "gross_weight",
    "fieldtype": "Float",
-   "label": "\u6bdb\u91cd"
+   "label": "\u6bdb\u91cd",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
    "fieldname": "blank_weight",
    "fieldtype": "Float",
-   "label": "\u76ae\u91cd"
+   "label": "\u76ae\u91cd",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_hsuqb",
@@ -188,7 +192,7 @@
    "allow_on_submit": 1,
    "fieldname": "pot",
    "fieldtype": "Link",
-   "label": "\u7f50",
+   "label": "\u7f50(\u5e93\u4f4d)",
    "options": "Warehouse"
   },
   {
@@ -205,7 +209,8 @@
    "allow_on_submit": 1,
    "fieldname": "net_weight",
    "fieldtype": "Float",
-   "label": "\u51c0\u91cd"
+   "label": "\u51c0\u91cd",
+   "read_only": 1
   },
   {
    "fieldname": "term_window",
@@ -248,12 +253,22 @@
    "fieldname": "reverse",
    "fieldtype": "Check",
    "label": "reverse"
+  },
+  {
+   "fieldname": "column_break_uxumw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "verification_code",
+   "fieldtype": "Data",
+   "label": "\u9a8c\u8bc1\u7801"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-11-12 07:28:39.770751",
+ "modified": "2023-12-15 20:25:48.112849",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",

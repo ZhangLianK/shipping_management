@@ -12,8 +12,56 @@ from frappe.model.utils import get_fetch_values
 from frappe import _, msgprint
 from erpnext.stock.utils import get_stock_balance
 import math
+import base64
+from PIL import Image
+from io import BytesIO
+import os
+import random
+import string
+from tencent_integration.tencent_integration.doctype.tencent_sms_log.tencent_sms_log import create_sms_log
+import json
+
 
 class ScaleItem(Document):
+	def get_verification_code(self):
+		driver_phone_number = frappe.get_value("Driver", self.driver, "cell_number")
+		if driver_phone_number:
+			if not self.verification_code:
+				#generate verification code with number of 6 digits
+				self.verification_code = ''.join(random.choices(string.digits, k=6))
+				self.save(ignore_permissions=True)
+			#generate a json list with the driver number
+			driver_phone_number_list = json.dumps([driver_phone_number])
+			variable_list = json.dumps([self.verification_code])
+			#send sms to driver
+			create_sms_log(self.company, "ship_verification_code", driver_phone_number_list, variable_list)
+			print('send sms')
+   
+	def check_credit_limit(self):
+		from erpnext.selling.doctype.customer.customer import check_credit_limit
+
+		sales_order_doc = frappe.get_doc('Sales Order', self.sales_order)
+		total_qty_vehicle = self.target_weight + sales_order_doc.qty_vehicle
+
+		extra_amount = 0
+		validate_against_credit_limit = False
+		bypass_credit_limit_check_at_sales_order = cint(
+			frappe.db.get_value(
+				"Customer Credit Limit",
+				filters={"parent": sales_order_doc.customer, "parenttype": "Customer", "company": sales_order_doc.company},
+				fieldname="bypass_credit_limit_check",
+			)
+		)
+
+		if bypass_credit_limit_check_at_sales_order:
+
+			validate_against_credit_limit = True
+			extra_amount = total_qty_vehicle / sales_order_doc.total_qty * sales_order_doc.grand_total
+
+		if validate_against_credit_limit:
+			check_credit_limit(
+				sales_order_doc.customer, sales_order_doc.company, bypass_credit_limit_check_at_sales_order, extra_amount
+			)
 
 	def calculate_weight(self):
 		if (not self.load_net_weight) and self.load_blank_weight and self.load_gross_weight:
@@ -79,14 +127,16 @@ class ScaleItem(Document):
 			frappe.throw(f"采购订单的总配车吨数:{total_qty_vehicle}超过已付款总量: {qty}")  
 
 	def validate_qty_out(self):
-		sales_invoice = frappe.get_doc('Sales Invoice', self.sales_invoice)
+		#pass
+		#sales_invoice = frappe.get_doc('Sales Invoice', self.sales_invoice)
 		#get all scale items doc related to this sales invoice except status is cancel
 		#and then sum all target_weight
-		scale_items = frappe.get_all("Scale Item", filters={'sales_invoice': self.sales_invoice, 'status': ['!=', '6 已取消']}, fields=['target_weight'])	
-		total_qty = sum([scale_item.target_weight for scale_item in scale_items]) + self.target_weight
+		#scale_items = frappe.get_all("Scale Item", filters={'sales_invoice': self.sales_invoice, 'status': ['!=', '6 已取消']}, fields=['target_weight'])	
+		#total_qty = sum([scale_item.target_weight for scale_item in scale_items]) + self.target_weight
 	
-		if sales_invoice.items[0].qty  < total_qty:
-			frappe.throw(f"总配车吨数超过销售费用清单 {self.sales_invoice} 的总量")
+		#if sales_invoice.items[0].qty  < total_qty:
+		#	frappe.throw(f"总配车吨数超过销售费用清单 {self.sales_invoice} 的总量")
+		self.check_credit_limit()
 
 	def validate_load(self):
 	#	vehicle_doc = frappe.get_doc('Vehicle',self.vehicle)
@@ -154,6 +204,21 @@ class ScaleItem(Document):
 			if (ori_doc.status[0] > self.status[0]):
 				frappe.throw(_(f"无法从状态 '{ori_doc.status}' 修改为 '{self.status}' ！"), frappe.ValidationError)
 
+	def update_order_scale_weight(self):
+		#get original target weight of the scale item
+		old_doc = self.get_doc_before_save()
+		old_target_weight = old_doc.target_weight
+
+		if self.purchase_order:
+			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order)
+			purchase_order.qty_vehicle  = purchase_order.qty_vehicle + self.target_weight - old_target_weight
+			purchase_order.save()
+
+		if self.sales_order:
+			sales_order = frappe.get_doc("Sales Order", self.sales_order)
+			sales_order.qty_vehicle  = sales_order.qty_vehicle + self.target_weight - old_target_weight
+			sales_order.save()
+   
 	def before_save(self):
 		#采购收货处理逻辑开始purchase receipt process logic start
 		if self.type == 'IN':
@@ -224,8 +289,16 @@ class ScaleItem(Document):
 			self.change_status()
 			#self.check_weight()
 			self.validate_status()
+		self.update_order_scale_weight()
 	
 	def on_submit(self):
+		
+		#create notification sms
+		#first get driver phone number
+		driver_doc = frappe.get_doc("Driver", self.driver)
+		if driver_doc.cell_number and driver_doc.recv_sms:
+			self.get_verification_code()
+		
 		if self.purchase_order:
 			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order)
 			purchase_order.qty_vehicle  = purchase_order.qty_vehicle + self.target_weight
@@ -265,6 +338,9 @@ class ScaleItem(Document):
 				sales_invoice.save()
 		
 			self.status = "9 已取消"
+   
+	def before_cancel(self):
+		self.status = "9 已取消"
 
 def set_missing_values(source, target):
 	target.run_method("set_missing_values")
@@ -280,10 +356,6 @@ def make_purchase_receipt(source_name, target_doc=None):
 		target.set_warehouse = source_doc.pot
 		
 	def update_item(obj, target, source_parent):
-		print(source_doc)
-		print(obj)
-		print(target)
-		print(source_parent)
 		target.warehouse = source_doc.pot
 		if	source_doc.type == 'IN':
 			target.qty = flt(source_doc.offload_net_weight)
@@ -489,75 +561,204 @@ def save_scale_weight():
 
 @frappe.whitelist()
 def get_scale_item():
-    try:
-        # Extract parameters from form_dict
-        parent_warehouse = frappe.form_dict.get('parent_warehouse')
-        checkall = frappe.form_dict.get('checkall')
-        vehicle = frappe.form_dict.get('vehicle')
-        
-        # Fetch warehouse names based on parent_warehouse
-        warehouse_query = "SELECT name FROM `tabWarehouse` WHERE parent_warehouse = %s"
-        warehouses = frappe.db.sql(warehouse_query, (parent_warehouse,), as_dict=True)
-        warehouse_names = [f"'{warehouse.name}'" for warehouse in warehouses]  # Wrap names in quotes
-        
-        frappe.log_error("warehouse list", warehouse_names)
+	try:
+		# Extract parameters from form_dict
+		parent_warehouse = frappe.form_dict.get('parent_warehouse')
+		checkall = frappe.form_dict.get('checkall')
+		vehicle = frappe.form_dict.get('vehicle')
+		
+		# Fetch warehouse names based on parent_warehouse
+		warehouse_query = "SELECT name FROM `tabWarehouse` WHERE parent_warehouse = %s"
+		warehouses = frappe.db.sql(warehouse_query, (parent_warehouse,), as_dict=True)
+		warehouse_names = [f"'{warehouse.name}'" for warehouse in warehouses]  # Wrap names in quotes
+		
+		frappe.log_error("warehouse list", warehouse_names)
 
-        # Construct the WHERE clause based on checkall, warehouse_names, and vehicle
-        status_conditions = ""
-        if checkall == 'False':
-            status_conditions = '((si.type = "IN" and si.status NOT IN ("6 已完成", "9 已取消", "5 已卸货")) OR (si.type = "OUT" and si.status IN ("0 新配","1 已配罐","2 正在装货")))'
-        else:
-            status_conditions = '(si.type IN ("IN", "OUT") and si.status NOT IN ("6 已完成", "9 已取消"))'
-        
-        # Embed the warehouse names directly into the warehouse_conditions string
-        warehouse_conditions = f"si.pot IN ({', '.join(warehouse_names)})"
-        
-        # Add vehicle condition if it exists in form_dict
-        vehicle_condition = f"AND si.vehicle = '{vehicle}'" if vehicle else ""
-        
-        combined_filter = f"{status_conditions} AND {warehouse_conditions} {vehicle_condition}"
-        
-        # SQL query to fetch scale items based on the combined filter
-        scale_item_query = f"""
-            SELECT
-                si.desc,
-                si.pot,
-                i.item_name as item,
-                si.date,
-                si.vehicle,
-                si.name as ID,
-                d.full_name as driver,
-                si.status,
-                si.target_weight,
-                si.type,
-                si.load_net_weight,
-                si.load_gross_weight,
-                si.load_blank_weight,
-                si.offload_net_weight,
-                si.offload_gross_weight,
-                si.offload_blank_weight,
-                si.load_blank_dt,
-                si.load_gross_dt,
-                si.offload_gross_dt,
-                si.offload_blank_dt,
-                d.pid as driver_id
-            FROM `tabScale Item` AS si
-            LEFT JOIN `tabDriver` AS d ON si.driver = d.name
-            LEFT OUTER JOIN `tabItem` AS i ON si.item = i.name
-            WHERE {combined_filter}
-        """ 
-        
-        scale_item = frappe.db.sql(scale_item_query, as_dict=True)
+		# Construct the WHERE clause based on checkall, warehouse_names, and vehicle
+		status_conditions = ""
+		if checkall == 'False':
+			status_conditions = '((si.type = "IN" and si.status NOT IN ("6 已完成", "9 已取消", "5 已卸货")) OR (si.type = "OUT" and si.status IN ("0 新配","1 已配罐","2 正在装货")))'
+		else:
+			status_conditions = '(si.type IN ("IN", "OUT") and si.status NOT IN ("6 已完成", "9 已取消"))'
+		
+		# Embed the warehouse names directly into the warehouse_conditions string
+		warehouse_conditions = f"si.pot IN ({', '.join(warehouse_names)})"
+		
+		# Add vehicle condition if it exists in form_dict
+		vehicle_condition = f"AND si.vehicle = '{vehicle}'" if vehicle else ""
+		
+		combined_filter = f"{status_conditions} AND {warehouse_conditions} {vehicle_condition}"
+		
+		# SQL query to fetch scale items based on the combined filter
+		scale_item_query = f"""
+			SELECT
+				si.desc,
+				si.pot,
+				i.item_name as item,
+				si.date,
+				si.vehicle,
+				si.name as ID,
+				d.full_name as driver,
+				si.status,
+				si.target_weight,
+				si.type,
+				si.load_net_weight,
+				si.load_gross_weight,
+				si.load_blank_weight,
+				si.offload_net_weight,
+				si.offload_gross_weight,
+				si.offload_blank_weight,
+				si.load_blank_dt,
+				si.load_gross_dt,
+				si.offload_gross_dt,
+				si.offload_blank_dt,
+				d.pid as driver_id
+			FROM `tabScale Item` AS si
+			LEFT JOIN `tabDriver` AS d ON si.driver = d.name
+			LEFT OUTER JOIN `tabItem` AS i ON si.item = i.name
+			WHERE {combined_filter}
+		""" 
+		
+		scale_item = frappe.db.sql(scale_item_query, as_dict=True)
 
-        # Return results
-        frappe.response["message"] = {
-            "status": "success",
-            "items": scale_item
-        }
+		# Return results
+		frappe.response["message"] = {
+			"status": "success",
+			"items": scale_item
+		}
 
-    except Exception as e:
-        frappe.log_error('details get failed', str(e))
-        frappe.response["message"] = {
-            "status": "error",
-            "message": str(e)
-        }
+	except Exception as e:
+		frappe.log_error('details get failed', str(e))
+		frappe.response["message"] = {
+			"status": "error",
+			"message": str(e)
+		}
+
+
+
+@frappe.whitelist(allow_guest=True)
+def start_end_shipping(action, scale_item, mileage,image_base64, verification_code=None):
+	try:
+		
+		scale_item_doc = frappe.get_doc("Scale Item", scale_item)
+		""" if scale_item_doc.verification_code != verification_code:
+			frappe.throw("验证码不正确")
+			return """
+      
+		if action == 'start':
+			
+			#except this scale item, check if there is any other scale item that not ended. please using field to_dt to check
+			#from_dt has value but to_dt is null
+			scale_item_query = f"""
+				SELECT
+					si.name
+				FROM `tabScale Item` AS si
+				WHERE si.name != '{scale_item}' AND si.from_dt IS NOT NULL AND si.to_dt IS NULL
+				"""
+			scale_item_list = frappe.db.sql(scale_item_query, as_dict=True)
+			if scale_item_list:
+				frappe.throw("还有其他物流单未结束，请先结束上一个物流单。")
+	
+			if scale_item_doc.from_dt:
+				frappe.throw("出车时间已经设定，切勿重复操作")
+			else:
+				file_url = save_base64_image(image_base64, f"{scale_item}_start.png")
+				scale_item_doc.from_dt = frappe.utils.now_datetime()
+				scale_item_doc.mileage_start = mileage
+				scale_item_doc.start_img = file_url
+				
+
+		elif action == 'end':
+			
+	  		#except this scale item, check if there is any other scale item that not ended. please using field to_dt to check
+			#from_dt has value but to_dt is null
+			scale_item_query = f"""
+				SELECT
+					si.name
+				FROM `tabScale Item` AS si
+				WHERE si.name != '{scale_item}' AND si.from_dt IS NOT NULL AND si.to_dt IS NULL
+				"""
+			scale_item_list = frappe.db.sql(scale_item_query, as_dict=True)
+			if scale_item_list:
+				frappe.throw("还有其他物流单未结束，请先结束其他物流单")
+	
+			if scale_item_doc.to_dt:
+				frappe.throw("出车时间已经设定，切勿重复操作")
+			else:
+				file_url = save_base64_image(image_base64, f"{scale_item}_end.png")
+				scale_item_doc.to_dt = frappe.utils.now_datetime()
+				scale_item_doc.mileage_end = mileage
+				scale_item_doc.end_img = file_url
+				scale_item_doc.verification_code = None
+		scale_item_doc.save(ignore_permissions=True)
+		frappe.response["message"] = {
+			"status": "success"
+		}
+	except Exception as e:
+		frappe.log_error('scale API update failed', str(e))
+		frappe.response["message"] = {
+			"status": "error",
+			"message": str(e)
+		}
+  
+
+def save_base64_image(base64_data, filename):
+	# Decode the base64 string
+	image_data = base64.b64decode(base64_data)
+	image_buffer = BytesIO(image_data)
+	image = Image.open(image_buffer)
+
+	# Save the image to a file
+	file_path = frappe.get_site_path('private', 'files', filename)
+	image.save(file_path)
+
+	# Create a File doc and link it to the specified Doctype
+	file_url = '/private/files/' + filename
+	file_doc = frappe.get_doc({
+		'doctype': 'File',
+		'file_name': filename,
+		'file_url': file_url,
+		'is_private': 1,
+	})
+	file_doc.insert(ignore_permissions=True)
+	frappe.db.commit()
+ 
+
+	return file_doc.file_url
+
+
+@frappe.whitelist(allow_guest=True)
+def get_verification_code(scale_item,cell_number):
+	scale_item_doc = frappe.get_doc("Scale Item", scale_item)
+	if scale_item_doc:
+		#get driver phone number
+		driver_phone_number = frappe.get_value("Driver", scale_item_doc.driver, "cell_number")
+		if driver_phone_number and cell_number == driver_phone_number:
+			if not scale_item_doc.verification_code:
+				#generate verification code with number of 6 digits
+				scale_item_doc.verification_code = ''.join(random.choices(string.digits, k=6))
+				scale_item_doc.save(ignore_permissions=True)
+			#generate a json list with the driver number
+			driver_phone_number_list = json.dumps([driver_phone_number])
+			variable_list = json.dumps([scale_item_doc.verification_code])
+			#send sms to driver
+			
+			create_sms_log(scale_item_doc.company, "ship_verification_code", driver_phone_number_list, variable_list)
+			print('send sms')
+			frappe.response["message"] = {
+				"status": "success",
+				"message": "验证码已经发送"
+			}
+		else:
+			frappe.response["message"] = {
+				"status": "error",
+				"message": "司机手机号码不匹配"
+			}
+	else:
+		frappe.response["message"] = {
+			"status": "error",
+			"message": "没有找到物流单"
+		}
+
+
+

@@ -1,0 +1,98 @@
+{
+ "actions": [],
+ "autoname": "autoincrement",
+ "creation": "2023-11-13 01:11:37.285340",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "id",
+  "vehicle",
+  "scale_item",
+  "driver",
+  "status",
+  "qty",
+  "from_addr",
+  "to_addr"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "scale_item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7269\u6d41\u8ba1\u91cf\u5355\u53f7",
+   "options": "Scale Item",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "vehicle",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u8f66\u53f7",
+   "options": "Vehicle"
+  },
+  {
+   "columns": 1,
+   "fetch_from": "scale_item.status",
+   "fetch_if_empty": 1,
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u72b6\u6001",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "\u9884\u88c5\u91cf"
+  },
+  {
+   "columns": 1,
+   "fieldname": "from_addr",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "\u63d0\u8d27\u5730"
+  },
+  {
+   "columns": 1,
+   "fieldname": "to_addr",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "\u9001\u8d27\u5730"
+  },
+  {
+   "columns": 1,
+   "fetch_from": "vehicle.driver",
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u53f8\u673a",
+   "options": "Driver"
+  },
+  {
+   "columns": 1,
+   "fieldname": "id",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "\u7f16\u53f7"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-12-05 20:47:56.374034",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Scale Child",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

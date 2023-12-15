@@ -1,0 +1,213 @@
+{
+ "actions": [],
+ "autoname": "naming_series: naming_series",
+ "creation": "2023-11-12 21:14:00.993100",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "column_break_4y0jg",
+  "plan_desc",
+  "column_break_apxqk",
+  "date",
+  "column_break_g0lig",
+  "qty",
+  "section_break_afqls",
+  "supplier",
+  "type",
+  "column_break_icmmw",
+  "transporter_company",
+  "status",
+  "column_break_36vxq",
+  "assigned_qty",
+  "bill_type",
+  "section_break_hvcxu",
+  "price",
+  "column_break_5gjj3",
+  "purchase_order",
+  "column_break_farmo",
+  "sales_order",
+  "naming_series",
+  "section_break_lg2jo",
+  "from_addr",
+  "column_break_ov0kr",
+  "to_addr"
+ ],
+ "fields": [
+  {
+   "fieldname": "plan_desc",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u8ba1\u5212\u6982\u8981"
+  },
+  {
+   "fieldname": "column_break_apxqk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u8ba1\u5212\u65e5\u671f"
+  },
+  {
+   "fieldname": "column_break_g0lig",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "\u627f\u8fd0\u5546",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "section_break_afqls",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "\u91c7\u8d2d\u5355",
+   "options": "Purchase Order"
+  },
+  {
+   "fieldname": "column_break_farmo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "\u9500\u552e\u5355",
+   "options": "Sales Order"
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "\u8ba1\u5212\u603b\u8fd0\u91cf"
+  },
+  {
+   "fieldname": "column_break_4y0jg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "supplier.represents_company",
+   "fieldname": "transporter_company",
+   "fieldtype": "Link",
+   "label": "\u627f\u8fd0\u5546\u516c\u53f8",
+   "options": "Company"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "\u516c\u53f8",
+   "options": "Company"
+  },
+  {
+   "fieldname": "column_break_icmmw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u72b6\u6001",
+   "options": "\u672a\u5904\u7406\n\u8fdb\u884c\u4e2d\n\u5b8c\u6210"
+  },
+  {
+   "fieldname": "section_break_hvcxu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_lg2jo",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "from_addr",
+   "fieldtype": "Small Text",
+   "label": "\u63d0\u8d27\u5730"
+  },
+  {
+   "fieldname": "to_addr",
+   "fieldtype": "Small Text",
+   "label": "\u9001\u8d27\u5730"
+  },
+  {
+   "fieldname": "column_break_ov0kr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_36vxq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "assigned_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "\u5df2\u914d\u8f66\u8fd0\u91cf"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "label": "\u7c7b\u578b",
+   "options": "Ship Type"
+  },
+  {
+   "fieldname": "bill_type",
+   "fieldtype": "Link",
+   "label": "\u7ed3\u7b97\u7c7b\u578b",
+   "options": "Scale Type"
+  },
+  {
+   "description": "\u5143/\u5428",
+   "fieldname": "price",
+   "fieldtype": "Float",
+   "label": "\u8fd0\u4ef7"
+  },
+  {
+   "fieldname": "column_break_5gjj3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "SP.YY.MM.DD.####"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-05 21:24:40.796184",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Ship Plan",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "plan_desc"
+}

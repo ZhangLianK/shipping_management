@@ -26,6 +26,18 @@ def get_conditions(filters):
 
     if filters.get("status"):
         conditions = conditions + f" and sci.status = '{filters.status}'"
+    
+    if filters.get("transporter"):
+        conditions = conditions + f" and sci.transporter = '{filters.transporter}'"
+    
+    if filters.get("purchase_order"):
+        conditions = conditions + f" and sci.purchase_order = '{filters.purchase_order}'"
+    
+    if filters.get("sales_order"):
+        conditions = conditions + f" and sci.sales_order = '{filters.sales_order}'"
+    
+    if filters.get("ship_plan"):
+        conditions = conditions + f" and sci.ship_plan = '{filters.ship_plan}'"
 
     return conditions
 
@@ -51,11 +63,13 @@ def get_data(conditions, filters):
             sci.target_weight,
             sci.load_net_weight,
             sci.offload_net_weight,
+            sci.offload_net_weight - sci.load_net_weight as net_variance,
             sci.purchase_order,
             sci.purchase_receipt,
             sci.sales_order,
             sci.sales_invoice,
-            sci.delivery_note
+            sci.delivery_note,
+            sci.ship_plan
 
         from `tabScale Item`  sci
         left outer join `tabDriver` d
@@ -161,6 +175,12 @@ def get_columns():
    "width": 0
   },
   {
+   "fieldname": "net_variance",
+   "fieldtype": "Float",
+   "label": "\u51c0\u91cd\u76c8\u4e8f",
+   "width": 0
+  },
+  {
    "fieldname": "purchase_order",
    "fieldtype": "Link",
    "label": "\u91c7\u8d2d\u8ba2\u5355",
@@ -194,7 +214,15 @@ def get_columns():
    "label": "\u9500\u552e\u51fa\u8d27\u5355",
    "options": "Delivery Note",
    "width": 0
+  },
+  {
+   "fieldname": "ship_plan",
+   "fieldtype": "Link",
+   "label": "\u7269\u6d41\u8ba1\u5212",
+   "options": "Ship Plan",
+   "width": 0
   }
+  
  ]
         
 	return columns

@@ -24,7 +24,7 @@ def save_weight(scale_item, gross_weight=None, gross_dt=None, blank_weight=None,
 				scale_item_doc.offload_net_weight = net_weight
 			if pot:
 				scale_item_doc.pot=pot
-			scale_item_doc.save()
+			scale_item_doc.save(ignore_permissions=True)
 		elif scale_item_doc.type == 'OUT':
 			if gross_weight:
 				scale_item_doc.load_gross_weight = gross_weight
@@ -38,7 +38,7 @@ def save_weight(scale_item, gross_weight=None, gross_dt=None, blank_weight=None,
 				scale_item_doc.load_net_weight = net_weight
 			if pot:
 				scale_item_doc.pot=pot
-			scale_item_doc.save()
+			scale_item_doc.save(ignore_permissions=True)
 		return "success"
 	except Exception as e:
 		return e

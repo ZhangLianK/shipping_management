@@ -1,0 +1,77 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-19 08:35:52.962784",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "scale_item",
+  "verification_code",
+  "load_gross_weight",
+  "load_blank_weight",
+  "load_net_weight",
+  "load_image_upload"
+ ],
+ "fields": [
+  {
+   "fieldname": "scale_item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Scale Item",
+   "options": "Scale Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "load_gross_weight",
+   "fieldtype": "Float",
+   "label": "\u88c5\u8f66\u6bdb\u91cd"
+  },
+  {
+   "fieldname": "load_blank_weight",
+   "fieldtype": "Float",
+   "label": "\u88c5\u8f66\u76ae\u91cd"
+  },
+  {
+   "fieldname": "load_net_weight",
+   "fieldtype": "Float",
+   "label": "\u88c5\u8f66\u51c0\u91cd"
+  },
+  {
+   "fieldname": "load_image_upload",
+   "fieldtype": "Attach Image",
+   "label": "\u88c5\u8f66\u78c5\u5355\u4e0a\u4f20"
+  },
+  {
+   "fieldname": "verification_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u9a8c\u8bc1\u7801"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-12-14 21:39:58.505386",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Scale Load Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

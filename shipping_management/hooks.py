@@ -6,7 +6,16 @@ app_publisher = "Alvin"
 app_description = "Shipping Management for Petroleum Products"
 app_email = "zhangliankun0907@foxmail.com"
 app_license = "MIT"
+website_route_rules = [
+    # Other route rules...
 
+    # Route for shipping-view
+    {"from_route": "/shipping-viewer", "to_route": "/shipping-viewer"},
+    
+    # You can add more route rules here...
+]
+
+#add page route
 # Includes in <head>
 # ------------------
 

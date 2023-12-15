@@ -14,9 +14,20 @@ frappe.ui.form.on('Serial Port Reader', {
     // refresh: function(frm) {
 
     // }
+    onload_post_render: function (frm) {
+        //change the button color
+        frm.get_field("gross_weight_btn").$input.css("background","#2590EF")
+        frm.get_field("gross_weight_btn").$input.css("color","white")
+        frm.get_field("btn_blank_weight").$input.css("background","#4CA86C")
+        frm.get_field("btn_blank_weight").$input.css("color","white")
+        frm.get_field("save_weight").$input.css("background","red")
+        frm.get_field("save_weight").$input.css("color","white")
+    },
 
 
     refresh: function (frm) {
+        
+
         frm.set_query("scale_item", function () {
             return {
                 filters: {
@@ -315,6 +326,31 @@ frappe.ui.form.on('Serial Port Reader', {
             }
         });
     },
+    ship_type: function (frm) {
+        //when ship_type is OUT, make the verification code field mandatory
+        if (frm.doc.ship_type == "OUT") {
+            frm.set_df_property("verification_code", "reqd", 1);
+        }
+        else {
+            frm.set_df_property("verification_code", "reqd", 0);
+        }
+    },
+    verification_code: function (frm) {
+        //when verification code is entered, using the code to get all document with the same code
+        //check length of the value if length is 6 then contine
+        if (frm.doc.verification_code.length == 6) {
+            //get all document with the same verification code
+            frappe.db.get_doc("Scale Item", null, { verification_code: frm.doc.verification_code }).then(doc => {
+                if (doc) {
+                    frm.doc.vehicle = doc.vehicle;
+                    frm.doc.scale_item = doc.name;
+                    frm.doc.ship_type = doc.type;
+                    frm.doc.pot = doc.pot
+                    frm.refresh();
+                }
+            });
+        }
+    },
     scale_item: function (frm) {
         frappe.db.get_doc("Scale Item", frm.doc.scale_item).then(doc => {
             if (doc.type != frm.doc.ship_type) {
@@ -432,8 +468,8 @@ async function openClose(frm) {
                         reader.releaseLock(); // release the lock on the reader so the owner port can be closed
                         break;
                     }
-                    frm.doc.term_window = frm.doc.term_window + value; // write the incoming string to the term_window textarea
-                    frm.refresh_field('term_window');
+                    //frm.doc.term_window = frm.doc.term_window + value; // write the incoming string to the term_window textarea
+                    //frm.refresh_field('term_window');
                     console.log(value);
                     if (reverse) {
                         value = Array.from(value).reverse().join("");
