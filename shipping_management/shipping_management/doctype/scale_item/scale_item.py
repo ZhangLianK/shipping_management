@@ -653,7 +653,7 @@ def start_end_shipping(action, scale_item, mileage,image_base64, verification_co
 				SELECT
 					si.name
 				FROM `tabScale Item` AS si
-				WHERE si.name != '{scale_item}' AND si.from_dt IS NOT NULL AND si.to_dt IS NULL
+				WHERE si.name != '{scale_item}' AND si.from_dt IS NOT NULL AND si.to_dt IS NULL AND si.status != '9 已取消' AND si.driver = '{scale_item_doc.driver}'
 				"""
 			scale_item_list = frappe.db.sql(scale_item_query, as_dict=True)
 			if scale_item_list:
@@ -670,17 +670,11 @@ def start_end_shipping(action, scale_item, mileage,image_base64, verification_co
 
 		elif action == 'end':
 			
-	  		#except this scale item, check if there is any other scale item that not ended. please using field to_dt to check
-			#from_dt has value but to_dt is null
-			scale_item_query = f"""
-				SELECT
-					si.name
-				FROM `tabScale Item` AS si
-				WHERE si.name != '{scale_item}' AND si.from_dt IS NOT NULL AND si.to_dt IS NULL
-				"""
-			scale_item_list = frappe.db.sql(scale_item_query, as_dict=True)
-			if scale_item_list:
-				frappe.throw("还有其他物流单未结束，请先结束其他物流单")
+	  		#check if this scale item has already started
+			if not scale_item_doc.from_dt:
+				frappe.throw("请先开始物流单")
+				return
+			
 	
 			if scale_item_doc.to_dt:
 				frappe.throw("出车时间已经设定，切勿重复操作")
