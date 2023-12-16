@@ -295,9 +295,10 @@ class ScaleItem(Document):
 		
 		#create notification sms
 		#first get driver phone number
-		driver_doc = frappe.get_doc("Driver", self.driver)
-		if driver_doc.cell_number and driver_doc.recv_sms:
-			self.get_verification_code()
+		if self.driver:
+			driver_doc = frappe.get_doc("Driver", self.driver)
+			if driver_doc.cell_number and driver_doc.recv_sms:
+				self.get_verification_code()
 		
 		if self.purchase_order:
 			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order)
@@ -640,7 +641,7 @@ def get_scale_item():
 def start_end_shipping(action, scale_item, mileage,image_base64, verification_code=None):
 	try:
 		
-		scale_item_doc = frappe.get_doc("Scale Item", scale_item)
+		scale_item_doc = frappe.get_doc("Scale Item", scale_item,ignore_permissions=True)
 		""" if scale_item_doc.verification_code != verification_code:
 			frappe.throw("验证码不正确")
 			return """
