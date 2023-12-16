@@ -122,6 +122,12 @@ def ocr_image(load_image_upload_value,scale_item):
 	return info.__dict__
 
 
+@frappe.whitelist()
+def get_scale_item_load(scale_item):
+	result = frappe.db.get_value("Scale Item",scale_item,["load_gross_weight","load_net_weight","load_blank_weight"],as_dict=1)
+	return result
+    
+
 class Info():
 	def __init__(self):
 		self._Tare = None

@@ -4,6 +4,23 @@ frappe.ready(function () {
 	console.log("Ready");
 	$(".web-form-footer .discard-btn")[0].innerHTML = '返回';
 	$(".web-footer > .container").remove();
+	frappe.web_form.on("scale_item", function (field, value) {
+		console.log("scale_item field changed");
+		//get the scale_item's other field value
+		frappe.call({
+			method: "shipping_management.shipping_management.web_form.scale_offload.scale_offload.get_scale_item_offload",
+			args: {
+				"scale_item": value
+			},
+			callback: function (r) {
+				console.log("r.message: " + r.message);
+				//set the scale_item's other field value
+				frappe.web_form.set_value("offload_gross_weight", r.message.offload_gross_weight);
+				frappe.web_form.set_value("offload_net_weight", r.message.offload_net_weight);
+				frappe.web_form.set_value("offload_blank_weight", r.message.offload_blank_weight);
+			}
+		});
+	});
 
 	//when the whole document is ready check if scale_item is set
 	$(document).ready(function () {

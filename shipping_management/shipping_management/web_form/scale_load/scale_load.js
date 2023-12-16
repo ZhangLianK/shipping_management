@@ -5,6 +5,24 @@ frappe.ready(function () {
 	$(".web-form-footer .discard-btn")[0].innerHTML = '返回';
 	$(".web-footer > .container").remove();
 
+
+	frappe.web_form.on("scale_item", function (field, value) {
+		console.log("scale_item field changed");
+		//get the scale_item's other field value
+		frappe.call({
+			method: "shipping_management.shipping_management.web_form.scale_load.scale_load.get_scale_item_load",
+			args: {
+				"scale_item": value
+			},
+			callback: function (r) {
+				console.log("r.message: " + r.message);
+				//set the scale_item's other field value
+				frappe.web_form.set_value("load_gross_weight", r.message.load_gross_weight);
+				frappe.web_form.set_value("load_net_weight", r.message.load_net_weight);
+				frappe.web_form.set_value("load_blank_weight", r.message.load_blank_weight);
+			}
+		});
+	});
 	//when the whole document is ready check if scale_item is set
 	$(document).ready(function () {
 		console.log("Document Ready");
