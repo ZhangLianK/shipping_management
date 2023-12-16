@@ -40,7 +40,7 @@ class ScaleItem(Document):
 	def check_credit_limit(self):
 		from erpnext.selling.doctype.customer.customer import check_credit_limit
 
-		sales_order_doc = frappe.get_doc('Sales Order', self.sales_order)
+		sales_order_doc = frappe.get_doc('Sales Order', self.sales_order,ignore_permissions=True)
 		total_qty_vehicle = self.target_weight + sales_order_doc.qty_vehicle
 
 		extra_amount = 0
@@ -114,7 +114,7 @@ class ScaleItem(Document):
 		total_allocated_amount = sum([ref.allocated_amount for ref in payment_entry_refs])
 	
 		# Get the first item rate from Purchase Order
-		purchase_order_doc = frappe.get_doc("Purchase Order", purchase_order)
+		purchase_order_doc = frappe.get_doc("Purchase Order", purchase_order,ignore_permissions=True)
 		first_item_rate = purchase_order_doc.items[0].rate if purchase_order_doc.items else 0
 	
 		# Calculate the quantity that can be purchased with the total allocated amount
@@ -205,19 +205,18 @@ class ScaleItem(Document):
 				frappe.throw(_(f"无法从状态 '{ori_doc.status}' 修改为 '{self.status}' ！"), frappe.ValidationError)
 
 	def update_order_scale_weight(self):
-		#get original target weight of the scale item
 		old_doc = self.get_doc_before_save()
 		old_target_weight = old_doc.target_weight
 
 		if self.purchase_order:
-			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order)
+			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order,ignore_permissions=True)
 			purchase_order.qty_vehicle  = purchase_order.qty_vehicle + self.target_weight - old_target_weight
-			purchase_order.save()
+			purchase_order.save(ignore_permissions=True)
 
 		if self.sales_order:
-			sales_order = frappe.get_doc("Sales Order", self.sales_order)
+			sales_order = frappe.get_doc("Sales Order", self.sales_order, ignore_permissions=True)
 			sales_order.qty_vehicle  = sales_order.qty_vehicle + self.target_weight - old_target_weight
-			sales_order.save()
+			sales_order.save(ignore_permissions=True)
    
 	def before_save(self):
 		#采购收货处理逻辑开始purchase receipt process logic start
@@ -289,7 +288,12 @@ class ScaleItem(Document):
 			self.change_status()
 			#self.check_weight()
 			self.validate_status()
-		self.update_order_scale_weight()
+
+				#get original target weight of the scale item
+		old_doc = self.get_doc_before_save()
+		old_target_weight = old_doc.target_weight
+		if self.target_weight != old_target_weight:
+			self.update_order_scale_weight()
 	
 	def on_submit(self):
 		
@@ -301,19 +305,19 @@ class ScaleItem(Document):
 				self.get_verification_code()
 		
 		if self.purchase_order:
-			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order)
+			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order,ignore_permissions=True)
 			purchase_order.qty_vehicle  = purchase_order.qty_vehicle + self.target_weight
-			purchase_order.save()
+			purchase_order.save(ignore_permissions=True)
 
 		if self.sales_order:
-			sales_order = frappe.get_doc("Sales Order", self.sales_order)
+			sales_order = frappe.get_doc("Sales Order", self.sales_order,ignore_permissions=True)
 			sales_order.qty_vehicle  = sales_order.qty_vehicle + self.target_weight
-			sales_order.save()
+			sales_order.save(ignore_permissions=True)
 
 		if self.sales_invoice:
-			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice)
+			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
 			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight
-			sales_invoice.save()
+			sales_invoice.save(ignore_permissions=True)
 	
 	def on_cancel(self):
 		#get all users that have role of "Scale Manager"
@@ -324,19 +328,19 @@ class ScaleItem(Document):
 			frappe.throw(("当前状态无法取消！如果需要取消，请联系部门负责人！"), frappe.ValidationError)
 		else:
 			if self.purchase_order:
-				purchase_order = frappe.get_doc("Purchase Order", self.purchase_order)
+				purchase_order = frappe.get_doc("Purchase Order", self.purchase_order,ignore_permissions=True)
 				purchase_order.qty_vehicle  = purchase_order.qty_vehicle - self.target_weight
-				purchase_order.save()
+				purchase_order.save(ignore_permissions=True)
 
 			if self.sales_order:
-				sales_order = frappe.get_doc("Sales Order", self.sales_order)
+				sales_order = frappe.get_doc("Sales Order", self.sales_order,ignore_permissions=True)
 				sales_order.qty_vehicle  = sales_order.qty_vehicle - self.target_weight
-				sales_order.save()
+				sales_order.save(ignore_permissions=True)
 
 			if self.sales_invoice:
-				sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice)
+				sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
 				sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle - self.target_weight
-				sales_invoice.save()
+				sales_invoice.save(ignore_permissions=True)
 		
 			self.status = "9 已取消"
    
