@@ -12,7 +12,8 @@ def get_context(context):
             #redirect to 404 page if scale item not found
             frappe.local.flags.redirect_location = '/me'
             raise frappe.Redirect
-    
+
+        context.no_cache = 1
         #get driver name
         if scale_item_doc.driver:
             driver_name = frappe.get_value("Driver",scale_item_doc.driver,"full_name")

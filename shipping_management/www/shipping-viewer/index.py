@@ -14,6 +14,7 @@ def get_context(context):
             raise frappe.Redirect
     
         #get driver name
+        context.no_cache = 1
         if scale_item_doc.driver:
             driver_name = frappe.get_value("Driver",scale_item_doc.driver,"full_name")
         context.scale_item = scale_item_doc.name
@@ -35,6 +36,7 @@ def get_context(context):
         context.gaosufee = scale_item_doc.gaosufee
         context.from_dt = scale_item_doc.from_dt
         context.to_dt = scale_item_doc.to_dt
+        context.status = scale_item_doc.status
     
         if scale_item_doc.driver:
             driver_doc = frappe.get_doc("Driver",scale_item_doc.driver)
