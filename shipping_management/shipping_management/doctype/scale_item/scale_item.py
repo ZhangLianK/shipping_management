@@ -147,6 +147,10 @@ class ScaleItem(Document):
 
 
 	def validate_pot(self):
+		
+		# if the pot and item both exist, then check else skip
+		if not self.pot or not self.item:
+			return
 		item_code = self.item  # Replace with your actual item code
 		warehouse = self.pot  # Assuming the warehouse name is in a field named 'warehouse'
 
