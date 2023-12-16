@@ -23,6 +23,8 @@
   "column_break_36vxq",
   "assigned_qty",
   "bill_type",
+  "column_break_6qxwm",
+  "item",
   "section_break_hvcxu",
   "price",
   "column_break_5gjj3",
@@ -181,11 +183,23 @@
    "fieldtype": "Select",
    "label": "Naming Series",
    "options": "SP.YY.MM.DD.####"
+  },
+  {
+   "fieldname": "column_break_6qxwm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 1,
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7269\u6599",
+   "options": "Item"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-05 21:24:40.796184",
+ "modified": "2023-12-17 00:30:54.917165",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Ship Plan",

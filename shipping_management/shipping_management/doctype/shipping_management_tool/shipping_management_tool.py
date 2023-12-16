@@ -74,6 +74,7 @@ def save_doc(doc_data):
                 scale_item.from_addr = ship_plan.from_addr
                 scale_item.to_addr = ship_plan.to_addr
                 scale_item.price= ship_plan.price
+                scale_item.item = ship_plan.item
                 scale_item.save()
                 scale_child.scale_item = scale_item.name
 
