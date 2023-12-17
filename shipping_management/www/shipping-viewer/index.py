@@ -15,6 +15,7 @@ def get_context(context):
     
         #get driver name
         context.no_cache = 1
+        context.show_sidebar = True
         if scale_item_doc.driver:
             driver_name = frappe.get_value("Driver",scale_item_doc.driver,"full_name")
         context.scale_item = scale_item_doc.name

@@ -21,7 +21,7 @@
  "list_columns": [],
  "login_required": 0,
  "max_attachment_size": 0,
- "modified": "2023-12-14 22:08:59.018595",
+ "modified": "2023-12-17 21:11:36.904315",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "scale-offload",
@@ -31,7 +31,7 @@
  "route": "scale-offload",
  "show_attachments": 0,
  "show_list": 0,
- "show_sidebar": 0,
+ "show_sidebar": 1,
  "title": "\u5378\u8f66\u4fe1\u606f\u63d0\u4ea4",
  "web_form_fields": [
   {
@@ -95,5 +95,6 @@
    "reqd": 0,
    "show_in_filter": 0
   }
- ]
+ ],
+ "website_sidebar": "Shipping"
 }

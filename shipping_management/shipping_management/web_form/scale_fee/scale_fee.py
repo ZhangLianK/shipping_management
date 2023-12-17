@@ -2,6 +2,7 @@ import frappe
 
 def get_context(context):
 	# do your magic here
+	context.show_sidebar = True
 	if frappe.form_dict.scale_item:
 		context.success_url = "/shipping-viewer?scale_item=" + frappe.form_dict.scale_item
 		context.success_title = "非常感谢！"

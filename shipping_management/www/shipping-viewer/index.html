@@ -1,3 +1,4 @@
+{% from "frappe/templates/includes/avatar_macro.html" import avatar %}
 {% extends "templates/web.html" %}
 {% block title %}{{ _('Shipping Management') }}{% endblock %}
 {% block header %}
@@ -517,11 +518,12 @@ startbutton_start.addEventListener('change', function(e) {
         reader.onload = function(event) {
             let img = new Image();
             img.onload = function() {
+                rate = img.width / img.height;
                 canvas_start.width = 500;
-                canvas_start.height = 500;
+                canvas_start.height = 500 / rate;
                 var context_img_start = canvas_start.getContext('2d');
 
-                context_img_start.drawImage(img, 0, 0,500,500);
+                context_img_start.drawImage(img, 0, 0,canvas_start.width,canvas_start.height);
                 var data_start = canvas_start.toDataURL('image/png');
                 console.log(data_start)
                 canvas_start.style.width = '80%';

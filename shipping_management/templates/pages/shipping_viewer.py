@@ -14,6 +14,7 @@ def get_context(context):
             raise frappe.Redirect
 
         context.no_cache = 1
+        context.show_sidebar = True
 
         #get driver name
         if scale_item_doc.driver:

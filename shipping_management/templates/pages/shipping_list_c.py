@@ -6,6 +6,7 @@ def get_context(context):
         frappe.throw('You must be logged in to view this page.', frappe.PermissionError)
     else:
         context.no_cache = 1
+        context.show_sidebar = True
         context.title = 'Scale Items'
         context.scale_items = get_scale_items()
         
