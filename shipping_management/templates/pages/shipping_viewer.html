@@ -325,7 +325,7 @@
                                 <strong class="control-label" for="imageUpload">里程表图片上传</strong>
                                 <div class="controls">
                                     <div>
-                                        <input type="file" accept="image/*" capture="camera" id="startbutton" class='btn'>
+                                        <input type="file" accept="image/*" id="startbutton" class='btn'>
                                     </div>
                                     <div>
                                         <canvas id="canvas" width="100%"></canvas>
@@ -465,46 +465,6 @@
                 }
             });
         });
-        // Confirm Start Button in Modal
-        $("#confirmStart").click(function() {
-            let mileage_start = $("#startModal #mileage").val();
-            let cell_number = $("#startModal #cell_number").val();
-            let verification_code = $("#startModal #verification_code").val();
-            console.log(mileage_start)
-            if (canvas_start.getAttribute('status') != 'ok'){
-                frappe.msgprint("请拍摄里程表图片!");
-                return;
-            }
-            let image_base64_start = canvas_start.toDataURL('image/png').split(',')[1];
-            // Example: Stripping the prefix if present
-
-            if (!mileage_start || !image_base64_start){
-                frappe.msgprint("请填写所有必要信息，里程,手机号，验证码和里程表图片");
-                return;
-            }
-            frappe.call({
-                method: "shipping_management.shipping_management.doctype.scale_item.scale_item.start_end_shipping",
-                args: {
-                    "action": 'start',
-                    "scale_item": "{{ scale_item }}",
-                    "mileage": mileage_start,
-                    "image_base64": image_base64_start,
-                    "cell_number": cell_number,
-                    "verification_code": verification_code,
-                },
-                callback: function(r) {
-                    if(r.message) {
-                        if (r.message.status == "success"){
-                            frappe.msgprint("运单开始！开始时间为" + frappe.datetime.now_datetime());
-                        }
-                        else{
-                            frappe.msgprint(r.message);
-                        }
-                    }
-                    $('#startModal').modal('hide'); // Hide Modal
-                }
-            });
-        });
 
         // Remove Footer (if needed)
         $(".web-footer > .container").remove();
@@ -571,12 +531,46 @@ function takepicture_end() {
 }
 //end button camera end
 
-let video_start = document.querySelector('#startModal #video');
+// Confirm Start Button in Modal
+let confirm_start = document.querySelector('#startModal #confirmStart');
+confirm_start.addEventListener('click', function(ev){
+    let mileage_start = $("#startModal #mileage").val();
+    console.log(mileage_start)
+    if (canvas_start.getAttribute('status') != 'ok'){
+        frappe.msgprint("请拍摄里程表图片!");
+        return;
+    }
+    let image_base64_start = canvas_start.toDataURL('image/png').split(',')[1];
+    // Example: Stripping the prefix if present
+
+    if (!mileage_start || !image_base64_start){
+        frappe.msgprint("请填写所有必要信息，里程,手机号，验证码和里程表图片");
+        return;
+    }
+    frappe.call({
+        method: "shipping_management.shipping_management.doctype.scale_item.scale_item.start_end_shipping",
+        args: {
+            "action": 'start',
+            "scale_item": "{{ scale_item }}",
+            "mileage": mileage_start,
+            "image_base64": image_base64_start
+        },
+        callback: function(r) {
+            if(r.message) {
+                if (r.message.status == "success"){
+                    frappe.msgprint("运单开始！开始时间为" + frappe.datetime.now_datetime());
+                }
+                else{
+                    frappe.msgprint(r.message);
+                }
+            }
+            $('#startModal').modal('hide'); // Hide Modal
+        }
+    });
+});
+
 let canvas_start = document.querySelector('#startModal #canvas');
 let startbutton_start = document.querySelector('#startModal #startbutton');
-let capturebutton_start = document.querySelector('#startModal #capturebutton');
-let cameraPopup_start = document.querySelector('#startModal #cameraPopup');
-let stream_start;
 
 startbutton_start.addEventListener('change', function(e) {
     if (e.target.files && e.target.files[0]) {
@@ -584,14 +578,14 @@ startbutton_start.addEventListener('change', function(e) {
         reader.onload = function(event) {
             let img = new Image();
             img.onload = function() {
-                canvas_start.width = img.width;
-                canvas_start.height = img.height;
+                canvas_start.width = 500;
+                canvas_start.height = 500;
                 var context_img_start = canvas_start.getContext('2d');
 
-                context_img_start.drawImage(img, 0, 0);
+                context_img_start.drawImage(img, 0, 0,500,500);
                 var data_start = canvas_start.toDataURL('image/png');
                 console.log(data_start)
-                canvas_start.style.width = '100%';
+                canvas_start.style.width = '80%';
                 canvas_start.style.height = 'auto'
                 canvas_start.setAttribute('status', 'ok');
             };
