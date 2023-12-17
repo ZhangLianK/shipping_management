@@ -364,12 +364,23 @@
 {%- block script -%}
 <script>
     $(document).ready(function(){
+        //if to_dt is not blank, then hide all buttons
+        let to_dt = "{% if to_dt %} {{ to_dt }} {% endif %}";
+        if (to_dt){
+            $("#start").hide();
+            $("#end").hide();
+            $("#load").hide();
+            $("#offload").hide();
+            $("#fee").hide();
+        }
+
         $("#load").click(function(){
             //direct to load page
             let query_params = frappe.utils.get_query_params();
 			let path = '/scale-load/new' + '?' + frappe.utils.get_url_from_dict(query_params);
             window.location.href = path
         });
+        
         $("#offload").click(function(){
             //direct to load page
             let query_params = frappe.utils.get_query_params();
@@ -534,17 +545,23 @@
     }, false);
   
     function startup_end() {
-      cameraPopup_end.style.display = 'block';
-      navigator.mediaDevices.getUserMedia({video: true})
-      .then(function(mediaStream) {
-        stream_end = mediaStream;
-        video_end.srcObject = mediaStream;
-        video_end.play();
-      })
-      .catch(function(err) {
-        console.log("An error occurred: " + err);
-      });
-  }
+        cameraPopup_end.style.display = 'block';
+      
+        // Specify the rear camera
+        let constraints = {
+          video: { facingMode: { exact: "environment" } }
+        };
+      
+        navigator.mediaDevices.getUserMedia(constraints)
+          .then(function(mediaStream) {
+            stream_end = mediaStream;
+            video_end.srcObject = mediaStream;
+            video_end.play();
+          })
+          .catch(function(err) {
+            console.log("An error occurred: " + err);
+          });
+      }
 
 function takepicture_end() {
         // Set the canvas dimensions to match the video.
