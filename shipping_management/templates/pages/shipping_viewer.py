@@ -54,6 +54,7 @@ def get_context(context):
         context.from_dt = scale_item_doc.from_dt
         context.to_dt = scale_item_doc.to_dt
         context.status = scale_item_doc.status
+        context.target_weight = scale_item_doc.target_weight
 
     
         if scale_item_doc.driver:
