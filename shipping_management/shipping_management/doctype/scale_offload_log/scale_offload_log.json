@@ -19,6 +19,7 @@
    "fieldname": "scale_item",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Scale Item",
    "options": "Scale Item",
    "reqd": 1
@@ -52,7 +53,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-14 21:39:48.005495",
+ "modified": "2023-12-17 23:01:01.999605",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Offload Log",

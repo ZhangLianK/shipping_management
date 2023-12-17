@@ -8,7 +8,7 @@ frappe.ready(function () {
 	//add custom css style to form-control and button
 	$(".form-control").css("font-size", "20px");
 	$(".btn").css("font-size", "20px");
-	
+
 	frappe.web_form.on("scale_item", function (field, value) {
 		console.log("scale_item field changed");
 		//get the scale_item's other field value
@@ -30,8 +30,36 @@ frappe.ready(function () {
 	//when the whole document is ready check if scale_item is set
 	$(document).ready(function () {
 		console.log("Document Ready");
-		//remove web-footer container div
 
+		frappe.web_form.handle_success = function (data) {
+			// TODO: remove this (used for payments app)
+			if (this.accept_payment && !this.doc.paid) {
+				window.location.href = data;
+			}
+	
+			if (!this.is_new) {
+				$(".success-title").text(__("Updated"));
+				$(".success-message").text(__("Your form has been successfully updated"));
+			}
+	
+			$(".web-form-container").hide();
+			$(".success-page").removeClass("hide");
+			//get the url from div class="success_url_message"
+			let success_url = document.querySelector(".success_url_message a").href;
+			if (!this.success_url) {
+				this.success_url = success_url;
+			}
+			if (this.success_url) {
+				frappe.utils.setup_timer(5, 0, $(".time"));
+				setTimeout(() => {
+					window.location.href = this.success_url;
+				}, 5000);
+			} else {
+				this.render_success_page(data);
+				
+
+			}
+		}
 
 		frappe.web_form.discard_form = function () {
 			console.log("Discard form called");

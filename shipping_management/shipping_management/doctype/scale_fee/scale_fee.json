@@ -19,6 +19,7 @@
   {
    "fieldname": "scale_item",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "\u7269\u6d41\u5355\u53f7",
    "options": "Scale Item"
   },
@@ -50,7 +51,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-14 21:31:48.511648",
+ "modified": "2023-12-17 23:00:35.652543",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Fee",
