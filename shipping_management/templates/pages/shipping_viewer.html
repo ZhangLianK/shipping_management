@@ -10,20 +10,21 @@
     <div class="container">
         <!-- Page Description -->
         <div class="row mb-4">
-            <p>开始执行运单，请点击【出车（运单开始）】按钮，运单结束后点击【收车（运单结束）】按钮。
+            <p>开始执行运单，请点击【运单开始】按钮，运单结束后点击【运单结束】按钮。
                 <br>车辆装车完毕后请点击【装车信息上传】按钮。
                 <br>车辆卸车完毕后请点击【卸车信息上传】按钮。
+                <br>如果有费用信息请点击【费用信息上传】按钮。
                 </p>
         </div>
         <!-- Buttons for Start and End Actions -->
         <div class="row mb-4">
             <!-- Left Aligned Button -->
             <div class="col text-left">
-                <a id="start" class="btn btn-primary">出车（运单开始）</a>
+                <a id="start" class="btn btn-primary">运单开始</a>
             </div>
             <!-- Right Aligned Button -->
             <div class="col text-right">
-                <a id="end" class="btn btn-success">收车（运单结束）</a>
+                <a id="end" class="btn btn-success">运单结束</a>
             </div>
         </div>
 
@@ -274,15 +275,11 @@
                             <div class="form-group">
                                 <strong class="control-label" for="imageUpload">里程表图片上传</strong>
                                 <div class="controls">
-                                    <div id="cameraPopup" style="display: none; position: relative;">
-                                        <video id="video" width="100%" autoplay></video>
-                                        <button id="capturebutton" style="position: absolute; top: 10px; right: 10px;" class="btn btn-primary">拍照</button>
+                                    <div>
+                                        <input type="file" accept="image/*" id="endbutton" class='btn'>
                                     </div>
                                     <div>
-                                        <button id="startbutton" class="btn btn-primary">打开摄像头</button>
-                                    </div>
-                                    <div>
-                                        <canvas id="canvas" width="100%"></canvas>
+                                        <canvas id="canvas"></canvas>
                                     </div>
                                 </div>   
                             </div>
@@ -397,10 +394,11 @@
             $('#endModal').modal('show');
         });
         
+        let confirm_end = document.querySelector('#endModal #confirmEnd');
         // Confirm End Button in Modal
-        $("#confirmEnd").click(function() {
+        confirm_end.addEventListener('click', function(ev){
             let mileage_end = $("#endModal #mileage").val();
-            let verification_code = $("#endModal #verification_code").val();
+            
             //check convas_end is not blank
             if (canvas_end.getAttribute('status') != 'ok'){
                 frappe.msgprint("请拍摄里程表图片!");
@@ -423,7 +421,6 @@
                     "scale_item": "{{ scale_item }}",
                     "mileage": mileage_end,
                     "image_base64": image_base64_end,
-                    "verification_code": verification_code,
                 },
                 callback: function(r) {
                     if(r.message) {
@@ -438,97 +435,39 @@
                 }
             });
         });
-        //get verification code
-        $("#get_verification_code").click(function() {
-            let cell_number = $("#startModal #cell_number").val();
-            let scale_item = "{{ scale_item }}";
-
-            if (!cell_number){
-                frappe.msgprint("请填写手机号");
-                return;
-            }
-            frappe.call({
-                method: "shipping_management.shipping_management.doctype.scale_item.scale_item.get_verification_code",
-                args: {
-                    "cell_number": cell_number,
-                    "scale_item": scale_item,
-                },
-                callback: function(r) {
-                    if(r.message) {
-                        if (r.message.status == "success"){
-                            frappe.msgprint("验证码已发送，请注意查收");
-                        }
-                        else{
-                            frappe.msgprint(r.message);
-                        }
-                    }
-                }
-            });
-        });
 
         // Remove Footer (if needed)
         $(".web-footer > .container").remove();
     });
     //end button camera start
-    let video_end = document.querySelector('#endModal #video');
+
     let canvas_end = document.querySelector('#endModal #canvas');
-    let startbutton_end = document.querySelector('#endModal #startbutton');
-    let capturebutton_end = document.querySelector('#endModal #capturebutton');
-    let cameraPopup_end = document.querySelector('#endModal #cameraPopup');
-    let stream_end;
+    let startbutton_end = document.querySelector('#endModal #endbutton');
+    
 
-    startbutton_end.addEventListener('click', function(ev){
-      startup_end();
-      ev.preventDefault();
-    }, false);
-  
-    capturebutton_end.addEventListener('click', function(ev){
-      takepicture_end();
-      ev.preventDefault();
-    }, false);
-  
-    function startup_end() {
-        cameraPopup_end.style.display = 'block';
-      
-        // Specify the rear camera
-        let constraints = {
-          video: { facingMode: { exact: "environment" } }
-        };
-      
-        navigator.mediaDevices.getUserMedia(constraints)
-          .then(function(mediaStream) {
-            stream_end = mediaStream;
-            video_end.srcObject = mediaStream;
-            video_end.play();
-          })
-          .catch(function(err) {
-            console.log("An error occurred: " + err);
-          });
-      }
+    startbutton_end.addEventListener('change', function(e) {
+        if (e.target.files && e.target.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function(event) {
+                let img = new Image();
+                img.onload = function() {
+                    canvas_end.width = 500;
+                    canvas_end.height = 500;
+                    var context_img_end = canvas_end.getContext('2d');
+    
+                    context_img_end.drawImage(img, 0, 0,500,500);
+                    var data_end = canvas_end.toDataURL('image/png');
+                    console.log(data_end)
+                    canvas_end.style.width = '80%';
+                    canvas_end.style.height = 'auto'
+                    canvas_end.setAttribute('status', 'ok');
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    });
 
-function takepicture_end() {
-        // Set the canvas dimensions to match the video.
-        canvas_end.width = video_end.videoWidth;
-        canvas_end.height = video_end.videoHeight;
-
-        var context_img_end = canvas_end.getContext('2d');
-        context_img_end.drawImage(video_end, 0, 0, video_end.videoWidth, video_end.videoHeight);
-        var data_end = canvas_end.toDataURL('image/png');
-        console.log(data_end);
-
-        // Stop all video streams.
-        stream_end.getTracks().forEach(function(track) {
-            track.stop();
-        });
-
-        video_end.srcObject = null;
-        cameraPopup_end.style.display = 'none';
-
-        // Adjust the canvas size to fit the modal.
-        canvas_end.style.width = '100%';
-        canvas_end.style.height = 'auto';
-        canvas_end.setAttribute('status', 'ok');
-}
 //end button camera end
 
 // Confirm Start Button in Modal
@@ -600,4 +539,12 @@ startbutton_start.addEventListener('change', function(e) {
 
 {%- block style -%}
 <!-- Add any custom styles here -->
+<style>
+.form-control {
+    font-size: 20px; /* or larger */
+}
+.btn {
+    font-size: 16px; /* or larger */
+}
+</style>
 {%- endblock -%}

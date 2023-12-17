@@ -4,6 +4,10 @@ frappe.ready(function() {
 	$(".web-form-footer .discard-btn")[0].innerHTML = '返回';
 	$(".web-footer > .container").remove();
 
+	//add custom css style to form-control and button
+	$(".form-control").css("font-size", "20px");
+	$(".btn").css("font-size", "20px");
+
 	//get the scale_item's other field value
 	frappe.web_form.on("scale_item", function (field, value) {
 		console.log("scale_item field changed");

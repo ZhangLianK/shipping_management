@@ -5,6 +5,10 @@ frappe.ready(function () {
 	$(".web-form-footer .discard-btn")[0].innerHTML = '返回';
 	$(".web-footer > .container").remove();
 
+	//add custom css style to form-control and button
+	$(".form-control").css("font-size", "20px");
+	$(".btn").css("font-size", "20px");
+
 
 	frappe.web_form.on("scale_item", function (field, value) {
 		console.log("scale_item field changed");
@@ -26,8 +30,7 @@ frappe.ready(function () {
 	//when the whole document is ready check if scale_item is set
 	$(document).ready(function () {
 		console.log("Document Ready");
-		//remove web-footer container div
-
+		
 
 		frappe.web_form.discard_form = function () {
 			console.log("Discard form called");
