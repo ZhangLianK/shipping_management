@@ -36,6 +36,21 @@ class ScaleItem(Document):
 			#send sms to driver
 			create_sms_log(self.company, "ship_verification_code", driver_phone_number_list, variable_list)
 			print('send sms')
+
+	def send_notification_sms(self):
+		driver_phone_number = frappe.get_value("Driver", self.driver, "cell_number")
+		if driver_phone_number:
+			if not self.verification_code:
+				#generate verification code with number of 6 digits
+				self.verification_code = ''.join(random.choices(string.digits, k=6))
+				self.save(ignore_permissions=True)
+			#generate a json list with the driver number
+			driver_phone_number_list = json.dumps([driver_phone_number])
+			variable_list = json.dumps([self.name,self.verification_code])
+			#send sms to driver
+			create_sms_log(self.company, "ship_order_notification", driver_phone_number_list, variable_list)
+			print('send sms')
+   
    
 	def check_credit_limit(self):
 		from erpnext.selling.doctype.customer.customer import check_credit_limit
@@ -306,7 +321,7 @@ class ScaleItem(Document):
 		if self.driver:
 			driver_doc = frappe.get_doc("Driver", self.driver)
 			if driver_doc.cell_number and driver_doc.recv_sms:
-				self.get_verification_code()
+				self.send_notification_sms()
 		
 		if self.purchase_order:
 			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order,ignore_permissions=True)
