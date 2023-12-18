@@ -24,6 +24,7 @@
  ],
  "fields": [
   {
+   "fetch_from": "ship_plan.transporter_company",
    "fieldname": "company",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -107,7 +108,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-11-17 23:04:34.638934",
+ "modified": "2023-12-18 21:37:01.168577",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping Management Tool",

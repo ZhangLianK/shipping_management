@@ -365,6 +365,7 @@ class ScaleItem(Document):
    
 	def before_cancel(self):
 		self.status = "9 已取消"
+		self.to_dt = frappe.utils.now()
 
 def set_missing_values(source, target):
 	target.run_method("set_missing_values")

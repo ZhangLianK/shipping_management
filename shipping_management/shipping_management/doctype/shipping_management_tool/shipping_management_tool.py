@@ -52,7 +52,7 @@ def save_doc(doc_data):
         #if scale_item is not blank, update scale item
         for scale_child in doc.scale_child:
             if not scale_child.scale_item == 'N':
-                scale_item = frappe.get_doc('Scale Item', scale_child.scale_item)
+                scale_item = frappe.get_doc('Scale Item', scale_child.scale_item, ignore_permissions=True)
                 scale_item.target_weight = scale_child.qty
                 scale_item.from_addr = scale_child.from_addr
                 scale_item.to_addr = scale_child.to_addr
@@ -75,17 +75,18 @@ def save_doc(doc_data):
                 scale_item.to_addr = ship_plan.to_addr
                 scale_item.price= ship_plan.price
                 scale_item.item = ship_plan.item
-                scale_item.save()
+                scale_item.save(ignore_permissions=True)
                 scale_child.scale_item = scale_item.name
 
         # get all scale item related to this ship plan and not cancelled
-        scale_items = frappe.get_all('Scale Item', filters={'ship_plan': doc.ship_plan, 'docstatus': ['!=', '2']}, fields=['name'])
+        scale_items = frappe.get_all('Scale Item', filters={'ship_plan': doc.ship_plan, 'status': ['!=', '9 已取消']}, fields=['name'])
         if scale_items:
             #check every scale item if it exist in the scale_child, if not, cancel the scale item
             for scale_item in scale_items:
-                scale_item_doc = frappe.get_doc('Scale Item', scale_item.name)
+                scale_item_doc = frappe.get_doc('Scale Item', scale_item.name, ignore_permissions=True)
                 if not scale_item_doc.name in [scale_child.scale_item for scale_child in doc.scale_child]:
-                    scale_item_doc.cancel()
+                    scale_item_doc.status = '9 已取消'
+                    scale_item_doc.save(ignore_permissions=True)
 
         update_ship_plan(doc)   
         return doc.as_dict()
@@ -97,7 +98,7 @@ def save_doc(doc_data):
 @frappe.whitelist()
 def get_scale_childs(ship_plan):
     # fetch all scale item doc according to ship_plan
-    scale_items = frappe.get_all('Scale Item', filters={'ship_plan': ship_plan, 'docstatus': ['!=', '2']}, fields=['name', 'vehicle', 'driver', 'target_weight','status','from_addr','to_addr'])
+    scale_items = frappe.get_all('Scale Item', filters={'ship_plan': ship_plan, 'status': ['!=', '9 已取消']}, fields=['name', 'vehicle', 'driver', 'target_weight','status','from_addr','to_addr'])
     #get id of vehicle of every scale item
     for scale_item in scale_items:
         vehicle = frappe.get_doc('Vehicle', scale_item.vehicle)
@@ -109,7 +110,7 @@ def update_ship_plan(doc):
     # check if there is any scale item related to this ship plan
     scale_items = frappe.get_all('Scale Item', filters={'ship_plan': doc.ship_plan}, fields=['name'])
     # get the ship plan doc
-    ship_plan_doc = frappe.get_doc('Ship Plan', doc.ship_plan)
+    ship_plan_doc = frappe.get_doc('Ship Plan', doc.ship_plan, ignore_permissions=True)
     ship_plan_doc.assigned_qty = doc.assigned_qty
     if scale_items:
         # update the status of the ship plan
@@ -119,7 +120,7 @@ def update_ship_plan(doc):
         total_target_weight = 0
         overall_status = True
         for scale_item in scale_items:
-            scale_item_doc = frappe.get_doc('Scale Item', scale_item.name)
+            scale_item_doc = frappe.get_doc('Scale Item', scale_item.name, ignore_permissions=True)
             total_target_weight += scale_item_doc.target_weight
             if scale_item.status != '6 已完成' and scale_item.status != '9 已取消':
                 overall_status = False

@@ -13,8 +13,8 @@ def get_context(context):
 def get_scale_items():
     #get scale items from doctype Scale Item and return a list
     user_doc = frappe.get_doc('User', frappe.session.user)
-    if user_doc.mobile_no:
-        drivers = frappe.get_all('Driver', filters={'cell_number': user_doc.mobile_no}, fields=['name'])
+    if user_doc.phone:
+        drivers = frappe.get_all('Driver', filters={'cell_number': user_doc.phone}, fields=['name'])
         scale_items = []
         if drivers:
             for driver in drivers:
@@ -24,6 +24,6 @@ def get_scale_items():
             scale_items = [{'name': '此手机号未找到司机信息', 'status': '', 'date': '', 'vehicle': '', 'from_addr': '', 'to_addr': ''}]
 
     else:
-            scale_items = [{'name': '请在我的账户中维护手机号', 'status': '', 'date': '', 'vehicle': '', 'from_addr': '', 'to_addr': ''}]
+            scale_items = [{'name': '请在【我的账户】➡️【编辑个人信息】中设置【电话】信息', 'status': '', 'date': '', 'vehicle': '', 'from_addr': '', 'to_addr': ''}]
 
     return scale_items
