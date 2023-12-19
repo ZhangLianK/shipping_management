@@ -46,7 +46,7 @@ class ScaleItem(Document):
 				self.save(ignore_permissions=True)
 			#generate a json list with the driver number
 			driver_phone_number_list = json.dumps([driver_phone_number])
-			variable_list = json.dumps([self.name,self.verification_code])
+			variable_list = json.dumps([self.verification_code,self.name])
 			#send sms to driver
 			create_sms_log(self.company, "ship_order_notification", driver_phone_number_list, variable_list)
 			print('send sms')
