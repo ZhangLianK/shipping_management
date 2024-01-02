@@ -34,7 +34,7 @@ frappe.ui.form.on('Serial Port Reader', {
                     "status": ['not in', ['6 已完成', '9 已取消']],
                     "docstatus": 1,
                     "vehicle": frm.doc.vehicle,
-                    "type": frm.doc.ship_type
+                    "type": frm.doc.ship_type,
                 }
             };
         });
@@ -315,6 +315,9 @@ frappe.ui.form.on('Serial Port Reader', {
                 "blank_dt": frm.doc.blank_dt,
                 "net_weight": frm.doc.net_weight,
                 "pot": frm.doc.pot,
+                "type": frm.doc.ship_type,
+                "market_segment": frm.doc.market_segment,
+                "vehicle": frm.doc.vehicle,
             },
             callback: function (r) {
                 if (r.message == 'success') {
@@ -530,7 +533,8 @@ function clearTerminal(frm) {
 }
 
 function displayInScreen(frm, receivedData) {
-    const pattern = /(\d+\.\d+|\d+)/;
+    // add regular expression to the serial port reader setting.e.g. /(\d+\.\d+|\d+)/
+    const pattern = frm.doc.regexp;
     const match = receivedData.match(pattern);
     if (match) {
         const number = parseFloat(match[0]);

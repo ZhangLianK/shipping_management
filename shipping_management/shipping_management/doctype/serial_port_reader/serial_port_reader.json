@@ -15,6 +15,8 @@
   "pot",
   "column_break_uxumw",
   "verification_code",
+  "column_break_0vyo3",
+  "market_segment",
   "section_break_hltam",
   "screen",
   "section_break_jiasa",
@@ -44,6 +46,7 @@
   "flowcontrol",
   "stopchar",
   "reverse",
+  "regexp",
   "term_window",
   "amended_from"
  ],
@@ -263,12 +266,28 @@
    "fieldname": "verification_code",
    "fieldtype": "Data",
    "label": "\u9a8c\u8bc1\u7801"
+  },
+  {
+   "fieldname": "column_break_0vyo3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "market_segment",
+   "fieldtype": "Link",
+   "label": "\u4e8b\u4e1a\u90e8",
+   "options": "Market Segment"
+  },
+  {
+   "fieldname": "regexp",
+   "fieldtype": "Data",
+   "label": "regExp"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-12-15 20:25:48.112849",
+ "modified": "2024-01-02 21:03:25.965043",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",

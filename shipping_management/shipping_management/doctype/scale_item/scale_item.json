@@ -14,8 +14,11 @@
   "status",
   "column_break_7lger",
   "naming_series",
+  "column_break_gr1aw",
+  "market_segment",
   "section_break_glkhr",
   "type",
+  "vehicle_selector",
   "vehicle",
   "driver",
   "column_break_zlxzc",
@@ -87,6 +90,10 @@
   "yayunfee",
   "fakuan",
   "gaosufee",
+  "\u7cae\u98df\u68c0\u9a8c\u53c2\u6570_tab",
+  "shuifen",
+  "rongzhong",
+  "meibian",
   "amended_from"
  ],
  "fields": [
@@ -101,8 +108,7 @@
    "in_list_view": 1,
    "in_preview": 1,
    "label": "\u63cf\u8ff0",
-   "read_only_depends_on": "eval: !cur_frm.is_new()",
-   "reqd": 1
+   "read_only_depends_on": "eval: !cur_frm.is_new()"
   },
   {
    "fieldname": "column_break_scjid",
@@ -137,12 +143,13 @@
   },
   {
    "columns": 1,
+   "fetch_from": "vehicle_selector.license_plate",
+   "fetch_if_empty": 1,
    "fieldname": "vehicle",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "\u8f66\u53f7",
-   "options": "Vehicle",
    "reqd": 1
   },
   {
@@ -245,7 +252,7 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "\u8ba1\u5212\u8fd0\u91cf",
-   "reqd": 1
+   "mandatory_depends_on": "eval: doc.market_segment == '\u6210\u54c1\u6cb9'"
   },
   {
    "fieldname": "section_break_0bb8g",
@@ -483,6 +490,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "depends_on": "eval: doc.market_segment == '\u6210\u54c1\u6cb9'",
    "fieldname": "\u8d39\u7528\u8be6\u60c5_tab",
    "fieldtype": "Tab Break",
    "label": "\u8d39\u7528\u8be6\u60c5"
@@ -578,12 +586,53 @@
    "fieldname": "verification_code",
    "fieldtype": "Data",
    "label": "\u53f8\u673a\u9a8c\u8bc1\u7801"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "market_segment",
+   "fieldtype": "Link",
+   "label": "\u4e8b\u4e1a\u90e8",
+   "options": "Market Segment"
+  },
+  {
+   "fieldname": "column_break_gr1aw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "vehicle_selector",
+   "fieldtype": "Link",
+   "label": "\u9009\u62e9\u8f66\u8f86",
+   "options": "Vehicle"
+  },
+  {
+   "depends_on": "eval: doc.market_segment == '\u7cae\u98df'",
+   "fieldname": "\u7cae\u98df\u68c0\u9a8c\u53c2\u6570_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u7cae\u98df\u68c0\u9a8c\u53c2\u6570"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "shuifen",
+   "fieldtype": "Float",
+   "label": "\u6c34\u5206"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "rongzhong",
+   "fieldtype": "Float",
+   "label": "\u5bb9\u91cd"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "meibian",
+   "fieldtype": "Float",
+   "label": "\u9709\u53d8"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-12-15 20:26:07.967706",
+ "modified": "2024-01-02 20:15:53.972601",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
