@@ -482,6 +482,8 @@ async function openClose(frm) {
                         receivedData += value;
                         if (receivedData.includes(stopchar)){
                             console.log("Full Message Received:", receivedData);
+                            //remove stopchar string from the received data
+                            receivedData = receivedData.replace(stopchar, "");
                             displayInScreen(frm, receivedData);
                             receivedData = "";
                         }
