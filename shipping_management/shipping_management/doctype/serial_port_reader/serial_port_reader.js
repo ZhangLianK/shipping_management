@@ -535,7 +535,7 @@ function clearTerminal(frm) {
 
 function displayInScreen(frm, receivedData) {
     // add regular expression to the serial port reader setting.e.g. /(\d+\.\d+|\d+)/
-    const pattern = frm.doc.regexp;
+    const pattern = new RegExp(frm.doc.regexp);
     const match = receivedData.match(pattern);
     if (match) {
         const number = parseFloat(match[0]);
