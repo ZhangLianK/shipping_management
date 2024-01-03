@@ -480,10 +480,11 @@ async function openClose(frm) {
                     
                     if (stopchar) {
                         receivedData += value;
-                        if (receivedData.includes(stopchar))
+                        if (receivedData.includes(stopchar)){
                             console.log("Full Message Received:", receivedData);
                             displayInScreen(frm, receivedData);
                             receivedData = "";
+                        }
                     }
                     else  {
                         console.log("Full Message Received:", receivedData);

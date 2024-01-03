@@ -68,7 +68,7 @@ frappe.ui.form.on('Scale Item', {
         // add custom button to complete the scale item
         if ((frm.doc.status == '5 已卸货' && frm.doc.type == 'IN' && frm.doc.purchase_receipt)
             || (frm.doc.status == '5 已卸货' && frm.doc.type == 'OUT' && frm.doc.delivery_note)
-            || (frm.doc.status == '5 已卸货' && frm.doc.type == 'DIRC' && frm.doc.purchase_receipt) && frm.doc.delivery_note) {
+            || (frm.doc.status == '5 已卸货' && frm.doc.type == 'DIRC' && frm.doc.purchase_receipt && frm.doc.delivery_note)) {
             frm.add_custom_button(__('Complete'), function () {
                 if (!frm.doc.price){
                     frappe.throw(__('未输入运输价格！请输入运输价格后再进行完成操作！'));
