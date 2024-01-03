@@ -491,9 +491,13 @@ async function openClose(frm) {
                     else  {
                         //log 
                         receivedData = value;
-                        console.log("Full Message Received:", receivedData);
-                        displayInScreen(frm, receivedData);
-                        receivedData = "";
+                        //check the received data if it has + charactor
+                        if (receivedData.includes("+")) {
+                            console.log("Full Message Received:", receivedData);
+                            displayInScreen(frm, receivedData);
+                            receivedData = "";
+                        }
+                        
                     }
                 }
 
