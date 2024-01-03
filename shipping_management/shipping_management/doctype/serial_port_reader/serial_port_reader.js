@@ -537,10 +537,32 @@ function clearTerminal(frm) {
 
 function displayInScreen(frm, receivedData) {
     // add regular expression to the serial port reader setting.e.g. /(\d+\.\d+|\d+)/
+
+/*     function extractWeight(data, pattern) {
+        // Create a RegExp object using the pattern string
+        const regex = new RegExp(pattern);
+        const match = data.match(regex);
+    
+        if (match) {
+            // Convert the matched string to an integer
+            const weight = parseInt(match[1], 10);
+            return weight + ' kg';
+        } else {
+            // Handle cases where no match is found
+            return 'No valid weight found';
+        }
+    }
+    
+    const data = '」+00140001B「';
+    const pattern = "\\+?(\\d+)01B"; // Note: double backslashes are used for escaping
+    const weight = extractWeight(data, pattern);
+    console.log(weight); // Output should be 1400 kg
+     */
+
     const pattern = new RegExp(frm.doc.regexp);
     const match = receivedData.match(pattern);
     if (match) {
-        const number = parseFloat(match[0]);
+        const number = parseFloat(match[1]);
         frm.fields_dict.screen.df.options = `
                             <div style="background-color: black; color: white; height:100px; text-align: center; font-size:60px">
                                 <p>${number}</p>
