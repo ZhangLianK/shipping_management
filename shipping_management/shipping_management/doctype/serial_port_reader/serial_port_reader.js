@@ -305,6 +305,10 @@ frappe.ui.form.on('Serial Port Reader', {
         }
     },
     save_weight: function (frm) {
+        if (!frm.doc.ship_type && !frm.doc.scale_item) {
+            frappe.msgprint("未选择物流计量单，则需要输入物流计量单类型以创建新物流单");
+            return;
+        }
         frappe.call({
             method: "shipping_management.shipping_management.doctype.serial_port_reader.serial_port_reader.save_weight",
             args: {
@@ -318,10 +322,16 @@ frappe.ui.form.on('Serial Port Reader', {
                 "type": frm.doc.ship_type,
                 "market_segment": frm.doc.market_segment,
                 "vehicle": frm.doc.vehicle,
+                "item_code": frm.doc.item_code,
             },
             callback: function (r) {
-                if (r.message == 'success') {
-                    frappe.msgprint("保存成功");
+                if (r.message.status == 'success') {
+                    if(r.message.scale_item){
+                        frappe.msgprint("保存成功。新物流计量单号为：" + r.message.scale_item);
+                    }
+                    else{
+                        frappe.msgprint("保存成功");
+                    }
                 }
                 else {
                     frappe.msgprint(r.message);
@@ -355,9 +365,13 @@ frappe.ui.form.on('Serial Port Reader', {
         }
     },
     scale_item: function (frm) {
+        if (!frm.doc.scale_item) {
+            return;
+        }
         frappe.db.get_doc("Scale Item", frm.doc.scale_item).then(doc => {
             if (doc.type != frm.doc.ship_type) {
-                frappe.throw("物流计量单类型与当前类型不一致");
+                frm.doc.ship_type = doc.type;
+                frappe.msgprint("物流计量单类型与当前选择不一致，已自动更改");
             }
             //if (doc.pot) {
             //    frappe.throw("物流计量单已经过磅,请勿重复操作！重复操作将会覆盖原有数据！");
@@ -372,6 +386,7 @@ frappe.ui.form.on('Serial Port Reader', {
                 frm.doc.item_code = doc.item;
                 frm.doc.ship_type = doc.type;
                 frm.doc.vehicle = doc.vehicle;
+                frm.doc.item_code = doc.item;
                 frm.refresh();
             }
             else if (doc.type == "OUT") {
@@ -384,6 +399,7 @@ frappe.ui.form.on('Serial Port Reader', {
                 frm.doc.item_code = doc.item;
                 frm.doc.ship_type = doc.type;
                 frm.doc.vehicle = doc.vehicle;
+                frm.doc.item_code = doc.item;
                 frm.refresh();
             }
         });
