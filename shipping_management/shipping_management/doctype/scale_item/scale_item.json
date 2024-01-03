@@ -121,6 +121,7 @@
    "fieldtype": "Select",
    "ignore_user_permissions": 1,
    "in_list_view": 1,
+   "in_preview": 1,
    "in_standard_filter": 1,
    "label": "\u8f66\u8f86\u72b6\u6001",
    "options": "0 \u65b0\u914d\n1 \u5df2\u914d\u7f50\n2 \u6b63\u5728\u88c5\u8d27\n3 \u5df2\u88c5\u8d27\n4 \u6b63\u5728\u5378\u8d27\n5 \u5df2\u5378\u8d27\n6 \u5df2\u5b8c\u6210\n9 \u5df2\u53d6\u6d88",
@@ -297,21 +298,21 @@
    "allow_on_submit": 1,
    "fieldname": "load_net_weight",
    "fieldtype": "Float",
-   "label": "\u51c0\u91cd",
+   "label": "\u88c5\u8f66\u51c0\u91cd",
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "load_gross_weight",
    "fieldtype": "Float",
-   "label": "\u6bdb\u91cd",
+   "label": "\u88c5\u8f66\u6bdb\u91cd",
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "load_blank_weight",
    "fieldtype": "Float",
-   "label": "\u7a7a\u91cd",
+   "label": "\u88c5\u8f66\u7a7a\u91cd",
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
   {
@@ -339,21 +340,21 @@
    "allow_on_submit": 1,
    "fieldname": "offload_net_weight",
    "fieldtype": "Float",
-   "label": "\u51c0\u91cd",
+   "label": "\u5378\u8f66\u51c0\u91cd",
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "offload_gross_weight",
    "fieldtype": "Float",
-   "label": "\u6bdb\u91cd",
+   "label": "\u5378\u8f66\u6bdb\u91cd",
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "offload_blank_weight",
    "fieldtype": "Float",
-   "label": "\u7a7a\u91cd",
+   "label": "\u5378\u8f66\u7a7a\u91cd",
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
   {
@@ -632,7 +633,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-01-02 20:15:53.972601",
+ "modified": "2024-01-03 15:36:53.697726",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
@@ -652,6 +653,7 @@
    "write": 1
   }
  ],
+ "search_fields": "status, vehicle, date, type",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

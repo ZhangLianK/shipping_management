@@ -359,9 +359,9 @@ frappe.ui.form.on('Serial Port Reader', {
             if (doc.type != frm.doc.ship_type) {
                 frappe.throw("物流计量单类型与当前类型不一致");
             }
-            if (doc.pot) {
-                frappe.throw("物流计量单已经过磅,请勿重复操作！重复操作将会覆盖原有数据！");
-            }
+            //if (doc.pot) {
+            //    frappe.throw("物流计量单已经过磅,请勿重复操作！重复操作将会覆盖原有数据！");
+            //}
             if (doc.type == "IN") {
                 frm.doc.gross_weight = doc.offload_gross_weight;
                 frm.doc.gross_dt = doc.offload_gross_dt;
