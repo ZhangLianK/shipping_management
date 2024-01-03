@@ -20,6 +20,7 @@
   "section_break_hltam",
   "screen",
   "section_break_jiasa",
+  "vehicle_selector",
   "vehicle",
   "item_code",
   "column_break_xp0as",
@@ -112,10 +113,11 @@
   },
   {
    "allow_on_submit": 1,
+   "fetch_from": "vehicle_selector.license_plate",
+   "fetch_if_empty": 1,
    "fieldname": "vehicle",
-   "fieldtype": "Link",
-   "label": "\u8f66\u8f86",
-   "options": "Vehicle"
+   "fieldtype": "Data",
+   "label": "\u8f66\u8f86"
   },
   {
    "fieldname": "section_break_hltam",
@@ -124,7 +126,7 @@
   {
    "fieldname": "section_break_jiasa",
    "fieldtype": "Section Break",
-   "label": "\u8bf7\u8f93\u5165\u8f66\u724c\u53f7\uff0c\u5e76\u9009\u53d6\u8ba1\u91cf\u5355\u53ca\u6cb9\u7f50\u4fe1\u606f"
+   "label": "\u8bf7\u8f93\u5165\u8f66\u724c\u53f7\uff0c\u6216\u9009\u53d6\u8ba1\u91cf\u5355\u53f7"
   },
   {
    "fieldname": "column_break_zlgq7",
@@ -282,12 +284,19 @@
    "fieldname": "regexp",
    "fieldtype": "Data",
    "label": "regExp"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "vehicle_selector",
+   "fieldtype": "Link",
+   "label": "\u8f66\u8f86\u5217\u8868",
+   "options": "Vehicle"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-01-02 21:03:25.965043",
+ "modified": "2024-01-03 15:54:46.621796",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",
