@@ -489,6 +489,7 @@ async function openClose(frm) {
                         }
                     }
                     else  {
+                        //log 
                         receivedData = value
                         console.log("Full Message Received:", receivedData);
                         displayInScreen(frm, receivedData);
