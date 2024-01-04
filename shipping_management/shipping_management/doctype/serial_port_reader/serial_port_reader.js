@@ -385,7 +385,7 @@ frappe.ui.form.on('Serial Port Reader', {
                 frm.doc.ship_type = doc.type;
                 frappe.msgprint("物流计量单【类别】与当前选择不一致，已自动更改");
             }
-            if (doc.pot) {
+            if (doc.pot != frm.doc.pot) {
                 frm.doc.pot = doc.pot;
                 frappe.msgprint("物流计量单【库位】与当前选择不一致，已自动更改");
             }
