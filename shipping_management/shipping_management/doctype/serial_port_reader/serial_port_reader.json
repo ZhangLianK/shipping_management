@@ -40,6 +40,8 @@
   "column_break_zmafe",
   "save_weight",
   "net_weight",
+  "column_break_fwdle",
+  "clear",
   "com_setting_tab",
   "baudrate",
   "buffersize",
@@ -303,12 +305,21 @@
   {
    "fieldname": "column_break_mcisp",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_fwdle",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "clear",
+   "fieldtype": "Button",
+   "label": "\u8ba1\u91cf\u6570\u636e\u6e05\u7a7a"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-01-03 22:28:26.939912",
+ "modified": "2024-01-04 12:55:12.144517",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",

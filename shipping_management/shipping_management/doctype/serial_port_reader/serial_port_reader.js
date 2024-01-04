@@ -332,20 +332,24 @@ frappe.ui.form.on('Serial Port Reader', {
                     else{
                         frappe.msgprint("保存成功");
                     }
-                    frm.doc.gross_weight = 0;
-                    frm.doc.blank_weight = 0;
-                    frm.doc.net_weight = 0;
-                    frm.doc.scale_item = '';
-                    frm.doc.gross_dt = '';
-                    frm.doc.blank_dt = '';
-                    frm.doc.vehicle = '';
-                    frm.refresh();
                 }
                 else {
                     frappe.msgprint(r.message);
                 }
             }
         });
+    },
+    clear: function (frm) {
+        frm.doc.scale_item = "";
+        frm.doc.gross_weight = 0;
+        frm.doc.gross_dt = "";
+        frm.doc.blank_weight = 0;
+        frm.doc.blank_dt = "";
+        frm.doc.net_weight = 0;
+        frm.doc.driver = "";
+        frm.doc.item_code = "";
+        frm.doc.vehicle = "";
+        frm.refresh();
     },
     ship_type: function (frm) {
         //when ship_type is OUT, make the verification code field mandatory
@@ -379,11 +383,12 @@ frappe.ui.form.on('Serial Port Reader', {
         frappe.db.get_doc("Scale Item", frm.doc.scale_item).then(doc => {
             if (doc.type != frm.doc.ship_type) {
                 frm.doc.ship_type = doc.type;
-                frappe.msgprint("物流计量单类型与当前选择不一致，已自动更改");
+                frappe.msgprint("物流计量单【类别】与当前选择不一致，已自动更改");
             }
-            //if (doc.pot) {
-            //    frappe.throw("物流计量单已经过磅,请勿重复操作！重复操作将会覆盖原有数据！");
-            //}
+            if (doc.pot) {
+                frm.doc.pot = doc.pot;
+                frappe.msgprint("物流计量单【库位】与当前选择不一致，已自动更改");
+            }
             if (doc.type == "IN") {
                 frm.doc.gross_weight = doc.offload_gross_weight;
                 frm.doc.gross_dt = doc.offload_gross_dt;
