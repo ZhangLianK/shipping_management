@@ -332,6 +332,14 @@ frappe.ui.form.on('Serial Port Reader', {
                     else{
                         frappe.msgprint("保存成功");
                     }
+                    frm.doc.gross_weight = '';
+                    frm.doc.blank_weight = '';
+                    frm.doc.net_weight = '';
+                    frm.doc.scale_item = '';
+                    frm.doc.gross_dt = '';
+                    frm.doc.blank_dt = '';
+                    frm.doc.vehicle = '';
+                    frm.refresh();
                 }
                 else {
                     frappe.msgprint(r.message);
