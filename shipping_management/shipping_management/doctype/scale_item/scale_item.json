@@ -216,6 +216,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "columns": 1,
    "fieldname": "item",
    "fieldtype": "Link",
@@ -633,7 +634,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-01-03 15:36:53.697726",
+ "modified": "2024-01-05 18:37:09.365531",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
