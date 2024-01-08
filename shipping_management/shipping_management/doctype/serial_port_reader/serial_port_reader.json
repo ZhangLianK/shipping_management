@@ -12,10 +12,14 @@
   "section_break_do9bk",
   "ship_type",
   "column_break_zlgq7",
-  "pot",
+  "purchase_order",
+  "sales_order",
+  "column_break_0vyo3",
+  "from",
+  "to",
   "column_break_uxumw",
   "verification_code",
-  "column_break_0vyo3",
+  "column_break_vs1qp",
   "market_segment",
   "section_break_hltam",
   "screen",
@@ -27,6 +31,8 @@
   "scale_item",
   "column_break_xp0as",
   "item_code",
+  "column_break_ot2bh",
+  "pot",
   "column_break_ungzv",
   "driver",
   "section_break_hsuqb",
@@ -42,6 +48,14 @@
   "net_weight",
   "column_break_fwdle",
   "clear",
+  "\u7cae\u98df\u4ef7\u683c\u53ca\u68c0\u9a8c\u6307\u6807_tab",
+  "price_ls",
+  "rongzhong",
+  "shuifen",
+  "meibian",
+  "zazhi",
+  "\u5173\u8054\u4fe1\u606f_tab",
+  "company",
   "com_setting_tab",
   "baudrate",
   "buffersize",
@@ -314,12 +328,107 @@
    "fieldname": "clear",
    "fieldtype": "Button",
    "label": "\u8ba1\u91cf\u6570\u636e\u6e05\u7a7a"
+  },
+  {
+   "allow_on_submit": 1,
+   "depends_on": "eval: doc.ship_type == 'IN'",
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "\u91c7\u8d2d\u8ba2\u5355",
+   "options": "Purchase Order"
+  },
+  {
+   "fieldname": "column_break_vs1qp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "depends_on": "eval: doc.ship_type == 'OUT'",
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "\u9500\u552e\u8ba2\u5355",
+   "options": "Sales Order"
+  },
+  {
+   "allow_on_submit": 1,
+   "depends_on": "eval: doc.ship_type == 'IN'",
+   "fetch_from": "purchase_order.supplier_name",
+   "fieldname": "from",
+   "fieldtype": "Data",
+   "label": "\u53d1\u8d27\u5355\u4f4d",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "depends_on": "eval: doc.ship_type == 'OUT'",
+   "fetch_from": "sales_order.customer_name",
+   "fieldname": "to",
+   "fieldtype": "Data",
+   "label": "\u6536\u8d27\u5355\u4f4d",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.market_segment == '\u7cae\u98df'",
+   "fieldname": "\u7cae\u98df\u4ef7\u683c\u53ca\u68c0\u9a8c\u6307\u6807_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u7cae\u98df\u4ef7\u683c\u53ca\u68c0\u9a8c\u6307\u6807"
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "scale_item.price_ls",
+   "fieldname": "price_ls",
+   "fieldtype": "Float",
+   "label": "\u4ef7\u683c"
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "scale_item.rongzhong",
+   "fieldname": "rongzhong",
+   "fieldtype": "Float",
+   "label": "\u5bb9\u91cd"
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "scale_item.shuifen",
+   "fieldname": "shuifen",
+   "fieldtype": "Float",
+   "label": "\u6c34\u5206"
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "scale_item.meibian",
+   "fieldname": "meibian",
+   "fieldtype": "Float",
+   "label": "\u9709\u53d8"
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "scale_item.zazhi",
+   "fieldname": "zazhi",
+   "fieldtype": "Float",
+   "label": "\u6742\u8d28"
+  },
+  {
+   "fieldname": "\u5173\u8054\u4fe1\u606f_tab",
+   "fieldtype": "Tab Break",
+   "label": "\u5173\u8054\u4fe1\u606f"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "company",
+   "fieldtype": "Data",
+   "label": "\u516c\u53f8"
+  },
+  {
+   "fieldname": "column_break_ot2bh",
+   "fieldtype": "Column Break"
   }
  ],
+ "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-01-04 12:55:12.144517",
+ "modified": "2024-01-07 21:42:26.711598",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",

@@ -16,17 +16,64 @@ frappe.ui.form.on('Serial Port Reader', {
     // }
     onload_post_render: function (frm) {
         //change the button color
-        frm.get_field("gross_weight_btn").$input.css("background","#2590EF")
-        frm.get_field("gross_weight_btn").$input.css("color","white")
-        frm.get_field("btn_blank_weight").$input.css("background","#4CA86C")
-        frm.get_field("btn_blank_weight").$input.css("color","white")
-        frm.get_field("save_weight").$input.css("background","red")
-        frm.get_field("save_weight").$input.css("color","white")
+        frm.get_field("gross_weight_btn").$input.css("background", "#2590EF")
+        frm.get_field("gross_weight_btn").$input.css("color", "white")
+        frm.get_field("btn_blank_weight").$input.css("background", "#4CA86C")
+        frm.get_field("btn_blank_weight").$input.css("color", "white")
+        frm.get_field("save_weight").$input.css("background", "red")
+        frm.get_field("save_weight").$input.css("color", "white")
     },
 
 
     refresh: function (frm) {
-        
+        //get company from parent warehouse field frm.doc.plant
+        if (frm.doc.plant) {
+            frappe.db.get_doc("Warehouse", frm.doc.plant).then(doc => {
+                if (doc) {
+                    const company = doc.company;
+                    console.log(company);
+                }
+            });
+        }
+
+        // Get the button field
+        let saveWeightButton = frm.fields_dict['save_weight'].$input;
+
+        // Add click event listener
+        saveWeightButton.on('click', function () {
+            // Disable the button
+            saveWeightButton.prop('disabled', true);
+
+            // Re-enable the button after 5 seconds
+            setTimeout(function () {
+                saveWeightButton.prop('disabled', false);
+            }, 5000); // 5000 milliseconds = 5 seconds
+        });
+
+        // filter the po with session default company   
+        if (frm.doc.market_segment == '粮食') {
+            frm.set_query('purchase_order', function () {
+                return {
+                    filters: {
+                        'schedule_date': ['>=', frappe.datetime.nowdate()],
+                        'company': frappe.defaults.get_user_default('company'),
+                        'docstatus': 1,
+                        'status': ['not in', ['Closed', 'Completed', 'Cancelled']],
+                        'is_internal_supplier': 0,
+                    }
+                };
+            });
+            frm.set_query('sales_order', function () {
+                return {
+                    filters: {
+                        'company': frappe.defaults.get_user_default('company'),
+                        'docstatus': 1,
+                        'status': ['not in', ['Closed', 'Completed', 'Cancelled']],
+                        'is_internal_customer': 0,
+                    }
+                };
+            });
+        }
 
         frm.set_query("scale_item", function () {
             return {
@@ -38,7 +85,8 @@ frappe.ui.form.on('Serial Port Reader', {
                 }
             };
         });
-        frm.set_query("warehouse", function () {
+
+        frm.set_query("plant", function () {
             return {
                 filters: {
                     is_group: 1
@@ -49,7 +97,7 @@ frappe.ui.form.on('Serial Port Reader', {
             return {
                 filters: {
                     is_group: 0,
-                    "parent_warehouse": frm.doc.plant
+                    "company": frm.doc.company,
                 }
             };
         });
@@ -77,7 +125,193 @@ frappe.ui.form.on('Serial Port Reader', {
             }
 
             // Prepare your HTML content with real data
-            var html_content = `
+            if (frm.doc.market_segment == '粮食') {
+                var html_content = `
+            <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/html" lang="zh" >
+    <head>
+        <title>称重计量单</title>
+        <style>
+            body {
+                margin-top: 1rem;
+                width: 210mm;
+                height: 70mm;
+                padding-top: 5%;
+                padding-left: 10%;
+                padding-right: 10%;
+            }
+            table {
+                width: 100%;
+            }
+            table, th, td {
+                border: 0.1rem solid black;
+                border-collapse: collapse;
+            }
+            th {
+                width: 10%;
+                padding-left: 1%;
+                text-align: left;
+            }
+            td {
+                width: 30%;
+                padding-left: 1%;
+                text-align: left;
+            }
+            .info {
+                width: 10%;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+            }
+            .title {
+                text-align: center;
+            }
+            .signature {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 0.5rem;
+            }
+            .hd_txt {
+                text-align: left;
+            }
+            .shd_txt {
+                text-align: right;
+            }
+            .hd {
+                float: left;
+            }
+            .shd {
+                float: right;
+            }
+
+            @media print {
+                @page {
+                    size: 210mm 70mm;
+                }
+                body {
+                    margin-top: 1rem;
+                    padding-top: 5%;
+                    padding-left: 10%;
+                    padding-right: 10%;
+                    page-break-inside: avoid;
+                }
+                nav {
+                    display: none;
+                }
+                table {
+                    width: 100%;
+                }
+                table, th, td {
+                    border: 0.1rem solid black;
+                    border-collapse: collapse;
+                }
+                th {
+                    width: 10%;
+                    padding-left: 1%;
+                    text-align: left;
+                }
+                td {
+                    width: 30%;
+                    padding-left: 1%;
+                    text-align: left;
+                }
+                .info {
+                    width: 10%;
+                }
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .title {
+                    text-align: center;
+                }
+                .signature {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 0.5rem;
+                }
+                .hd_txt {
+                    text-align: left;
+                }
+                .shd_txt {
+                    text-align: right;
+                }
+                .hd {
+                    float: left;
+                }
+                .shd {
+                    float: right;
+                }
+            }
+        </style>
+    </head>
+    <body>
+    <div id = "printableArea">
+    <div class="header">
+        <div class = "hd">
+            <h3 class="hd_txt">称重计量单</h3>
+            <p class="hd_txt">${doc.company ? doc.company : doc.plant}</p>
+
+        </div>
+        <div class = "shd">
+            <p class = "shd_txt">单号: ${doc.scale_item}</p>
+            <p class="shd_txt">【${doc.ship_type === 'IN' ? '入' : doc.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot}</p>
+        </div>
+    </div>
+    <table>
+      <tr>
+        <th>车号</th>
+        <td>${doc.vehicle}</td>
+        <th>毛重</th>
+        <td>${doc.gross_weight}</td>
+        <th>杂质</th>
+        <td class = "info">${doc.zazhi ? doc.zazhi : ''}</td>
+      </tr>
+      <tr>
+        <th>货名</th>
+        <td>${doc.item_code}</td>
+        <th>毛重时间</th>
+        <td>${doc.gross_dt}</td>
+        <th>容重</th>
+        <td class = "info">${doc.rongzhong ? doc.rongzhong : ''}</td>
+      </tr>
+      <tr>
+        <th>发货单位</th>
+        <td>${doc.ship_type === 'IN' ? doc.from : frm.doc.company}</td>
+        <th>皮重</th>
+        <td>${doc.blank_weight}</td>
+        <th>霉变</th>
+        <td class = "info">${doc.meibian ? doc.meibian : ''}</td>
+      </tr>
+      <tr>
+        <th>收货单位</th>
+        <td>${doc.ship_type === 'OUT' ? doc.to : frm.doc.company}</td>
+              <th>皮重时间</th>
+        <td>${doc.blank_dt}</td>
+        <th>水分</th>
+        <td class = "info">${doc.shuifen ? doc.shuifen : ''}</td>
+      </tr>
+      <tr>
+        <th>打印时间</th>
+        <td>${get_date_time()}</td>
+        <th>净重</th>
+        <td>${doc.net_weight}</td>
+        <th>价格</th>
+        <td class = "info">${doc.price_ls ? doc.price_ls : ''}</td>
+      </tr>
+    </table>
+
+    <div class="signature">
+        <p class="hd">过磅员: ${frappe.session.user}</p>
+        <p class="shd">司机: _________________</p>
+    </div>
+    </div>
+    </body>
+    </html>`;
+            }
+            else {
+                var html_content = `
             <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/html" lang="zh" >
     <head>
@@ -201,7 +435,7 @@ frappe.ui.form.on('Serial Port Reader', {
         </div>
         <div class = "shd">
             <p class = "shd_txt">单号: ${doc.scale_item}</p>
-            <p class="shd_txt">${doc.pot}</p>
+            <p class="shd_txt">【${doc.ship_type === 'IN' ? '入' : doc.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot}</p>
         </div>
     </div>
     <table>
@@ -220,7 +454,7 @@ frappe.ui.form.on('Serial Port Reader', {
       </tr>
       <tr>
         <th>发货单位</th>
-        <td>______</td>
+        <td>${doc.ship_type === 'IN' ? doc.from : ''}</td>
 
         <th>皮重</th>
         <td>${doc.blank_weight}</td>
@@ -246,7 +480,7 @@ frappe.ui.form.on('Serial Port Reader', {
     </div>
     </body>
     </html>`;
-
+            }
             // Replace placeholders with actual data from the form
             //html_content = html_content.replace('{}', doc.name); // repeat for other fields
 
@@ -305,8 +539,12 @@ frappe.ui.form.on('Serial Port Reader', {
         }
     },
     save_weight: function (frm) {
-        if (!frm.doc.ship_type && !frm.doc.scale_item) {
-            frappe.msgprint("未选择物流计量单，则需要输入物流计量单类型以创建新物流单");
+        if (frm.doc.ship_type == 'IN' && !frm.doc.scale_item && !frm.doc.purchase_order) {
+            frappe.throw("入库时，需要选择【计量单】或者选择【采购订单】。");
+            return;
+        }
+        if (frm.doc.ship_type == 'OUT' && !frm.doc.scale_item) {
+            frappe.throw("出库时必须选择物流计量单");
             return;
         }
         frappe.call({
@@ -323,13 +561,15 @@ frappe.ui.form.on('Serial Port Reader', {
                 "market_segment": frm.doc.market_segment,
                 "vehicle": frm.doc.vehicle,
                 "item_code": frm.doc.item_code,
+                "purchase_order": frm.doc.purchase_order,
             },
             callback: function (r) {
                 if (r.message.status == 'success') {
-                    if(r.message.scale_item){
+                    if (r.message.scale_item) {
+                        frm.set_value('scale_item', r.message.scale_item);
                         frappe.msgprint("保存成功。新物流计量单号为：" + r.message.scale_item);
                     }
-                    else{
+                    else {
                         frappe.msgprint("保存成功");
                     }
                 }
@@ -389,17 +629,24 @@ frappe.ui.form.on('Serial Port Reader', {
                 frm.doc.pot = doc.pot;
                 frappe.msgprint("物流计量单【库位】与当前选择不一致，已自动更改");
             }
+            frm.doc.company = doc.company;
+            frm.doc.driver = doc.driver;
+            frm.doc.item_code = doc.item;
+            frm.doc.ship_type = doc.type;
+            frm.doc.vehicle = doc.vehicle;
+            frm.doc.item_code = doc.item;
+            
             if (doc.type == "IN") {
                 frm.doc.gross_weight = doc.offload_gross_weight;
                 frm.doc.gross_dt = doc.offload_gross_dt;
                 frm.doc.blank_weight = doc.offload_blank_weight;
                 frm.doc.blank_dt = doc.offload_blank_dt;
                 frm.doc.net_weight = doc.offload_net_weight;
-                frm.doc.driver = doc.driver;
-                frm.doc.item_code = doc.item;
-                frm.doc.ship_type = doc.type;
-                frm.doc.vehicle = doc.vehicle;
-                frm.doc.item_code = doc.item;
+
+                if (doc.purchase_order != frm.doc.purchase_order && doc.purchase_order) {
+                    frm.set_value('purchase_order', doc.purchase_order)
+                    frappe.msgprint("物流计量单【采购订单】与当前选择不一致，已自动更改");
+                }
                 frm.refresh();
             }
             else if (doc.type == "OUT") {
@@ -408,11 +655,11 @@ frappe.ui.form.on('Serial Port Reader', {
                 frm.doc.blank_weight = doc.load_blank_weight;
                 frm.doc.blank_dt = doc.load_blank_dt;
                 frm.doc.net_weight = doc.load_net_weight;
-                frm.doc.driver = doc.driver;
-                frm.doc.item_code = doc.item;
-                frm.doc.ship_type = doc.type;
-                frm.doc.vehicle = doc.vehicle;
-                frm.doc.item_code = doc.item;
+
+                if (doc.sales_order != frm.doc.sales_order) {
+                    frm.set_value('sales_order', doc.sales_order)
+                    frappe.msgprint("物流计量单【销售订单】与当前选择不一致，已自动更改");
+                }
                 frm.refresh();
             }
         });
@@ -506,10 +753,10 @@ async function openClose(frm) {
                     if (reverse) {
                         value = Array.from(value).reverse().join("");
                     }
-                    
+
                     if (stopchar) {
                         receivedData += value;
-                        if (receivedData.includes(stopchar)){
+                        if (receivedData.includes(stopchar)) {
                             console.log("Full Message Received:", receivedData);
                             //remove stopchar string from the received data
                             receivedData = receivedData.replace(stopchar, "");
@@ -517,7 +764,7 @@ async function openClose(frm) {
                             receivedData = "";
                         }
                     }
-                    else  {
+                    else {
                         //log 
                         receivedData = value;
                         //check the received data if it has + charactor
@@ -526,7 +773,7 @@ async function openClose(frm) {
                             displayInScreen(frm, receivedData);
                             receivedData = "";
                         }
-                        
+
                     }
                 }
 
@@ -573,26 +820,26 @@ function clearTerminal(frm) {
 function displayInScreen(frm, receivedData) {
     // add regular expression to the serial port reader setting.e.g. /(\d+\.\d+|\d+)/
 
-/*     function extractWeight(data, pattern) {
-        // Create a RegExp object using the pattern string
-        const regex = new RegExp(pattern);
-        const match = data.match(regex);
-    
-        if (match) {
-            // Convert the matched string to an integer
-            const weight = parseInt(match[1], 10);
-            return weight + ' kg';
-        } else {
-            // Handle cases where no match is found
-            return 'No valid weight found';
+    /*     function extractWeight(data, pattern) {
+            // Create a RegExp object using the pattern string
+            const regex = new RegExp(pattern);
+            const match = data.match(regex);
+        
+            if (match) {
+                // Convert the matched string to an integer
+                const weight = parseInt(match[1], 10);
+                return weight + ' kg';
+            } else {
+                // Handle cases where no match is found
+                return 'No valid weight found';
+            }
         }
-    }
-    
-    const data = '」+00140001B「';
-    const pattern = "\\+?(\\d+)01B"; // Note: double backslashes are used for escaping
-    const weight = extractWeight(data, pattern);
-    console.log(weight); // Output should be 1400 kg
-     */
+        
+        const data = '」+00140001B「';
+        const pattern = "\\+?(\\d+)01B"; // Note: double backslashes are used for escaping
+        const weight = extractWeight(data, pattern);
+        console.log(weight); // Output should be 1400 kg
+         */
 
     const pattern = new RegExp(frm.doc.regexp);
     const match = receivedData.match(pattern);

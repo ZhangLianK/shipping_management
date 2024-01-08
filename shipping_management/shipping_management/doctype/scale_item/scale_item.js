@@ -42,16 +42,21 @@ frappe.ui.form.on('Scale Item', {
             };
         });
         // set filter for purchase order field selection
-        frm.set_query('purchase_order', function () {
-            return {
-                filters: {
-                    'item': frm.doc.item,
-                    'company': frm.doc.company,
-                    'docstatus': 1,
-                    'status': ['not in', ['Closed', 'Completed', 'To Bill', 'Cancelled']]
-                }
-            };
-        });
+        if (frm.doc.market_segment == '成品油') {
+        }
+        if (frm.doc.market_segment == '粮食') {
+            frm.set_query('purchase_order', function () {
+                return {
+                    filters: {
+                        'schedule_date': ['>=', frappe.datetime.nowdate()],
+                        'company': frm.doc.company,
+                        'docstatus': 1,
+                        'status': ['not in', ['Closed', 'Completed', 'Cancelled']],
+                    }
+                };
+            });
+        }
+        
         //set filter for transporter, fitler the supplier by is_transporter field
         frm.set_query('transporter', function () {
             return {
@@ -88,7 +93,7 @@ frappe.ui.form.on('Scale Item', {
             frm.add_custom_button(__('Create Purchase Receipt'), function () {
                 if (!frm.doc.pot && frm.doc.type == 'IN') {
 
-                    frappe.throw(__('无入罐信息！'));
+                    frappe.throw(__('无【罐（库位）】信息！'));
 
                 }
                 else if (frm.is_dirty()) {

@@ -238,6 +238,12 @@ class ScaleItem(Document):
 			sales_order.save(ignore_permissions=True)
    
 	def before_save(self):
+		if self.market_segment == '粮食':
+			if self.type == 'IN' and self.offload_net_weight and self.price_ls and not self.amount_ls:
+				self.amount_ls = self.offload_net_weight * self.price_ls
+			if self.type == 'OUT' and self.load_net_weight and self.price_ls and not self.amount_ls:
+				self.amount_ls = self.load_net_weight * self.price_ls
+			
 		#采购收货处理逻辑开始purchase receipt process logic start
 		self.change_status()
 		if self.type == 'IN' and self.market_segment == '成品油':
@@ -285,6 +291,11 @@ class ScaleItem(Document):
 		pass
 
 	def before_update_after_submit(self):
+		if self.market_segment == '粮食':
+			if self.type == 'IN' and self.offload_net_weight and self.price_ls and not self.amount_ls:
+				self.amount_ls = self.offload_net_weight * self.price_ls
+			if self.type == 'OUT' and self.load_net_weight and self.price_ls and not self.amount_ls:
+				self.amount_ls = self.load_net_weight * self.price_ls
 		#frappe.msgprint("before_update_after_submit")
 		self.change_status()
 		if self.type == 'IN' and self.market_segment == '成品油':
@@ -321,17 +332,17 @@ class ScaleItem(Document):
 			if driver_doc.cell_number and driver_doc.recv_sms:
 				self.send_notification_sms()
 		
-		if self.purchase_order:
+		if self.purchase_order and self.target_weight:
 			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order,ignore_permissions=True)
 			purchase_order.qty_vehicle  = purchase_order.qty_vehicle + self.target_weight
 			purchase_order.save(ignore_permissions=True)
 
-		if self.sales_order:
+		if self.sales_order and self.target_weight:
 			sales_order = frappe.get_doc("Sales Order", self.sales_order,ignore_permissions=True)
 			sales_order.qty_vehicle  = sales_order.qty_vehicle + self.target_weight
 			sales_order.save(ignore_permissions=True)
 
-		if self.sales_invoice:
+		if self.sales_invoice and self.target_weight:
 			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
 			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight
 			sales_invoice.save(ignore_permissions=True)
@@ -383,9 +394,14 @@ def make_purchase_receipt(source_name, target_doc=None):
 		if	source_doc.type == 'IN':
 			target.qty = flt(source_doc.offload_net_weight)
 			target.stock_qty = flt(source_doc.offload_net_weight) * flt(obj.conversion_factor)
-			target.amount = flt(source_doc.offload_net_weight)  * flt(obj.rate)
-			target.base_amount = (
-			flt(source_doc.offload_net_weight) * flt(obj.rate) * flt(source_parent.conversion_rate)
+			if source_doc.price_ls:
+				target.rate = flt(source_doc.price_ls)
+				target.amount = flt(source_doc.offload_net_weight)  * target.rate
+				target.base_amount = (flt(source_doc.offload_net_weight) * target.rate * flt(source_parent.conversion_rate))
+			else:
+				target.amount = flt(source_doc.offload_net_weight)  * flt(obj.rate)
+				target.base_amount = (
+				flt(source_doc.offload_net_weight) * flt(obj.rate) * flt(source_parent.conversion_rate)
 		)
 		if	source_doc.type == 'DIRC':
 			target.qty = flt(source_doc.load_net_weight)
@@ -438,8 +454,12 @@ def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 
 	source_doc = frappe.get_doc("Scale Item", source_name)
 	source = source_doc.sales_order
-	source_si = source_doc.sales_invoice
-	source_si_doc = frappe.get_doc("Sales Invoice", source_si)
+	if source_doc.sales_invoice:
+		source_si = source_doc.sales_invoice
+		source_si_doc = frappe.get_doc("Sales Invoice", source_si)
+	else :
+		source_si = None
+		source_si_doc = None
 
 	def set_missing_values(source, target):
 		target.run_method("set_missing_values")
@@ -467,14 +487,16 @@ def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 			target.qty = flt(source_doc.load_net_weight)
 			target.amount = flt(source_doc.offload_net_weight)  * flt(source.rate)
 			target.base_amount = (flt(source_doc.load_net_weight) * flt(source.rate))
-			target.against_sales_invoice = source_si
-			target.si_detail = source_si_doc.items[0].name
+			if source_si:
+				target.against_sales_invoice = source_si
+				target.si_detail = source_si_doc.items[0].name
 		if	source_doc.bill_type == 'SD':
 			target.qty = flt(source_doc.offload_net_weight)
 			target.amount = flt(source_doc.offload_net_weight)  * flt(source.rate)
 			target.base_amount = (flt(source_doc.offload_net_weight) * flt(source.rate))
-			target.against_sales_invoice = source_si
-			target.si_detail = source_si_doc.items[0].name
+			if source_si:
+				target.against_sales_invoice = source_si
+				target.si_detail = source_si_doc.items[0].name
 
 		item = get_item_defaults(target.item_code, source_parent.company)
 		item_group = get_item_group_defaults(target.item_code, source_parent.company)
