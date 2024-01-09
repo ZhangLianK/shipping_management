@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe.utils import cint, cstr, flt, nowdate
 
 class SerialPortReader(Document):
 	pass
@@ -18,15 +19,15 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 			scale_item_doc = frappe.new_doc("Scale Item")
 			if type == 'IN':
 				if not gross_weight=='0':
-					scale_item_doc.offload_gross_weight = gross_weight
+					scale_item_doc.offload_gross_weight = flt(gross_weight)
 				if gross_dt:
-					scale_item_doc.offload_gross_dt = gross_dt
+					scale_item_doc.offload_gross_dt = flt(gross_dt)
 				if not blank_weight == '0':
-					scale_item_doc.offload_blank_weight = blank_weight
+					scale_item_doc.offload_blank_weight = flt(blank_weight)
 				if blank_dt:
-					scale_item_doc.offload_blank_dt = blank_dt
+					scale_item_doc.offload_blank_dt = flt(blank_dt)
 				if not net_weight == '0':
-					scale_item_doc.offload_net_weight = net_weight
+					scale_item_doc.offload_net_weight = flt(net_weight)
 				if pot:
 					scale_item_doc.pot=pot
 				scale_item_doc.market_segment = market_segment
@@ -40,15 +41,15 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 				return {"scale_item": scale_item_doc.name, "status": "success"}
 			elif type == 'OUT':
 				if not gross_weight == '0':
-					scale_item_doc.load_gross_weight = gross_weight
+					scale_item_doc.load_gross_weight = flt(gross_weight)
 				if gross_dt:
-					scale_item_doc.load_gross_dt = gross_dt
+					scale_item_doc.load_gross_dt = flt(gross_dt)
 				if not blank_weight == '0':
-					scale_item_doc.load_blank_weight = blank_weight
+					scale_item_doc.load_blank_weight = flt(blank_weight)
 				if blank_dt:
-					scale_item_doc.load_blank_dt = blank_dt
+					scale_item_doc.load_blank_dt = flt(blank_dt)
 				if not net_weight == '0':
-					scale_item_doc.load_net_weight = net_weight
+					scale_item_doc.load_net_weight = flt(net_weight)
 				if pot:
 					scale_item_doc.pot=pot
 				scale_item_doc.market_segment = market_segment
@@ -63,30 +64,30 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 			scale_item_doc = frappe.get_doc("Scale Item", scale_item)
 			if scale_item_doc.type == 'IN':
 				if not gross_weight == '0':
-					scale_item_doc.offload_gross_weight = gross_weight
+					scale_item_doc.offload_gross_weight = flt(gross_weight)
 				if gross_dt:
-					scale_item_doc.offload_gross_dt = gross_dt
+					scale_item_doc.offload_gross_dt = flt(gross_dt)
 				if not blank_weight == '0':
-					scale_item_doc.offload_blank_weight = blank_weight
+					scale_item_doc.offload_blank_weight = flt(blank_weight)
 				if blank_dt:
-					scale_item_doc.offload_blank_dt = blank_dt
+					scale_item_doc.offload_blank_dt = flt(blank_dt)
 				if not net_weight== '0':
-					scale_item_doc.offload_net_weight = net_weight
+					scale_item_doc.offload_net_weight = flt(net_weight)
 				if pot:
 					scale_item_doc.pot=pot
 				scale_item_doc.stock_date = frappe.utils.today()
 				scale_item_doc.save(ignore_permissions=True)
 			elif scale_item_doc.type == 'OUT':
 				if not gross_weight == '0':
-					scale_item_doc.load_gross_weight = gross_weight
+					scale_item_doc.load_gross_weight = flt(gross_weight)
 				if gross_dt:
-					scale_item_doc.load_gross_dt = gross_dt
+					scale_item_doc.load_gross_dt = flt(gross_dt)
 				if not blank_weight=='0':
-					scale_item_doc.load_blank_weight = blank_weight
+					scale_item_doc.load_blank_weight = flt(blank_weight)
 				if blank_dt:
-					scale_item_doc.load_blank_dt = blank_dt
+					scale_item_doc.load_blank_dt = flt(blank_dt)
 				if not net_weight=='0':
-					scale_item_doc.load_net_weight = net_weight
+					scale_item_doc.load_net_weight = flt(net_weight)
 				if pot:
 					scale_item_doc.pot=pot
 				scale_item_doc.stock_date = frappe.utils.today()

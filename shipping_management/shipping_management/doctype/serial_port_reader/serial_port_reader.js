@@ -26,6 +26,8 @@ frappe.ui.form.on('Serial Port Reader', {
 
 
     refresh: function (frm) {
+        // Disable the Save button
+        frm.disable_save();
         //get company from parent warehouse field frm.doc.plant
         if (frm.doc.plant) {
             frappe.db.get_doc("Warehouse", frm.doc.plant).then(doc => {
