@@ -300,7 +300,7 @@ frappe.ui.form.on('Serial Port Reader', {
         <th>净重</th>
         <td>${doc.net_weight}</td>
         <th>价格</th>
-        <td class = "info">${doc.price_ls ? doc.price_ls : ''}</td>
+        <td class = "info"></td>
       </tr>
     </table>
 
