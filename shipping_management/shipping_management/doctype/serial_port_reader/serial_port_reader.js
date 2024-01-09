@@ -495,7 +495,7 @@ frappe.ui.form.on('Serial Port Reader', {
         // Replace 'your_html_fieldname' with the actual fieldname of your HTML field.
         frm.fields_dict.screen.df.options = `
             <div style="background-color: black; color: white; height:100px; text-align: center;font-size:60px">
-                <p>23000</p>
+                <p>请打开端口</p>
             </div>`;
     },
     gross_weight_btn: function (frm) {
@@ -541,14 +541,28 @@ frappe.ui.form.on('Serial Port Reader', {
         }
     },
     save_weight: function (frm) {
-        if (frm.doc.ship_type == 'IN' && !frm.doc.scale_item && !frm.doc.purchase_order) {
-            frappe.throw("入库时，需要选择【计量单】或者选择【采购订单】。");
-            return;
+        if (frm.doc.ship_type == 'IN') {
+            if (!frm.doc.scale_item && !frm.doc.purchase_order)
+            {
+                frappe.throw("入库时，需要选择【计量单】或者选择【采购订单】。");
+                return;
+            }
+            if (frm.doc.gross_weight == 0 && frm.doc.blank_weight == 0) {
+                frappe.throw("请先读取毛重后再保存");
+                return;
+            }
         }
-        if (frm.doc.ship_type == 'OUT' && !frm.doc.scale_item) {
-            frappe.throw("出库时必须选择物流计量单");
-            return;
+        if (frm.doc.ship_type == 'OUT') {
+            if(!frm.doc.scale_item){
+                frappe.throw("出库时必须选择物流计量单");
+                return;
+            }
+            if (frm.doc.gross_weight == 0 && frm.doc.blank_weight == 0) {
+                frappe.throw("请先读取皮重后再保存");
+                return;
+            }
         }
+        
         frappe.call({
             method: "shipping_management.shipping_management.doctype.serial_port_reader.serial_port_reader.save_weight",
             args: {
