@@ -95,6 +95,10 @@
   "price_ls",
   "column_break_deguh",
   "amount_ls",
+  "column_break_wjmet",
+  "koukuan",
+  "section_break_spdda",
+  "beizhu",
   "section_break_0owcq",
   "shuifen",
   "column_break_fou6p",
@@ -685,12 +689,32 @@
   {
    "fieldname": "column_break_nzqdf",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_wjmet",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "koukuan",
+   "fieldtype": "Float",
+   "label": "\u6263\u6b3e"
+  },
+  {
+   "fieldname": "section_break_spdda",
+   "fieldtype": "Section Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "beizhu",
+   "fieldtype": "Data",
+   "label": "\u5907\u6ce8"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-01-07 09:37:39.780253",
+ "modified": "2024-01-16 14:33:48.115234",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

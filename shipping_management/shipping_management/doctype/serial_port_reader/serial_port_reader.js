@@ -578,6 +578,12 @@ frappe.ui.form.on('Serial Port Reader', {
                 "vehicle": frm.doc.vehicle,
                 "item_code": frm.doc.item_code,
                 "purchase_order": frm.doc.purchase_order,
+                "price_ls": frm.doc.price_ls,
+				"beizhu": frm.doc.beizhu,
+				"shuifen": frm.doc.shuifen,
+				"zazhi": frm.doc.zazhi,
+				"rongzhong": frm.doc.rongzhong,
+				"meibian": frm.doc.meibian
             },
             callback: function (r) {
                 if (r.message.status == 'success') {
