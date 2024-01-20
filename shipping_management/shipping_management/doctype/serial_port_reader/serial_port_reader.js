@@ -42,14 +42,14 @@ frappe.ui.form.on('Serial Port Reader', {
                         label: '发货单位',
                         fieldname: 'company1',
                         fieldtype: 'Link',
-                        options: 'Company', // Assuming 'Company' is a DocType
+                        options: 'Business Partner', // Assuming 'Company' is a DocType
                         reqd: 1
                     },
                     {
                         label: '收货单位',
                         fieldname: 'company2',
                         fieldtype: 'Link',
-                        options: 'Company', // Assuming 'Company' is a DocType
+                        options: 'Business Partner', // Assuming 'Company' is a DocType
                         reqd: 1
                     },
                     {
