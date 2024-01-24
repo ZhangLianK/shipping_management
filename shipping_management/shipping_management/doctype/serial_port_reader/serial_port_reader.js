@@ -26,36 +26,16 @@ frappe.ui.form.on('Serial Port Reader', {
 
 
     refresh: function (frm) {
-        frm.add_custom_button('打印关联方磅单', function() {
+        frm.add_custom_button('打印关联方磅单', function () {
             // Code to show the dialog will go here
             let dialog = new frappe.ui.Dialog({
                 title: '关联方信息',
                 fields: [
                     {
-                        label: '入出库类型',
-                        fieldname: 'ship_type',
+                        label: '模版',
+                        fieldname: 'scale_template',
                         fieldtype: 'Link',
-                        options: 'Ship Type', // Assuming 'Company' is a DocType
-                        reqd: 1
-                    },
-                    {
-                        label: '发货单位',
-                        fieldname: 'company1',
-                        fieldtype: 'Link',
-                        options: 'Business Partner', // Assuming 'Company' is a DocType
-                        reqd: 1
-                    },
-                    {
-                        label: '收货单位',
-                        fieldname: 'company2',
-                        fieldtype: 'Link',
-                        options: 'Business Partner', // Assuming 'Company' is a DocType
-                        reqd: 1
-                    },
-                    {
-                        label: '过磅员',
-                        fieldname: 'guobanger',
-                        fieldtype: 'Data',
+                        options: 'Scale Template', // Assuming 'Company' is a DocType
                         reqd: 1
                     }
                 ],
@@ -63,202 +43,34 @@ frappe.ui.form.on('Serial Port Reader', {
                 primary_action(values) {
                     dialog.hide();
                     var doc = frm.doc;
-            if (!doc.scale_item || !doc.ship_type) {
-                frappe.msgprint("请先选择物流计量单");
-                return;
-            }
-
-            // Prepare your HTML content with real data
-            if (frm.doc.market_segment == '粮食') {
-                var html_content = `
-            <!DOCTYPE html>
-    <html xmlns="http://www.w3.org/1999/html" lang="zh" >
-    <head>
-        <title>称重计量单</title>
-        <style>
-            body {
-                margin-top: 1rem;
-                width: 210mm;
-                height: 70mm;
-                padding-top: 5%;
-                padding-left: 10%;
-                padding-right: 10%;
-            }
-            table {
-                width: 100%;
-            }
-            table, th, td {
-                border: 0.1rem solid black;
-                border-collapse: collapse;
-            }
-            th {
-                width: 10%;
-                padding-left: 1%;
-                text-align: left;
-            }
-            td {
-                width: 30%;
-                padding-left: 1%;
-                text-align: left;
-            }
-            .info {
-                width: 10%;
-            }
-            .header {
-                display: flex;
-                justify-content: space-between;
-            }
-            .title {
-                text-align: center;
-            }
-            .signature {
-                display: flex;
-                justify-content: space-between;
-                margin-top: 0.5rem;
-            }
-            .hd_txt {
-                text-align: left;
-            }
-            .shd_txt {
-                text-align: right;
-            }
-            .hd {
-                float: left;
-            }
-            .shd {
-                float: right;
-            }
-
-            @media print {
-                @page {
-                    size: 210mm 70mm;
-                }
-                body {
-                    margin-top: 1rem;
-                    padding-top: 5%;
-                    padding-left: 10%;
-                    padding-right: 10%;
-                    page-break-inside: avoid;
-                }
-                nav {
-                    display: none;
-                }
-                table {
-                    width: 100%;
-                }
-                table, th, td {
-                    border: 0.1rem solid black;
-                    border-collapse: collapse;
-                }
-                th {
-                    width: 10%;
-                    padding-left: 1%;
-                    text-align: left;
-                }
-                td {
-                    width: 30%;
-                    padding-left: 1%;
-                    text-align: left;
-                }
-                .info {
-                    width: 10%;
-                }
-                .header {
-                    display: flex;
-                    justify-content: space-between;
-                }
-                .title {
-                    text-align: center;
-                }
-                .signature {
-                    display: flex;
-                    justify-content: space-between;
-                    margin-top: 0.5rem;
-                }
-                .hd_txt {
-                    text-align: left;
-                }
-                .shd_txt {
-                    text-align: right;
-                }
-                .hd {
-                    float: left;
-                }
-                .shd {
-                    float: right;
-                }
-            }
-        </style>
-    </head>
-    <body>
-    <div id = "printableArea">
-    <div class="header">
-        <div class = "hd">
-            <h3 class="hd_txt">称重计量单</h3>
-            <p class="hd_txt"></p>
-
-        </div>
-        <div class = "shd">
-            <p class = "shd_txt">单号: ${doc.scale_item}</p>
-            <p class="shd_txt">【${values.ship_type === 'IN' ? '入' : values.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot.split(" - ")[0]}</p>
-        </div>
-    </div>
-    <table>
-      <tr>
-        <th>车号</th>
-        <td>${doc.vehicle}</td>
-        <th>毛重</th>
-        <td>${doc.gross_weight}</td>
-        <th>杂质</th>
-        <td class = "info">${doc.zazhi ? doc.zazhi : ''}</td>
-      </tr>
-      <tr>
-        <th>货名</th>
-        <td>${doc.item_code}</td>
-        <th>毛重时间</th>
-        <td>${doc.gross_dt}</td>
-        <th>容重</th>
-        <td class = "info">${doc.rongzhong ? doc.rongzhong : ''}</td>
-      </tr>
-      <tr>
-        <th>发货单位</th>
-        <td>${values.company1}</td>
-        <th>皮重</th>
-        <td>${doc.blank_weight}</td>
-        <th>霉变</th>
-        <td class = "info">${doc.meibian ? doc.meibian : ''}</td>
-      </tr>
-      <tr>
-        <th>收货单位</th>
-        <td>${values.company2}</td>
-              <th>皮重时间</th>
-        <td>${doc.blank_dt}</td>
-        <th>水分</th>
-        <td class = "info">${doc.shuifen ? doc.shuifen : ''}</td>
-      </tr>
-      <tr>
-        <th>打印时间</th>
-        <td>${get_date_time()}</td>
-        <th>净重</th>
-        <td>${doc.net_weight}</td>
-        <th>价格</th>
-        <td class = "info"></td>
-      </tr>
-    </table>
-
-    <div class="signature">
-        <p class="hd">过磅员: ${values.guobanger}</p>
-        <p class="shd">司机: _________________</p>
-    </div>
-    </div>
-    </body>
-    </html>`;
-            }
-            // Call the print function
-            print_html_label(html_content);
+                    if (!doc.scale_item || !doc.ship_type) {
+                        frappe.msgprint("请先选择物流计量单");
+                        return;
+                    }
+                    //get the template from the dialog
+                    frappe.db.get_doc("Scale Template", values.scale_template).then(template => {
+                        if (template) {
+                            // Prepare your HTML content with real data
+                            let html_content = template.template_html.replace('${no}', 
+                                    doc.scale_item.slice(1,5) +'-' +doc.scale_item.slice(8,12) ).replace('${date}', 
+                                        get_today()).replace('${v1}',
+                                        template.v1).replace('${ve}',
+                                        doc.vehicle).replace('${gr}',
+                                        doc.gross_weight).replace('${bl}',
+                                        doc.blank_weight).replace('${net}',
+                                        doc.net_weight).replace('${sh}',
+                                        doc.shuifen).replace('${r}',
+                                        doc.rongzhong).replace('${pot}',
+                                        doc.pot.split(' - ')[0]);
+                            // Call the print function
+                            print_html_label(html_content);
+                        }
+                    });
                 }
             });
-            
+
+
+
             dialog.show();
         });
         // Disable the Save button
@@ -777,8 +589,7 @@ frappe.ui.form.on('Serial Port Reader', {
     },
     save_weight: function (frm) {
         if (frm.doc.ship_type == 'IN') {
-            if (!frm.doc.scale_item && !frm.doc.purchase_order)
-            {
+            if (!frm.doc.scale_item && !frm.doc.purchase_order) {
                 frappe.throw("入库时，需要选择【计量单】或者选择【采购订单】。");
                 return;
             }
@@ -788,7 +599,7 @@ frappe.ui.form.on('Serial Port Reader', {
             }
         }
         if (frm.doc.ship_type == 'OUT') {
-            if(!frm.doc.scale_item){
+            if (!frm.doc.scale_item) {
                 frappe.throw("出库时必须选择物流计量单");
                 return;
             }
@@ -797,7 +608,7 @@ frappe.ui.form.on('Serial Port Reader', {
                 return;
             }
         }
-        
+
         frappe.call({
             method: "shipping_management.shipping_management.doctype.serial_port_reader.serial_port_reader.save_weight",
             args: {
@@ -814,11 +625,11 @@ frappe.ui.form.on('Serial Port Reader', {
                 "item_code": frm.doc.item_code,
                 "purchase_order": frm.doc.purchase_order,
                 "price_ls": frm.doc.price_ls,
-				"beizhu": frm.doc.beizhu,
-				"shuifen": frm.doc.shuifen,
-				"zazhi": frm.doc.zazhi,
-				"rongzhong": frm.doc.rongzhong,
-				"meibian": frm.doc.meibian
+                "beizhu": frm.doc.beizhu,
+                "shuifen": frm.doc.shuifen,
+                "zazhi": frm.doc.zazhi,
+                "rongzhong": frm.doc.rongzhong,
+                "meibian": frm.doc.meibian
             },
             callback: function (r) {
                 if (r.message.status == 'success') {
@@ -892,7 +703,7 @@ frappe.ui.form.on('Serial Port Reader', {
             frm.doc.ship_type = doc.type;
             frm.doc.vehicle = doc.vehicle;
             frm.doc.item_code = doc.item;
-            
+
             if (doc.type == "IN") {
                 frm.doc.gross_weight = doc.offload_gross_weight;
                 frm.doc.gross_dt = doc.offload_gross_dt;
