@@ -140,7 +140,9 @@ frappe.ui.form.on('Shipping Management Tool', {
 			fields: ['name', 'id'],
 			filters: {
 				'company': company
-			}
+			},
+			order_by: 'id asc',
+			limit: 'all'
 		}).then(r => {
 				if (r) {
 					// Add checkboxes and information to the container for each vehicle
