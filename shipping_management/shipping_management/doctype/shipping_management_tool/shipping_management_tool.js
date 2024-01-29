@@ -90,7 +90,7 @@ frappe.ui.form.on('Shipping Management Tool', {
 			.on('input', function () {
 				var search_value = $(this).val().toLowerCase();
 				// Filter the vehicle list based on the search
-				$('.custom-sidebar-multiselect label').each(function () {
+				$('.custom-sidebar-multiselect .vehicle-id').each(function () {
 					var $label = $(this);
 					var text = $label.text().toLowerCase();
 					if (text.includes(search_value)) {
