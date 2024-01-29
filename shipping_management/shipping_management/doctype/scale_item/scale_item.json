@@ -99,6 +99,7 @@
   "koukuan",
   "section_break_spdda",
   "beizhu",
+  "nonghu",
   "section_break_0owcq",
   "shuifen",
   "column_break_fou6p",
@@ -709,12 +710,18 @@
    "fieldname": "beizhu",
    "fieldtype": "Data",
    "label": "\u5907\u6ce8"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "nonghu",
+   "fieldtype": "Data",
+   "label": "\u519c\u6237"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-01-16 14:33:48.115234",
+ "modified": "2024-01-22 16:04:00.414547",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

@@ -25,6 +25,7 @@
   "bill_type",
   "column_break_6qxwm",
   "item",
+  "market_segment",
   "section_break_hvcxu",
   "price",
   "column_break_5gjj3",
@@ -195,11 +196,17 @@
    "in_list_view": 1,
    "label": "\u7269\u6599",
    "options": "Item"
+  },
+  {
+   "fieldname": "market_segment",
+   "fieldtype": "Link",
+   "label": "\u4e8b\u4e1a\u90e8",
+   "options": "Market Segment"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-17 00:30:54.917165",
+ "modified": "2024-01-29 15:12:33.984084",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Ship Plan",

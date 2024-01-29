@@ -9,6 +9,8 @@
   "company",
   "column_break_xudq5",
   "date",
+  "column_break_u3cuz",
+  "transporter",
   "section_break_incyt",
   "ship_plan",
   "column_break_emxj5",
@@ -103,12 +105,22 @@
    "fieldtype": "Float",
    "label": "\u5df2\u914d\u8f66\u8fd0\u91cf",
    "read_only": 1
+  },
+  {
+   "fieldname": "column_break_u3cuz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "transporter",
+   "fieldtype": "Link",
+   "label": "\u627f\u8fd0\u5546",
+   "options": "Supplier"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-12-18 21:37:01.168577",
+ "modified": "2024-01-29 15:18:59.145910",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping Management Tool",

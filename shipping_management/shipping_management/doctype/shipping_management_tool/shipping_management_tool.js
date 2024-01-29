@@ -21,6 +21,23 @@ frappe.ui.form.on("Scale Child", {
 
 frappe.ui.form.on('Shipping Management Tool', {
 	refresh: function (frm) {
+		//filter transporter list using supplier's is_transporter field
+		frm.set_query("transporter", function () {
+			return {
+				filters: {
+					"is_transporter": 1
+				}
+			};
+		});
+		//filter ship_plan using transporter field
+		frm.set_query("ship_plan", function () {
+			return {
+				filters: {
+					"supplier": frm.doc.transporter
+				}
+			};
+		});
+
 		// Hide the save button
 		frm.disable_save();
 		//remove the menu 
@@ -118,21 +135,16 @@ frappe.ui.form.on('Shipping Management Tool', {
 		});
 		// default company
 		var company = frappe.defaults.get_user_default("Company");
-		// Fetch the vehicles
-		frappe.call({
-			method: 'frappe.client.get_list',
-			args: {
-				doctype: 'Vehicle',
-				fields: ['name', 'id'], // Retrieve both 'name' and 'id'
-				order_by: 'id asc',
-				filters: {
-					'company': company
-				}
-			},
-			callback: function (r) {
-				if (r.message) {
+
+		frappe.db.get_list('Vehicle', {
+			fields: ['name', 'id'],
+			filters: {
+				'company': company
+			}
+		}).then(r => {
+				if (r) {
 					// Add checkboxes and information to the container for each vehicle
-					$.each(r.message, function (i, vehicle) {
+					$.each(r, function (i, vehicle) {
 						var $checkbox_wrapper = $('<div class="vehicle-row">').appendTo($multi_select_container);
 
 						// Create a checkbox for each vehicle
@@ -165,7 +177,7 @@ frappe.ui.form.on('Shipping Management Tool', {
 					});
 				}
 			}
-		});
+		);
 
 
 		const css = `
