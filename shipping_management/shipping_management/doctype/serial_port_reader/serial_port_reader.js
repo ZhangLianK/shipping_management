@@ -73,8 +73,10 @@ frappe.ui.form.on('Serial Port Reader', {
 
             dialog.show();
         });
-        // Disable the Save button
-        frm.disable_save();
+        // Disable the Save button if the session user is not administrator
+        if (frappe.session.user != 'Administrator'){
+            frm.disable_save();
+        }
         //get company from parent warehouse field frm.doc.plant
         if (frm.doc.plant) {
             frappe.db.get_doc("Warehouse", frm.doc.plant).then(doc => {
@@ -607,6 +609,14 @@ frappe.ui.form.on('Serial Port Reader', {
                 frappe.throw("请先读取皮重后再保存");
                 return;
             }
+        }
+        if (frm.doc.ship_type == 'OTH'){
+            frappe.throw("请确认此车辆的入出库类型！")
+            return;
+        }
+        if (frm.doc.market_segment == '成品油' && !frm.doc.scale_item){
+            frappe.throw("请选择物流计量单！")
+            return;
         }
 
         frappe.call({

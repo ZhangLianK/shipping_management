@@ -83,6 +83,8 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 				return {"scale_item": scale_item_doc.name, "status": "success"}
 		else:
 			scale_item_doc = frappe.get_doc("Scale Item", scale_item)
+			if scale_item_doc.type == 'OTH' and not type == 'OTH':
+				scale_item_doc.type = type
 			if scale_item_doc.type == 'IN':
 				if not gross_weight == '0':
 					scale_item_doc.offload_gross_weight = flt(gross_weight)

@@ -298,7 +298,8 @@
    "fieldname": "market_segment",
    "fieldtype": "Link",
    "label": "\u4e8b\u4e1a\u90e8",
-   "options": "Market Segment"
+   "options": "Market Segment",
+   "reqd": 1
   },
   {
    "fieldname": "regexp",
@@ -428,7 +429,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-01-07 21:42:26.711598",
+ "modified": "2024-02-01 23:46:10.552742",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",

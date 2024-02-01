@@ -243,7 +243,10 @@ class ScaleItem(Document):
 				self.amount_ls = self.offload_net_weight * self.price_ls
 			if self.type == 'OUT' and self.load_net_weight and self.price_ls and not self.amount_ls:
 				self.amount_ls = self.load_net_weight * self.price_ls
-			
+		#get supplier from vehicle master
+		if not self.transporter:
+			vehicle_doc = frappe.get_doc('Vehicle',self.vehicle)
+			self.transporter = vehicle_doc.transporter
 		#采购收货处理逻辑开始purchase receipt process logic start
 		self.change_status()
 		if self.type == 'IN' and self.market_segment == '成品油':
@@ -383,7 +386,7 @@ def set_missing_values(source, target):
 
 @frappe.whitelist()
 def make_purchase_receipt(source_name, target_doc=None):
-	source_doc = frappe.get_doc("Scale Item", source_name)
+	source_doc = frappe.get_doc("Scale Item", source_name)	
 	def update_parent(obj, target,source_parent):
 		print(target)
 		target.scale_item = source_doc.name
