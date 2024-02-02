@@ -964,11 +964,11 @@ frappe.ui.form.on('Serial Port Reader', {
         frappe.db.get_doc("Scale Item", frm.doc.scale_item).then(doc => {
             if (doc.type != frm.doc.ship_type) {
                 frm.doc.ship_type = doc.type;
-                frappe.msgprint("物流计量单【类别】与当前选择不一致，已自动更改");
+                //frappe.msgprint("物流计量单【类别】与当前选择不一致，已自动更改");
             }
             if (doc.pot != frm.doc.pot) {
                 frm.doc.pot = doc.pot;
-                frappe.msgprint("物流计量单【库位】与当前选择不一致，已自动更改");
+                //frappe.msgprint("物流计量单【库位】与当前选择不一致，已自动更改");
             }
             frm.doc.company = doc.company;
             frm.doc.driver = doc.driver;
@@ -986,7 +986,7 @@ frappe.ui.form.on('Serial Port Reader', {
 
                 if (doc.purchase_order != frm.doc.purchase_order && doc.purchase_order) {
                     frm.set_value('purchase_order', doc.purchase_order)
-                    frappe.msgprint("物流计量单【采购订单】与当前选择不一致，已自动更改");
+                    //frappe.msgprint("物流计量单【采购订单】与当前选择不一致，已自动更改");
                 }
                 frm.refresh();
             }
@@ -999,7 +999,7 @@ frappe.ui.form.on('Serial Port Reader', {
 
                 if (doc.sales_order != frm.doc.sales_order) {
                     frm.set_value('sales_order', doc.sales_order)
-                    frappe.msgprint("物流计量单【销售订单】与当前选择不一致，已自动更改");
+                    //frappe.msgprint("物流计量单【销售订单】与当前选择不一致，已自动更改");
                 }
                 frm.refresh();
             }
