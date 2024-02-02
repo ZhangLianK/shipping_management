@@ -481,12 +481,12 @@ frappe.ui.form.on('Serial Port Reader', {
     <div class="header">
         <div class = "hd">
             <h3 class="hd_txt">称重计量单</h3>
-            <p class="hd_txt">${doc.plant}</p>
+            <p class="hd_txt"></p>
 
         </div>
         <div class = "shd">
             <p class = "shd_txt">单号: ${doc.scale_item}</p>
-            <p class="shd_txt">【${doc.ship_type === 'IN' ? '入' : doc.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot.split(' - ')[0]}</p>
+            <p class="shd_txt">【${doc.ship_type === 'IN' ? '入' : doc.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot.split(' - ')[1]}</p>
         </div>
     </div>
     <table>
@@ -654,7 +654,7 @@ frappe.ui.form.on('Serial Port Reader', {
     <div class="header">
         <div class = "hd">
             <h3 class="hd_txt">称重计量单</h3>
-            <p class="hd_txt">${doc.plant}</p>
+            <p class="hd_txt"></p>
 
         </div>
         <div class = "shd">
