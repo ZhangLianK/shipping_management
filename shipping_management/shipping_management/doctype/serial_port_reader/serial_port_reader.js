@@ -590,7 +590,7 @@ frappe.ui.form.on('Serial Port Reader', {
         }
     },
     save_weight: function (frm) {
-        if (frm.doc.ship_type == 'IN') {
+        if (frm.doc.ship_type == 'IN' && frm.doc.market_segment == '粮食') {
             if (!frm.doc.scale_item && !frm.doc.purchase_order) {
                 frappe.throw("入库时，需要选择【计量单】或者选择【采购订单】。");
                 return;
@@ -600,24 +600,24 @@ frappe.ui.form.on('Serial Port Reader', {
                 return;
             }
         }
-        if (frm.doc.ship_type == 'OUT') {
-            if (!frm.doc.scale_item) {
-                frappe.throw("出库时必须选择物流计量单");
-                return;
-            }
+        if (frm.doc.ship_type == 'OUT' && frm.doc.market_segment == '粮食') {
+           if (!frm.doc.scale_item) {
+               frappe.throw("出库时必须选择物流计量单");
+               return;
+           }
             if (frm.doc.gross_weight == 0 && frm.doc.blank_weight == 0) {
                 frappe.throw("请先读取皮重后再保存");
                 return;
             }
         }
-        if (frm.doc.ship_type == 'OTH'){
+        if (frm.doc.ship_type == 'OTH' && frm.doc.market_segment == '粮食') {
             frappe.throw("请确认此车辆的入出库类型！")
             return;
         }
-        if (frm.doc.market_segment == '成品油' && !frm.doc.scale_item){
-            frappe.throw("请选择物流计量单！")
-            return;
-        }
+        //if (frm.doc.market_segment == '成品油' && !frm.doc.scale_item){
+        //    frappe.throw("请选择物流计量单！")
+        //    return;
+        //}
 
         frappe.call({
             method: "shipping_management.shipping_management.doctype.serial_port_reader.serial_port_reader.save_weight",
