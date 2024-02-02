@@ -486,7 +486,7 @@ frappe.ui.form.on('Serial Port Reader', {
         </div>
         <div class = "shd">
             <p class = "shd_txt">单号: ${doc.scale_item}</p>
-            <p class="shd_txt">【${doc.ship_type === 'IN' ? '入' : doc.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot}</p>
+            <p class="shd_txt">【${doc.ship_type === 'IN' ? '入' : doc.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot.split(' - ')[0]}</p>
         </div>
     </div>
     <table>
