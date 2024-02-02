@@ -379,7 +379,7 @@ frappe.ui.form.on('Serial Port Reader', {
     </table>
 
     <div class="signature">
-        <p class="hd">过磅员: ${frappe.session.user}</p>
+        <p class="hd">过磅员: ${frappe.session.user_fullname}</p>
         <p class="shd">司机: _________________</p>
     </div>
     </div>
@@ -550,7 +550,7 @@ frappe.ui.form.on('Serial Port Reader', {
     </table>
 
     <div class="signature">
-        <p class="hd">过磅员: ${frappe.session.user}</p>
+        <p class="hd">过磅员: ${frappe.session.user_fullname}</p>
         <p class="shd">司机: _________________</p>
     </div>
     </div>
@@ -723,7 +723,7 @@ frappe.ui.form.on('Serial Port Reader', {
     </table>
 
     <div class="signature">
-        <p class="hd">过磅员: ${frappe.session.user}</p>
+        <p class="hd">过磅员: ${frappe.session.user_fullname}</p>
         <p class="shd">司机: _________________</p>
     </div>
     </div>
