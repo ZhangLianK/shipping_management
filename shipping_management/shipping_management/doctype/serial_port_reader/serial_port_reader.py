@@ -89,11 +89,11 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 				if not gross_weight == '0':
 					scale_item_doc.offload_gross_weight = flt(gross_weight)
 				if gross_dt:
-					scale_item_doc.offload_gross_dt = flt(gross_dt)
+					scale_item_doc.offload_gross_dt = gross_dt
 				if not blank_weight == '0':
 					scale_item_doc.offload_blank_weight = flt(blank_weight)
 				if blank_dt:
-					scale_item_doc.offload_blank_dt = flt(blank_dt)
+					scale_item_doc.offload_blank_dt = blank_dt
 				if not net_weight== '0':
 					scale_item_doc.offload_net_weight = flt(net_weight)
 				if pot:
@@ -104,11 +104,11 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 				if not gross_weight == '0':
 					scale_item_doc.load_gross_weight = flt(gross_weight)
 				if gross_dt:
-					scale_item_doc.load_gross_dt = flt(gross_dt)
+					scale_item_doc.load_gross_dt = gross_dt
 				if not blank_weight=='0':
 					scale_item_doc.load_blank_weight = flt(blank_weight)
 				if blank_dt:
-					scale_item_doc.load_blank_dt = flt(blank_dt)
+					scale_item_doc.load_blank_dt = blank_dt
 				if not net_weight=='0':
 					scale_item_doc.load_net_weight = flt(net_weight)
 				if pot:
