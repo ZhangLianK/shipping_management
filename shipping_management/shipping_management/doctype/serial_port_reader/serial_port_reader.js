@@ -29,9 +29,7 @@ frappe.ui.form.on('Serial Port Reader', {
         frm.fields_dict['in_process'].grid.wrapper.on('change', function(e) {
             $("[data-value='OUT']").css("color","red");
         });
-
         
-
         frm.fields_dict.in_process.grid.wrapper.on('click', '.grid-row-check', function(event) {
             // Get the name of the currently clicked row
             var clickedRowName = $(event.target).closest('.grid-row').attr('data-name');
