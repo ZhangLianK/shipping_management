@@ -357,25 +357,23 @@ class ScaleItem(Document):
 		scale_manager = frappe.get_all("Has Role", filters={'role': 'Scale Manager Dummy'}, fields=['parent'])
 		scale_manager_list = [item.parent for item in scale_manager]
 
-		if self.status[0] >= '3' and frappe.session.user != 'Administrator' and frappe.session.user not in scale_manager_list:
-			frappe.throw(("当前状态无法取消！如果需要取消，请联系部门负责人！"), frappe.ValidationError)
-		else:
-			if self.purchase_order:
-				purchase_order = frappe.get_doc("Purchase Order", self.purchase_order,ignore_permissions=True)
-				purchase_order.qty_vehicle  = purchase_order.qty_vehicle - self.target_weight
-				purchase_order.save(ignore_permissions=True)
-
-			if self.sales_order:
-				sales_order = frappe.get_doc("Sales Order", self.sales_order,ignore_permissions=True)
-				sales_order.qty_vehicle  = sales_order.qty_vehicle - self.target_weight
-				sales_order.save(ignore_permissions=True)
-
-			if self.sales_invoice:
-				sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
-				sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle - self.target_weight
-				sales_invoice.save(ignore_permissions=True)
-		
-			self.status = "9 已取消"
+		#if self.status[0] >= '3' and frappe.session.user != 'Administrator' and frappe.session.user not in scale_manager_list:
+		#	frappe.throw(("当前状态无法取消！如果需要取消，请联系部门负责人！"), frappe.ValidationError)
+		#else:
+		if self.purchase_order:
+			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order,ignore_permissions=True)
+			purchase_order.qty_vehicle  = purchase_order.qty_vehicle - self.target_weight
+			purchase_order.save(ignore_permissions=True)
+		if self.sales_order:
+			sales_order = frappe.get_doc("Sales Order", self.sales_order,ignore_permissions=True)
+			sales_order.qty_vehicle  = sales_order.qty_vehicle - self.target_weight
+			sales_order.save(ignore_permissions=True)
+		if self.sales_invoice:
+			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
+			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle - self.target_weight
+			sales_invoice.save(ignore_permissions=True)
+	
+		self.status = "9 已取消"
    
 	def before_cancel(self):
 		self.status = "9 已取消"
