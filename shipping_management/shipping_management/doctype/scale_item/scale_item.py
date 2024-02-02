@@ -245,10 +245,10 @@ class ScaleItem(Document):
 			if self.type == 'OUT' and self.load_net_weight and self.price_ls and not self.amount_ls:
 				self.amount_ls = self.load_net_weight * self.price_ls
 		#get supplier from vehicle master
-		if not self.transporter:
-			vehicle_doc = frappe.get_doc('Vehicle',self.vehicle)
-			if vehicle_doc:
-				self.transporter = vehicle_doc.transporter
+		#if not self.transporter:
+		#	vehicle_doc = frappe.get_doc('Vehicle',self.vehicle)
+		#	if vehicle_doc:
+		#		self.transporter = vehicle_doc.transporter
 		#采购收货处理逻辑开始purchase receipt process logic start
 		self.change_status()
 		if self.type == 'IN' and self.market_segment == '成品油':
