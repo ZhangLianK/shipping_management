@@ -26,6 +26,12 @@ frappe.ui.form.on('Serial Port Reader', {
 
 
     refresh: function (frm) {
+        frm.fields_dict['in_process'].grid.wrapper.on('change', function(e) {
+            $("[data-value='OUT']").css("color","red");
+        });
+
+        
+
         frm.fields_dict.in_process.grid.wrapper.on('click', '.grid-row-check', function(event) {
             // Get the name of the currently clicked row
             var clickedRowName = $(event.target).closest('.grid-row').attr('data-name');
@@ -870,68 +876,7 @@ frappe.ui.form.on('Serial Port Reader', {
         frm.doc.vehicle = "";
         frm.refresh();
     },
-    refresh_list: function (frm) {
-        //get the scale item list when click button field 'refresh_list', and show the list in the child table 'in_process'
-        frappe.db.get_list('Scale Item', {
-            fields: [
-                'name', 
-                'type', 
-                'vehicle', 
-                'load_blank_weight', 
-                'load_gross_weight', 
-                'offload_blank_weight', 
-                'offload_gross_weight',
-                'load_blank_dt',
-                'offload_gross_dt',
-                'pot'
-            ],
-            filters: {
-                'status': ['in', ['2 正在装货', '4 正在卸货']]
-            }
-        }).then(records => {
-            let inProcessData = records.map(record => {
-                let grossWeight, blankWeight,time;
-        
-                if (record.type === 'IN') {
-                    grossWeight = record.offload_gross_weight;
-                    blankWeight = record.offload_blank_weight;
-                    time = record.offload_gross_dt;
-                } else if (record.type === 'OUT') {
-                    grossWeight = record.load_gross_weight;
-                    blankWeight = record.load_blank_weight;
-                    time = record.load_blank_dt;
-                }
-        
-                return {
-                    name: record.name,
-                    vehicle: record.vehicle,
-                    type: record.type,
-                    pot: record.pot,
-                    gross_weight: grossWeight,
-                    blank_weight: blankWeight,
-                    time: time
-                };
-            });
-        
-            frm.clear_table('in_process');
-				//add scale item to the child table
-				for (let row of inProcessData) {
-					frm.add_child('in_process', {
-						scale_item: row.name,
-						ship_type: row.type,
-						vehicle: row.vehicle,
-						pot: row.pot,
-						gross_weight: row.gross_weight,
-                        blank_weight: row.blank_weight,
-                        time: row.time
-					});
-				}
-				frm.refresh_field('in_process');
-                frm.refresh();
-            
-        });
-        
-    },
+    refresh_list: refresh_list,
     ship_type: function (frm) {
         //when ship_type is OUT, make the verification code field mandatory
         if (frm.doc.ship_type == "OUT") {
@@ -1290,7 +1235,6 @@ function refresh_list(frm) {
             }
             frm.refresh_field('in_process');
             frm.refresh();
-        
     });
     
 }

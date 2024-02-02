@@ -436,7 +436,8 @@
    "fieldname": "in_process",
    "fieldtype": "Table",
    "label": "\u6b63\u5728\u8fdb\u884c\u4e2d",
-   "options": "Serial Port Reader List"
+   "options": "Serial Port Reader List",
+   "read_only": 1
   },
   {
    "fieldname": "refresh_list",
@@ -448,7 +449,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-02 13:56:37.799898",
+ "modified": "2024-02-02 19:10:59.109146",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",
