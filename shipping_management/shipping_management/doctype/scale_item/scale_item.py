@@ -247,7 +247,8 @@ class ScaleItem(Document):
 		#get supplier from vehicle master
 		if not self.transporter:
 			vehicle_doc = frappe.get_doc('Vehicle',self.vehicle)
-			self.transporter = vehicle_doc.transporter
+			if vehicle_doc:
+				self.transporter = vehicle_doc.transporter
 		#采购收货处理逻辑开始purchase receipt process logic start
 		self.change_status()
 		if self.type == 'IN' and self.market_segment == '成品油':
