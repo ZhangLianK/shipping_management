@@ -157,8 +157,9 @@ class ScaleItem(Document):
 	#	vehicle_doc = frappe.get_doc('Vehicle',self.vehicle)
 	#	if self.target_weight > vehicle_doc.load_capacity:
 	#		frappe.throw(_(f"目标运输量超过核定载重量，请再次检查【目标运输量】"), frappe.CannotEditDocumentError)
-		if not self.target_weight:
-			frappe.throw(_(f"【计划运量】不能为0"))
+	#	if not self.target_weight:
+	#		frappe.throw(_(f"【计划运量】不能为0"))
+		pass
 
 
 	def validate_pot(self):
