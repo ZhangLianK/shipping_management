@@ -852,7 +852,7 @@ frappe.ui.form.on('Serial Port Reader', {
                     else {
                         frappe.msgprint("保存成功");
                     }
-                    refresh_list(frm);
+                    //refresh_list(frm);
                 }
                 else {
                     frappe.msgprint(r.message);

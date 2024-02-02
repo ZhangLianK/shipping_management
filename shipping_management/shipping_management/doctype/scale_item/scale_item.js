@@ -4,6 +4,549 @@
 frappe.ui.form.on('Scale Item', {
 
     refresh: function (frm) {
+        
+        frm.add_custom_button('Print Label', function () {
+            // Action when button is clicked
+            var doc = frm.doc;
+
+            // Prepare your HTML content with real data
+            if (frm.doc.market_segment == '粮食') {
+                var html_content = `
+            <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/html" lang="zh" >
+    <head>
+        <title>称重计量单</title>
+        <style>
+            body {
+                margin-top: 1rem;
+                width: 210mm;
+                height: 70mm;
+                padding-top: 5%;
+                padding-left: 10%;
+                padding-right: 10%;
+            }
+            table {
+                width: 100%;
+            }
+            table, th, td {
+                border: 0.1rem solid black;
+                border-collapse: collapse;
+            }
+            th {
+                width: 10%;
+                padding-left: 1%;
+                text-align: left;
+            }
+            td {
+                width: 30%;
+                padding-left: 1%;
+                text-align: left;
+            }
+            .info {
+                width: 10%;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+            }
+            .title {
+                text-align: center;
+            }
+            .signature {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 0.5rem;
+            }
+            .hd_txt {
+                text-align: left;
+            }
+            .shd_txt {
+                text-align: right;
+            }
+            .hd {
+                float: left;
+            }
+            .shd {
+                float: right;
+            }
+
+            @media print {
+                @page {
+                    size: 210mm 70mm;
+                }
+                body {
+                    margin-top: 1rem;
+                    padding-top: 5%;
+                    padding-left: 10%;
+                    padding-right: 10%;
+                    page-break-inside: avoid;
+                }
+                nav {
+                    display: none;
+                }
+                table {
+                    width: 100%;
+                }
+                table, th, td {
+                    border: 0.1rem solid black;
+                    border-collapse: collapse;
+                }
+                th {
+                    width: 10%;
+                    padding-left: 1%;
+                    text-align: left;
+                }
+                td {
+                    width: 30%;
+                    padding-left: 1%;
+                    text-align: left;
+                }
+                .info {
+                    width: 10%;
+                }
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .title {
+                    text-align: center;
+                }
+                .signature {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 0.5rem;
+                }
+                .hd_txt {
+                    text-align: left;
+                }
+                .shd_txt {
+                    text-align: right;
+                }
+                .hd {
+                    float: left;
+                }
+                .shd {
+                    float: right;
+                }
+            }
+        </style>
+    </head>
+    <body>
+    <div id = "printableArea">
+    <div class="header">
+        <div class = "hd">
+            <h3 class="hd_txt">称重计量单</h3>
+            <p class="hd_txt">${doc.company ? doc.company : doc.plant}</p>
+
+        </div>
+        <div class = "shd">
+            <p class = "shd_txt">单号: ${doc.scale_item}</p>
+            <p class="shd_txt">【${doc.ship_type === 'IN' ? '入' : doc.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot}</p>
+        </div>
+    </div>
+    <table>
+      <tr>
+        <th>车号</th>
+        <td>${doc.vehicle}</td>
+        <th>毛重</th>
+        <td>${doc.gross_weight}</td>
+        <th>杂质</th>
+        <td class = "info">${doc.zazhi ? doc.zazhi : ''}</td>
+      </tr>
+      <tr>
+        <th>货名</th>
+        <td>${doc.item_code}</td>
+        <th>毛重时间</th>
+        <td>${doc.gross_dt}</td>
+        <th>容重</th>
+        <td class = "info">${doc.rongzhong ? doc.rongzhong : ''}</td>
+      </tr>
+      <tr>
+        <th>发货单位</th>
+        <td>${doc.ship_type === 'IN' ? doc.from : frm.doc.company}</td>
+        <th>皮重</th>
+        <td>${doc.blank_weight}</td>
+        <th>霉变</th>
+        <td class = "info">${doc.meibian ? doc.meibian : ''}</td>
+      </tr>
+      <tr>
+        <th>收货单位</th>
+        <td>${doc.ship_type === 'OUT' ? doc.to : frm.doc.company}</td>
+              <th>皮重时间</th>
+        <td>${doc.blank_dt}</td>
+        <th>水分</th>
+        <td class = "info">${doc.shuifen ? doc.shuifen : ''}</td>
+      </tr>
+      <tr>
+        <th>打印时间</th>
+        <td>${get_date_time()}</td>
+        <th>净重</th>
+        <td>${doc.net_weight}</td>
+        <th>价格</th>
+        <td class = "info"></td>
+      </tr>
+    </table>
+
+    <div class="signature">
+        <p class="hd">过磅员: ${frappe.session.user_fullname}</p>
+        <p class="shd">司机: _________________</p>
+    </div>
+    </div>
+    </body>
+    </html>`;
+            }
+        else if (frm.doc.market_segment == '宏赫-成品油') {
+            var html_content = `
+            <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/html" lang="zh" >
+    <head>
+        <title>称重计量单</title>
+        <style>
+            body {
+                margin-top: 1rem;
+                width: 210mm;
+                height: 70mm;
+                padding-top: 5%;
+                padding-left: 10%;
+                padding-right: 10%;
+            }
+            table {
+                width: 100%;
+            }
+            table, th, td {
+                border: 0.1rem solid black;
+                border-collapse: collapse;
+            }
+            th {
+                width: 20%;
+                padding-left: 1%;
+                text-align: left;
+            }
+            td {
+                width: 30%;
+                padding-left: 1%;
+                text-align: left;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+            }
+            .title {
+                text-align: center;
+            }
+            .signature {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 0.5rem;
+            }
+            .hd_txt {
+                text-align: left;
+            }
+            .shd_txt {
+                text-align: right;
+            }
+            .hd {
+                float: left;
+            }
+            .shd {
+                float: right;
+            }
+
+            @media print {
+                @page {
+                    size: 210mm 70mm;
+                }
+                body {
+                    margin-top: 1rem;
+                    padding-top: 5%;
+                    padding-left: 10%;
+                    padding-right: 10%;
+                    page-break-inside: avoid;
+                }
+                nav {
+                    display: none;
+                }
+                table {
+                    width: 100%;
+                }
+                table, th, td {
+                    border: 0.1rem solid black;
+                    border-collapse: collapse;
+                }
+                th {
+                    width: 20%;
+                    padding-left: 1%;
+                    text-align: left;
+                }
+                td {
+                    width: 30%;
+                    padding-left: 1%;
+                    text-align: left;
+                }
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .title {
+                    text-align: center;
+                }
+                .signature {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 0.5rem;
+                }
+                .hd_txt {
+                    text-align: left;
+                }
+                .shd_txt {
+                    text-align: right;
+                }
+                .hd {
+                    float: left;
+                }
+                .shd {
+                    float: right;
+                }
+            }
+        </style>
+    </head>
+    <body>
+    <div id = "printableArea">
+    <div class="header">
+        <div class = "hd">
+            <h3 class="hd_txt">称重计量单</h3>
+            <p class="hd_txt"></p>
+
+        </div>
+        <div class = "shd">
+            <p class = "shd_txt">单号: ${doc.scale_item}</p>
+            <p class="shd_txt">【${doc.type === 'IN' ? '入' : doc.type === 'OUT' ? '出' : ''}】 ${doc.pot.split(' - ')[1]}</p>
+        </div>
+    </div>
+    <table>
+      <tr>
+        <th>车号</th>
+        <td>${doc.vehicle}</td>
+        <th>毛重</th>
+        <td>${doc.type === 'IN' ? doc.offload_gross_weight : doc.type === 'OUT' ? doc.load_gross_weight : ''}</td>
+      </tr>
+      <tr>
+        <th>货名</th>
+        <td></td>
+              <th>毛重时间</th>
+        <td>${doc.type === 'IN' ? doc.offload_gross_dt : doc.type === 'OUT' ? doc.load_gross_dt : ''}</td>
+
+      </tr>
+      <tr>
+        <th>发货单位</th>
+        <td>______</td>
+
+        <th>皮重</th>
+        <td>${doc.type === 'IN' ? doc.offload_blank_weight : doc.type === 'OUT' ? doc.load_blank_weight : ''}</td>
+      </tr>
+      <tr>
+        <th>收货单位</th>
+        <td>______</td>
+              <th>皮重时间</th>
+        <td>${doc.type === 'IN' ? doc.offload_blank_dt : doc.type === 'OUT' ? doc.load_blank_dt : ''}</td>
+      </tr>
+      <tr>
+        <th>打印时间</th>
+        <td>${get_date_time()}</td>
+            <th>净重</th>
+        <td>${doc.type === 'IN' ? doc.offload_net_weight : doc.type === 'OUT' ? doc.load_net_weight : ''}</td>
+      </tr>
+    </table>
+
+    <div class="signature">
+        <p class="hd">过磅员: ${frappe.session.user_fullname}</p>
+        <p class="shd">司机: _________________</p>
+    </div>
+    </div>
+    </body>
+    </html>
+            `;
+
+        }
+            else {
+                var html_content = `
+            <!DOCTYPE html>
+    <html xmlns="http://www.w3.org/1999/html" lang="zh" >
+    <head>
+        <title>称重计量单</title>
+        <style>
+            body {
+                margin-top: 1rem;
+                width: 210mm;
+                height: 70mm;
+                padding-top: 5%;
+                padding-left: 10%;
+                padding-right: 10%;
+            }
+            table {
+                width: 100%;
+            }
+            table, th, td {
+                border: 0.1rem solid black;
+                border-collapse: collapse;
+            }
+            th {
+                width: 20%;
+                padding-left: 1%;
+                text-align: left;
+            }
+            td {
+                width: 30%;
+                padding-left: 1%;
+                text-align: left;
+            }
+            .header {
+                display: flex;
+                justify-content: space-between;
+            }
+            .title {
+                text-align: center;
+            }
+            .signature {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 0.5rem;
+            }
+            .hd_txt {
+                text-align: left;
+            }
+            .shd_txt {
+                text-align: right;
+            }
+            .hd {
+                float: left;
+            }
+            .shd {
+                float: right;
+            }
+
+            @media print {
+                @page {
+                    size: 210mm 70mm;
+                }
+                body {
+                    margin-top: 1rem;
+                    padding-top: 5%;
+                    padding-left: 10%;
+                    padding-right: 10%;
+                    page-break-inside: avoid;
+                }
+                nav {
+                    display: none;
+                }
+                table {
+                    width: 100%;
+                }
+                table, th, td {
+                    border: 0.1rem solid black;
+                    border-collapse: collapse;
+                }
+                th {
+                    width: 20%;
+                    padding-left: 1%;
+                    text-align: left;
+                }
+                td {
+                    width: 30%;
+                    padding-left: 1%;
+                    text-align: left;
+                }
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .title {
+                    text-align: center;
+                }
+                .signature {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 0.5rem;
+                }
+                .hd_txt {
+                    text-align: left;
+                }
+                .shd_txt {
+                    text-align: right;
+                }
+                .hd {
+                    float: left;
+                }
+                .shd {
+                    float: right;
+                }
+            }
+        </style>
+    </head>
+    <body>
+    <div id = "printableArea">
+    <div class="header">
+        <div class = "hd">
+            <h3 class="hd_txt">称重计量单</h3>
+            <p class="hd_txt"></p>
+
+        </div>
+        <div class = "shd">
+            <p class = "shd_txt">单号: ${doc.scale_item}</p>
+            <p class="shd_txt">【${doc.ship_type === 'IN' ? '入' : doc.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot}</p>
+        </div>
+    </div>
+    <table>
+      <tr>
+        <th>车号</th>
+        <td>${doc.vehicle}</td>
+        <th>毛重</th>
+        <td>${doc.gross_weight}</td>
+      </tr>
+      <tr>
+        <th>货名</th>
+        <td>${doc.item_code}</td>
+              <th>毛重时间</th>
+        <td>${doc.gross_dt}</td>
+
+      </tr>
+      <tr>
+        <th>发货单位</th>
+        <td>${doc.ship_type === 'IN' ? doc.from : ''}</td>
+
+        <th>皮重</th>
+        <td>${doc.blank_weight}</td>
+      </tr>
+      <tr>
+        <th>收货单位</th>
+        <td>______</td>
+              <th>皮重时间</th>
+        <td>${doc.blank_dt}</td>
+      </tr>
+      <tr>
+        <th>打印时间</th>
+        <td>${get_date_time()}</td>
+            <th>净重</th>
+        <td>${doc.net_weight}</td>
+      </tr>
+    </table>
+
+    <div class="signature">
+        <p class="hd">过磅员: ${frappe.session.user_fullname}</p>
+        <p class="shd">司机: _________________</p>
+    </div>
+    </div>
+    </body>
+    </html>`;
+            }
+            // Replace placeholders with actual data from the form
+            //html_content = html_content.replace('{}', doc.name); // repeat for other fields
+
+            // Call the print function
+            print_html_label(html_content);
+        });
+
+
         //set the pot to company's default transit warehouse if the type is DIRC
         if (frm.doc.type == 'DIRC' && frm.doc.company) {
             frappe.db.get_value('Company', frm.doc.company, 'default_in_transit_warehouse', function (r) {
@@ -320,3 +863,41 @@ frappe.ui.form.on('Scale Item', {
         }
     },
 });
+
+
+function print_html_label(html_content) {
+    // Creating new window to print
+    var w = window.open('', '_blank');
+
+    // Inserting the html content to new window
+    w.document.write(html_content);
+
+    // Executing print command
+    w.document.close(); // necessary for IE >= 10
+    w.focus(); // necessary for IE >= 10
+
+    // Check if window is loaded
+    w.onload = function () {
+        w.print();
+        window.addEventListener("afterprint", function () {
+            w.close();
+        }, false);
+        //w.close();
+    };
+}
+//get date time in local timezone with format yyyy-mm-dd hh-mm-ss
+function get_date_time() {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    if (month < 10) month = '0' + month;
+    var day = date.getDate();
+    if (day < 10) day = '0' + day;
+    var hour = date.getHours();
+    if (hour < 10) hour = '0' + hour;
+    var minute = date.getMinutes();
+    if (minute < 10) minute = '0' + minute;
+    var second = date.getSeconds();
+    if (second < 10) second = '0' + second;
+    return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+}
