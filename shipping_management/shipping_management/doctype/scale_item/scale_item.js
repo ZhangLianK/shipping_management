@@ -319,7 +319,7 @@ frappe.ui.form.on('Scale Item', {
 
         </div>
         <div class = "shd">
-            <p class = "shd_txt">单号: ${doc.scale_item}</p>
+            <p class = "shd_txt">单号: ${doc.name}</p>
             <p class="shd_txt">【${doc.type === 'IN' ? '入' : doc.type === 'OUT' ? '出' : ''}】 ${doc.pot.split(' - ')[1]}</p>
         </div>
     </div>
