@@ -958,6 +958,7 @@ frappe.ui.form.on('Serial Port Reader', {
         frm.doc.ship_type = "";
         frm.doc.vehicle_selector = "";
         frm.refresh();
+        refresh_list(frm);
     },
     refresh_list: refresh_list,
     ship_type: function (frm) {
