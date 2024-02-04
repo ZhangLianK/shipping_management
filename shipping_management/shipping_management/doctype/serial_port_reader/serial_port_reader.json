@@ -10,7 +10,6 @@
  "field_order": [
   "plant",
   "section_break_do9bk",
-  "ship_type",
   "column_break_zlgq7",
   "purchase_order",
   "sales_order",
@@ -20,33 +19,35 @@
   "column_break_uxumw",
   "verification_code",
   "column_break_vs1qp",
-  "market_segment",
+  "item_code",
   "section_break_hltam",
   "screen",
   "section_break_jiasa",
+  "ship_type",
+  "column_break_gu8lx",
   "vehicle_selector",
   "column_break_ahoxa",
   "vehicle",
   "column_break_mcisp",
   "scale_item",
   "column_break_xp0as",
-  "item_code",
-  "column_break_ot2bh",
   "pot",
-  "column_break_ungzv",
-  "driver",
+  "column_break_ot2bh",
+  "status",
   "section_break_hsuqb",
-  "gross_weight_btn",
   "gross_weight",
-  "gross_dt",
-  "column_break_7wznt",
-  "btn_blank_weight",
   "blank_weight",
+  "net_weight",
+  "column_break_7wznt",
+  "gross_dt",
   "blank_dt",
   "column_break_zmafe",
-  "save_weight",
-  "net_weight",
+  "in_button",
+  "weight_btn",
+  "print_label",
   "column_break_fwdle",
+  "out_button",
+  "save_weight",
   "clear",
   "section_break_wpmwm",
   "refresh_list",
@@ -59,6 +60,8 @@
   "zazhi",
   "\u5173\u8054\u4fe1\u606f_tab",
   "company",
+  "market_segment",
+  "driver",
   "com_setting_tab",
   "baudrate",
   "buffersize",
@@ -138,7 +141,7 @@
    "fetch_if_empty": 1,
    "fieldname": "vehicle",
    "fieldtype": "Data",
-   "label": "\u8f66\u8f86"
+   "label": "\u8f66\u53f7"
   },
   {
    "fieldname": "section_break_hltam",
@@ -188,31 +191,15 @@
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "gross_weight_btn",
-   "fieldtype": "Button",
-   "label": "\u8bfb\u53d6\u6bdb\u91cd"
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "gross_dt",
    "fieldtype": "Datetime",
    "label": "\u6bdb\u91cd\u65f6\u95f4"
   },
   {
    "allow_on_submit": 1,
-   "fieldname": "btn_blank_weight",
-   "fieldtype": "Button",
-   "label": "\u8bfb\u53d6\u76ae\u91cd"
-  },
-  {
-   "allow_on_submit": 1,
    "fieldname": "blank_dt",
    "fieldtype": "Datetime",
    "label": "\u76ae\u91cd\u65f6\u95f4"
-  },
-  {
-   "fieldname": "column_break_ungzv",
-   "fieldtype": "Column Break"
   },
   {
    "allow_on_submit": 1,
@@ -229,7 +216,7 @@
    "allow_on_submit": 1,
    "fieldname": "save_weight",
    "fieldtype": "Button",
-   "label": "\u4fdd\u5b58\u91cd\u91cf\u4fe1\u606f"
+   "label": "\u4fdd\u5b58"
   },
   {
    "allow_on_submit": 1,
@@ -331,7 +318,7 @@
   {
    "fieldname": "clear",
    "fieldtype": "Button",
-   "label": "\u8ba1\u91cf\u6570\u636e\u6e05\u7a7a"
+   "label": "\u6e05\u7a7a"
   },
   {
    "allow_on_submit": 1,
@@ -442,13 +429,45 @@
    "fieldname": "refresh_list",
    "fieldtype": "Button",
    "label": "\u5237\u65b0\u5217\u8868"
+  },
+  {
+   "fieldname": "print_label",
+   "fieldtype": "Button",
+   "label": "\u6253\u5370"
+  },
+  {
+   "fieldname": "in_button",
+   "fieldtype": "Button",
+   "label": "\u5165\u5e93"
+  },
+  {
+   "fieldname": "out_button",
+   "fieldtype": "Button",
+   "label": "\u51fa\u5e93"
+  },
+  {
+   "fieldname": "column_break_gu8lx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "weight_btn",
+   "fieldtype": "Button",
+   "label": "\u79f0\u91cd"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "\u72b6\u6001",
+   "read_only": 1
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-02 20:19:39.600519",
+ "modified": "2024-02-04 20:07:57.649722",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",

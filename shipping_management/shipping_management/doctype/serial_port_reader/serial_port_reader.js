@@ -15,13 +15,44 @@ frappe.ui.form.on('Serial Port Reader', {
 
     // }
     onload_post_render: function (frm) {
+
+        frm.get_field("in_button").$input.css("background", "#3E70B4")
+        frm.get_field("in_button").$input.css("color", "white")
+        frm.get_field("in_button").$input.css("width","80%")
+        frm.get_field("in_button").$input.css("line-height","3")
+        frm.get_field("in_button").$input.css("font-size","large")
+
+        frm.get_field("out_button").$input.css("background", "#E7A014")
+        frm.get_field("out_button").$input.css("color", "white")
+        frm.get_field("out_button").$input.css("width","80%")
+        frm.get_field("out_button").$input.css("line-height","3")
+        frm.get_field("out_button").$input.css("font-size","large")
+
+
         //change the button color
-        frm.get_field("gross_weight_btn").$input.css("background", "#2590EF")
-        frm.get_field("gross_weight_btn").$input.css("color", "white")
-        frm.get_field("btn_blank_weight").$input.css("background", "#4CA86C")
-        frm.get_field("btn_blank_weight").$input.css("color", "white")
-        frm.get_field("save_weight").$input.css("background", "red")
+        frm.get_field("weight_btn").$input.css("background", "#4CA86C")
+        frm.get_field("weight_btn").$input.css("color", "white")
+        frm.get_field("weight_btn").$input.css("width","80%")
+        frm.get_field("weight_btn").$input.css("line-height","3")
+        frm.get_field("weight_btn").$input.css("font-size","large")
+
+        frm.get_field("save_weight").$input.css("background", "#C01534")
         frm.get_field("save_weight").$input.css("color", "white")
+        frm.get_field("save_weight").$input.css("width","80%")
+        frm.get_field("save_weight").$input.css("line-height","3")
+        frm.get_field("save_weight").$input.css("font-size","large")
+
+        frm.get_field("print_label").$input.css("background", "#5C5CA7")
+        frm.get_field("print_label").$input.css("color", "white")
+        frm.get_field("print_label").$input.css("width","80%")
+        frm.get_field("print_label").$input.css("line-height","3")
+        frm.get_field("print_label").$input.css("font-size","large")
+
+        frm.get_field("clear").$input.css("background", "grey")
+        frm.get_field("clear").$input.css("color", "white")
+        frm.get_field("clear").$input.css("width","80%")
+        frm.get_field("clear").$input.css("line-height","3")
+        frm.get_field("clear").$input.css("font-size","large")
     },
 
 
@@ -791,6 +822,56 @@ frappe.ui.form.on('Serial Port Reader', {
             frm.refresh_field('blank_dt');
         }
     },
+    in_button: function (frm) {
+        frm.set_value('ship_type', 'IN');
+        frm.refresh();
+    },
+    out_button: function (frm) {
+        frm.set_value('ship_type', 'OUT');
+        frm.refresh();
+    },
+    weight_btn: function (frm) {
+        // Get the current data displayed in the 'screen' field's HTML
+        const screenHTML = frm.fields_dict['screen'].wrapper.innerHTML;
+
+        // Extract the content within the <p> tag
+        const parser = new DOMParser();
+        const htmlDocument = parser.parseFromString(screenHTML, 'text/html');
+        const pContent = htmlDocument.querySelector('p').textContent;
+        const regex = /(\d+\.\d+|\d+)/; // Adjust based on your exact data format
+        const match = regex.exec(pContent);
+        if (match !== null) {
+            if (frm.doc.ship_type == 'IN') {
+                if (frm.doc.status != '4 正在卸货') {
+                    frm.set_value('gross_weight', match[0] / 1000);
+                    frm.refresh_field('gross_weight');
+                    frm.set_value('gross_dt', frappe.datetime.now_datetime());
+                    frm.refresh_field('gross_dt');
+                }
+                else {
+                    frm.set_value('blank_weight', match[0] / 1000);
+                    frm.refresh_field('blank_weight');
+                    frm.set_value('blank_dt', frappe.datetime.now_datetime());
+                    frm.refresh_field('blank_dt');
+                }
+
+            }
+            else if (frm.doc.ship_type == 'OUT') {
+                if (frm.doc.status != '2 正在装货') {
+                    frm.set_value('blank_weight', match[0] / 1000);
+                    frm.refresh_field('blank_weight');
+                    frm.set_value('blank_dt', frappe.datetime.now_datetime());
+                    frm.refresh_field('blank_dt');
+                }
+                else {
+                    frm.set_value('gross_weight', match[0] / 1000);
+                    frm.refresh_field('gross_weight');
+                    frm.set_value('gross_dt', frappe.datetime.now_datetime());
+                    frm.refresh_field('gross_dt');
+                }
+            }
+        }
+    },
     save_weight: function (frm) {
         if (frm.doc.ship_type == 'IN' && frm.doc.market_segment == '粮食') {
             if (!frm.doc.scale_item && !frm.doc.purchase_order) {
@@ -872,6 +953,10 @@ frappe.ui.form.on('Serial Port Reader', {
         frm.doc.driver = "";
         frm.doc.item_code = "";
         frm.doc.vehicle = "";
+        frm.doc.status = "";
+        frm.doc.pot = "";
+        frm.doc.ship_type = "";
+        frm.doc.vehicle_selector = "";
         frm.refresh();
     },
     refresh_list: refresh_list,
@@ -919,6 +1004,7 @@ frappe.ui.form.on('Serial Port Reader', {
             frm.doc.ship_type = doc.type;
             frm.doc.vehicle = doc.vehicle;
             frm.doc.item_code = doc.item;
+            frm.doc.status = doc.status;
 
             if (doc.type == "IN") {
                 frm.doc.gross_weight = doc.offload_gross_weight;
