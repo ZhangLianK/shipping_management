@@ -53,6 +53,10 @@ frappe.ui.form.on('Serial Port Reader', {
         frm.get_field("clear").$input.css("width","80%")
         frm.get_field("clear").$input.css("line-height","3")
         frm.get_field("clear").$input.css("font-size","large")
+
+        $(".input-with-feedback").css("font-size","large")
+        $(".control-value").css("font-size","large")
+        $(".control-label").css("font-size","large")
     },
 
 
