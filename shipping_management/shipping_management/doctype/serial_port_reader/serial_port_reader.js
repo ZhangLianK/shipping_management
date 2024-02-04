@@ -738,6 +738,7 @@ function refresh_list(frm) {
             'offload_gross_dt',
             'pot'
         ],
+        limit:100,
         filters: {
             'status': ['in', ['2 正在装货', '4 正在卸货']]
         }
