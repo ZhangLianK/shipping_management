@@ -336,7 +336,12 @@ frappe.ui.form.on('Serial Port Reader', {
         }
     },
     print_label: function (frm) {
-        print_lb(frm);
+        if (frm.doc.status == '3 已装货' || frm.doc.status == '5 已卸货'){
+            print_lb(frm);
+        }
+        else {
+            frappe.throw('请保存后再打印！')
+        }
     },
     save_weight: function (frm) {
         if (frm.doc.ship_type == 'IN' && frm.doc.market_segment == '粮食') {
@@ -392,12 +397,14 @@ frappe.ui.form.on('Serial Port Reader', {
             },
             callback: function (r) {
                 if (r.message.status == 'success') {
-                    if (r.message.scale_item) {
+                    if (r.message.is_new== 1) {
                         frm.set_value('scale_item', r.message.scale_item);
                         frappe.msgprint("保存成功。新物流计量单号为：" + r.message.scale_item);
                     }
                     else {
                         frappe.msgprint("保存成功");
+                        frm.set_value('scale_item', '');
+                        frm.set_value('scale_item',r.message.scale_item)
                     }
                     //refresh_list(frm);
                 }
@@ -470,7 +477,6 @@ frappe.ui.form.on('Serial Port Reader', {
             frm.doc.ship_type = doc.type;
             frm.doc.vehicle = doc.vehicle;
             frm.doc.item_code = doc.item;
-            frm.doc.status = doc.status;
 
             if (doc.type == "IN") {
                 frm.doc.gross_weight = doc.offload_gross_weight;

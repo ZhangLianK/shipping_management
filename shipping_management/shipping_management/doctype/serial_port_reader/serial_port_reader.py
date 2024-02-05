@@ -44,15 +44,16 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 				scale_item_doc.stock_date = frappe.utils.today()
 				scale_item_doc.item = item_code
 				scale_item_doc.purchase_order = purchase_order
-    
+				
 				scale_item_doc.price_ls=flt(price_ls)
 				scale_item_doc.shuifen=flt(shuifen)
 				scale_item_doc.zazhi=flt(zazhi)
 				scale_item_doc.rongzhong=flt(rongzhong)
 				scale_item_doc.meibian=flt(meibian)
-    
+
+				scale_item_doc.stock_dt = frappe.utils.now()
 				scale_item_doc.save(ignore_permissions=True)
-				return {"scale_item": scale_item_doc.name, "status": "success"}
+				return {"scale_item": scale_item_doc.name, "status": "success","is_new":1}
 			elif type == 'OUT':
 				if not gross_weight == '0':
 					scale_item_doc.load_gross_weight = flt(gross_weight)
@@ -70,6 +71,7 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 				scale_item_doc.type = type
 				scale_item_doc.date = frappe.utils.today()
 				scale_item_doc.stock_date = frappe.utils.today()
+				scale_item_doc.stock_dt = frappe.utils.now()
 				scale_item_doc.vehicle = vehicle
 				scale_item_doc.item = item_code
     
@@ -78,9 +80,10 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 				scale_item_doc.zazhi=flt(zazhi)
 				scale_item_doc.rongzhong=flt(rongzhong)
 				scale_item_doc.meibian=flt(meibian)
-    
+
+				scale_item_doc.stock_dt = frappe.utils.now()
 				scale_item_doc.save(ignore_permissions=True)
-				return {"scale_item": scale_item_doc.name, "status": "success"}
+				return {"scale_item": scale_item_doc.name, "status": "success","is_new":1}
 		else:
 			scale_item_doc = frappe.get_doc("Scale Item", scale_item)
 			if scale_item_doc.type == 'OTH' and not type == 'OTH':
@@ -99,6 +102,7 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 				if pot:
 					scale_item_doc.pot=pot
 				scale_item_doc.stock_date = frappe.utils.today()
+				scale_item_doc.stock_dt = frappe.utils.now()
 				scale_item_doc.save(ignore_permissions=True)
 			elif scale_item_doc.type == 'OUT':
 				if not gross_weight == '0':
@@ -115,6 +119,7 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 					scale_item_doc.pot=pot
 				scale_item_doc.stock_date = frappe.utils.today()
 				scale_item_doc.save(ignore_permissions=True)
-			return {"status": "success"}
+				scale_item_doc.stock_dt = frappe.utils.now()
+			return {"scale_item": scale_item_doc.name, "status": "success"}
 	except Exception as e:
 		return e

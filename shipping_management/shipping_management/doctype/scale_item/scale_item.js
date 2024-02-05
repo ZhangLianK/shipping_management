@@ -5,6 +5,35 @@ frappe.ui.form.on('Scale Item', {
 
     refresh: function (frm) {
         
+
+        //add a button to send sms message to driver
+        if (frm.doc.driver) {
+            let send_notification_load_offload = frm.add_custom_button(__('通知司机装卸货'), function () {
+                console.log('send sms to driver');
+                /* frappe.call({
+                    method: 'shipping_management.shipping_management.doctype.scale_item.scale_item.send_notification_load_offload',
+                    args: {
+                        'driver': frm.doc.driver,
+                    }
+                }); */
+            });
+            // Get the button of "通知司机装卸货"
+        //let send_notification_load_offload = frm.page.get_inner_group_button(__('通知司机装卸货'));
+
+        // Add click event listener
+        send_notification_load_offload.on('click', function () {
+            // Disable the button
+            send_notification_load_offload.prop('disabled', true);
+
+            // Re-enable the button after 5 seconds
+            setTimeout(function () {
+                send_notification_load_offload.prop('disabled', false);
+            }, 5000); // 5000 milliseconds = 5 seconds
+        });
+        }
+        
+
+        
         frm.add_custom_button('Print Label', function () {
             // Action when button is clicked
             var doc = frm.doc;

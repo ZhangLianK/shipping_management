@@ -457,6 +457,7 @@
   },
   {
    "allow_on_submit": 1,
+   "fetch_from": "scale_item.status",
    "fieldname": "status",
    "fieldtype": "Data",
    "label": "\u72b6\u6001",
@@ -467,7 +468,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-04 20:07:57.649722",
+ "modified": "2024-02-05 21:07:00.511298",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",

@@ -72,6 +72,7 @@
   "section_break_jo6pq",
   "purchase_order",
   "purchase_receipt",
+  "stock_dt",
   "column_break_0pcxq",
   "sales_order",
   "sales_invoice",
@@ -719,12 +720,19 @@
    "fieldname": "nonghu",
    "fieldtype": "Data",
    "label": "\u519c\u6237"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "stock_dt",
+   "fieldtype": "Datetime",
+   "label": "\u5165\u51fa\u5e93\u65f6\u95f4",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-02 20:42:19.629965",
+ "modified": "2024-02-05 20:52:46.887386",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

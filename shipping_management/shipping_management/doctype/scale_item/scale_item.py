@@ -303,24 +303,28 @@ class ScaleItem(Document):
 				self.amount_ls = self.load_net_weight * self.price_ls
 		#frappe.msgprint("before_update_after_submit")
 		self.change_status()
+		self.validate_status()
+  
 		if self.type == 'IN' and self.market_segment == '成品油':
 			#self.calculate_weight()
-			
 			#self.check_weight()
 			if self.pot:
 				self.validate_pot()
 			print("validate pot")
-			self.validate_status()
+			
+
 		
 		if self.type == 'OUT' and self.market_segment == '成品油':
 			#self.calculate_weight()
 			#self.check_weight()
-			self.validate_status()
+			#self.validate_status()
+			pass
 
 		if self.type == 'DIRC' and self.market_segment == '成品油':
 			#self.calculate_weight()
 			#self.check_weight()
-			self.validate_status()
+			#self.validate_status()
+			pass
 
 				#get original target weight of the scale item
 		old_doc = self.get_doc_before_save()
