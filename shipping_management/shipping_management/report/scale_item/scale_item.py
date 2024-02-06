@@ -16,7 +16,7 @@ def execute(filters=None):
 def get_conditions(filters):
     conditions = ""
     if filters.get("company"):
-        conditions = conditions + f"where sci.company = '{filters.company}'"
+        conditions = conditions + f"where sci.docstatus != 2 and sci.company = '{filters.company}'"
 
     if filters.get("vehicle"):
         conditions = conditions + f" and sci.vehicle = '{filters.vehicle}'"
