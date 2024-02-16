@@ -2,8 +2,12 @@
 // For license information, please see license.txt
 
 let default_company = frappe.defaults.get_user_default("company");
-console.log(default_company);
+
 frappe.listview_settings['Scale Item'] = {
+    before_render() {
+        $('.container').css("max-width", "100%");
+        $('.container.page-body').css("max-width", "100%");
+    },
     hide_name_column: true,
     has_indicator_for_draft: true,
     filters: [["company", "=", default_company]],

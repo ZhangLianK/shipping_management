@@ -237,6 +237,16 @@ class ScaleItem(Document):
 			sales_order = frappe.get_doc("Sales Order", self.sales_order, ignore_permissions=True)
 			sales_order.qty_vehicle  = sales_order.qty_vehicle + self.target_weight - old_target_weight
 			sales_order.save(ignore_permissions=True)
+
+		if self.sales_invoice:
+			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
+			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight - old_target_weight
+			sales_invoice.save(ignore_permissions=True)
+		
+		if self.ship_plan:
+			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan,ignore_permissions=True)
+			ship_plan.assigned_qty = ship_plan.assigned_qty + self.target_weight - old_target_weight
+			ship_plan.save(ignore_permissions=True)
    
 	def before_save(self):
 		if self.market_segment == '粮食':
@@ -251,7 +261,7 @@ class ScaleItem(Document):
 		#		self.transporter = vehicle_doc.transporter
 		#采购收货处理逻辑开始purchase receipt process logic start
 		self.change_status()
-		if self.type == 'IN' and self.market_segment == '成品油':
+		if self.type == 'IN' and self.market_segment == 'XXX':
 			#self.calculate_weight()
 			  
 			#self.check_weight()
@@ -265,7 +275,7 @@ class ScaleItem(Document):
 		#采购收货处理逻辑结束purchase receipt process logic end
 
 		#销售出货处理逻辑开始sales shipment process logic start
-		if self.type == 'OUT' and self.market_segment == '成品油':
+		if self.type == 'OUT' and self.market_segment == 'XXX':
 			#self.calculate_weight()
 			#self.check_weight()
 			self.validate_load()
@@ -277,7 +287,7 @@ class ScaleItem(Document):
 		#销售出货处理逻辑开始sales shipment process logic end
 
 		#销售直送处理逻辑开始sales direct process logic start
-		if self.type == 'DIRC' and self.market_segment == '成品油':
+		if self.type == 'DIRC' and self.market_segment == 'XXX':
 			#self.calculate_weight()
 			#self.check_weight()
 			self.validate_load()
@@ -305,7 +315,7 @@ class ScaleItem(Document):
 		self.change_status()
 		self.validate_status()
   
-		if self.type == 'IN' and self.market_segment == '成品油':
+		if self.type == 'IN' and self.market_segment == 'XXX':
 			#self.calculate_weight()
 			#self.check_weight()
 			if self.pot:
@@ -314,13 +324,13 @@ class ScaleItem(Document):
 			
 
 		
-		if self.type == 'OUT' and self.market_segment == '成品油':
+		if self.type == 'OUT' and self.market_segment == 'XXX':
 			#self.calculate_weight()
 			#self.check_weight()
 			#self.validate_status()
 			pass
 
-		if self.type == 'DIRC' and self.market_segment == '成品油':
+		if self.type == 'DIRC' and self.market_segment == 'XXX':
 			#self.calculate_weight()
 			#self.check_weight()
 			#self.validate_status()
@@ -355,6 +365,11 @@ class ScaleItem(Document):
 			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
 			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight
 			sales_invoice.save(ignore_permissions=True)
+
+		if self.ship_plan:
+			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan,ignore_permissions=True)
+			ship_plan.assigned_qty = ship_plan.assigned_qty + self.target_weight
+			ship_plan.save(ignore_permissions=True)
 	
 	def on_cancel(self):
 		#get all users that have role of "Scale Manager"
@@ -376,6 +391,10 @@ class ScaleItem(Document):
 			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
 			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle - self.target_weight
 			sales_invoice.save(ignore_permissions=True)
+		if self.ship_plan:
+			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan,ignore_permissions=True)
+			ship_plan.assigned_qty = ship_plan.assigned_qty - self.target_weight
+			ship_plan.save(ignore_permissions=True)
 	
 		self.status = "9 已取消"
    

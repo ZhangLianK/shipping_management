@@ -6,18 +6,33 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "id",
   "vehicle",
-  "scale_item",
   "driver",
+  "cell_number",
+  "target_weight",
+  "column_break_in0a2",
+  "transporter",
+  "type",
+  "pot",
+  "id",
+  "column_break_mcwz0",
+  "scale_item",
   "status",
-  "qty",
+  "bill_type",
+  "market_segment",
+  "section_break_z71wq",
   "from_addr",
-  "to_addr"
+  "column_break_lxshb",
+  "to_addr",
+  "section_break_gnhfr",
+  "purchase_order",
+  "column_break_lzg3v",
+  "sales_order",
+  "sales_invoice"
  ],
  "fields": [
   {
-   "columns": 2,
+   "columns": 1,
    "fieldname": "scale_item",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -46,13 +61,6 @@
   },
   {
    "columns": 1,
-   "fieldname": "qty",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "\u9884\u88c5\u91cf"
-  },
-  {
-   "columns": 1,
    "fieldname": "from_addr",
    "fieldtype": "Small Text",
    "in_list_view": 1,
@@ -78,14 +86,106 @@
    "columns": 1,
    "fieldname": "id",
    "fieldtype": "Int",
+   "label": "\u5185\u90e8\u7f16\u53f7"
+  },
+  {
+   "columns": 1,
+   "fieldname": "type",
+   "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "\u7f16\u53f7"
+   "label": "\u7c7b\u578b",
+   "options": "Ship Type"
+  },
+  {
+   "columns": 1,
+   "fetch_from": "driver.cell_number",
+   "fetch_if_empty": 1,
+   "fieldname": "cell_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u624b\u673a\u53f7"
+  },
+  {
+   "columns": 1,
+   "fieldname": "bill_type",
+   "fieldtype": "Link",
+   "label": "\u7ed3\u7b97\u7c7b\u578b",
+   "options": "Scale Type"
+  },
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "\u91c7\u8d2d\u8ba2\u5355",
+   "options": "Purchase Order"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "\u9500\u552e\u8ba2\u5355",
+   "options": "Sales Order"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "\u9500\u552e\u8d39\u7528\u6e05\u5355",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "transporter",
+   "fieldtype": "Link",
+   "label": "\u627f\u8fd0\u5546",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "column_break_in0a2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_mcwz0",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_lzg3v",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_z71wq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_lxshb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_gnhfr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "columns": 1,
+   "fieldname": "pot",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7f50\uff08\u5e93\u4f4d\uff09",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "market_segment",
+   "fieldtype": "Link",
+   "label": "\u4e8b\u4e1a\u90e8",
+   "options": "Market Segment"
+  },
+  {
+   "columns": 1,
+   "fieldname": "target_weight",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "\u9884\u88c5\u91cf"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-12-05 20:47:56.374034",
+ "modified": "2024-02-15 19:57:04.238048",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Child",

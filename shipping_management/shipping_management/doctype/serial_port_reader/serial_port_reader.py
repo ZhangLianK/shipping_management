@@ -4,6 +4,8 @@
 import frappe
 from frappe.model.document import Document
 from frappe.utils import cint, cstr, flt, nowdate
+import json
+from tencent_integration.tencent_integration.doctype.tencent_sms_log.tencent_sms_log import create_sms_log
 
 class SerialPortReader(Document):
 	pass
@@ -123,3 +125,22 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 			return {"scale_item": scale_item_doc.name, "status": "success"}
 	except Exception as e:
 		return e
+
+
+@frappe.whitelist()
+def send_scale_sms(scale_item):
+		scale_item_doc = frappe.get_doc("Scale Item", scale_item)
+		company = scale_item_doc.company
+		driver_phone_number = frappe.get_value("Driver", scale_item_doc.driver, "cell_number")
+		plant = scale_item_doc.pot.split(' - ')[0]
+		if scale_item_doc.type == 'IN':
+			type = '卸'
+		elif scale_item_doc.type == 'OUT':
+			type = '装'
+		if driver_phone_number:
+			#generate a json list with the driver number
+			driver_phone_number_list = json.dumps([driver_phone_number])
+			variable_list = json.dumps([plant,type])
+			#send sms to driver
+			#create_sms_log(company, "scale_notification", driver_phone_number_list, variable_list)
+			return {"status": "success"}

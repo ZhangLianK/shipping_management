@@ -8,25 +8,42 @@
  "field_order": [
   "company",
   "column_break_xudq5",
-  "date",
-  "column_break_u3cuz",
-  "transporter",
-  "section_break_incyt",
   "ship_plan",
-  "column_break_emxj5",
+  "column_break_u3cuz",
+  "date",
+  "column_break_wkj8y",
   "qty",
-  "column_break_g6dcs",
+  "column_break_yqbv2",
   "assigned_qty",
+  "column_break_wlrec",
+  "market_segment",
+  "section_break_incyt",
+  "type",
+  "column_break_emxj5",
+  "transporter",
+  "column_break_decq1",
+  "purchase_order",
+  "column_break_g6dcs",
+  "sales_order",
+  "column_break_oozw7",
+  "sales_invoice",
   "section_break_m1rbr",
   "from_addr",
   "column_break_tqed5",
   "to_addr",
   "section_break_dj6ub",
+  "export_xlsx",
+  "column_break_f1yhq",
+  "query_qty",
+  "column_break_uazgk",
+  "current_qty",
+  "column_break_ns8xt",
+  "variance_qty",
+  "section_break_bqyjv",
   "scale_child"
  ],
  "fields": [
   {
-   "fetch_from": "ship_plan.transporter_company",
    "fieldname": "company",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -39,8 +56,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "\u7269\u6d41\u8ba1\u5212",
-   "options": "Ship Plan",
-   "reqd": 1
+   "options": "Ship Plan"
   },
   {
    "fieldname": "scale_child",
@@ -83,6 +99,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "ship_plan.date",
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "\u8ba1\u5212\u65e5\u671f",
@@ -101,6 +118,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "ship_plan.assigned_qty",
    "fieldname": "assigned_qty",
    "fieldtype": "Float",
    "label": "\u5df2\u914d\u8f66\u8fd0\u91cf",
@@ -115,12 +133,103 @@
    "fieldtype": "Link",
    "label": "\u627f\u8fd0\u5546",
    "options": "Supplier"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "label": "\u7c7b\u578b",
+   "options": "Ship Type"
+  },
+  {
+   "fieldname": "column_break_wkj8y",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_yqbv2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "\u9500\u552e\u8d39\u7528\u6e05\u5355",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "column_break_oozw7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "\u9500\u552e\u8ba2\u5355",
+   "options": "Sales Order"
+  },
+  {
+   "fieldname": "column_break_decq1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "ship_plan.purchase_order",
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "\u91c7\u8d2d\u8ba2\u5355",
+   "options": "Purchase Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_wlrec",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "market_segment",
+   "fieldtype": "Link",
+   "label": "\u4e8b\u4e1a\u90e8",
+   "options": "Market Segment"
+  },
+  {
+   "fieldname": "export_xlsx",
+   "fieldtype": "Button",
+   "label": "\u5bfc\u51faExcel"
+  },
+  {
+   "fieldname": "section_break_bqyjv",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_f1yhq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "query_qty",
+   "fieldtype": "Float",
+   "label": "\u672c\u6b21\u67e5\u8be2\u603b\u91cf",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_uazgk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "current_qty",
+   "fieldtype": "Float",
+   "label": "\u5f53\u524d\u5217\u8868\u603b\u91cf",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ns8xt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "variance_qty",
+   "fieldtype": "Float",
+   "label": "\u672c\u6b21\u589e/\u6539\u603b\u91cf",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-01-29 15:18:59.145910",
+ "modified": "2024-02-16 22:24:50.002219",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping Management Tool",

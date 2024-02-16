@@ -52,6 +52,7 @@
   "section_break_wpmwm",
   "refresh_list",
   "in_process",
+  "new_list",
   "\u7cae\u98df\u4ef7\u683c\u53ca\u68c0\u9a8c\u6307\u6807_tab",
   "price_ls",
   "rongzhong",
@@ -277,7 +278,7 @@
    "allow_on_submit": 1,
    "fieldname": "verification_code",
    "fieldtype": "Data",
-   "label": "\u9a8c\u8bc1\u7801"
+   "label": "\u8fc7\u78c5\u7801"
   },
   {
    "fieldname": "column_break_0vyo3",
@@ -462,13 +463,20 @@
    "fieldtype": "Data",
    "label": "\u72b6\u6001",
    "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "new_list",
+   "fieldtype": "Table",
+   "label": "\u5df2\u62a5\u53f7",
+   "options": "Serial Port Reader N List"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-05 21:07:00.511298",
+ "modified": "2024-02-11 18:04:19.860044",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Serial Port Reader",

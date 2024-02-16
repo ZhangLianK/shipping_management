@@ -15,10 +15,8 @@
   "column_break_g0lig",
   "qty",
   "section_break_afqls",
-  "supplier",
   "type",
   "column_break_icmmw",
-  "transporter_company",
   "status",
   "column_break_36vxq",
   "assigned_qty",
@@ -27,8 +25,6 @@
   "item",
   "market_segment",
   "section_break_hvcxu",
-  "price",
-  "column_break_5gjj3",
   "purchase_order",
   "column_break_farmo",
   "sales_order",
@@ -60,12 +56,6 @@
   {
    "fieldname": "column_break_g0lig",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "supplier",
-   "fieldtype": "Link",
-   "label": "\u627f\u8fd0\u5546",
-   "options": "Supplier"
   },
   {
    "fieldname": "section_break_afqls",
@@ -100,13 +90,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "supplier.represents_company",
-   "fieldname": "transporter_company",
-   "fieldtype": "Link",
-   "label": "\u627f\u8fd0\u5546\u516c\u53f8",
-   "options": "Company"
-  },
-  {
    "fieldname": "company",
    "fieldtype": "Link",
    "in_standard_filter": 1,
@@ -123,7 +106,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "\u72b6\u6001",
-   "options": "\u672a\u5904\u7406\n\u8fdb\u884c\u4e2d\n\u5b8c\u6210"
+   "options": "\u672a\u5904\u7406\n\u8f66\u53f7\u6536\u96c6\u4e2d\n\u8f66\u53f7\u6536\u96c6\u5b8c\u6bd5\n\u62a5\u53f7\u5df2\u5b8c\u6210\n\u8fdb\u884c\u4e2d\n\u5b8c\u6210"
   },
   {
    "fieldname": "section_break_hvcxu",
@@ -170,16 +153,6 @@
    "options": "Scale Type"
   },
   {
-   "description": "\u5143/\u5428",
-   "fieldname": "price",
-   "fieldtype": "Float",
-   "label": "\u8fd0\u4ef7"
-  },
-  {
-   "fieldname": "column_break_5gjj3",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "label": "Naming Series",
@@ -206,7 +179,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-01-29 15:12:33.984084",
+ "modified": "2024-02-16 21:08:10.846089",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Ship Plan",
@@ -226,6 +199,7 @@
    "write": 1
   }
  ],
+ "search_fields": "status, date, qty",
  "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",

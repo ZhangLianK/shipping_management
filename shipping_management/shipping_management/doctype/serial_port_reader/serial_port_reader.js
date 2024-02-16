@@ -86,6 +86,28 @@ frappe.ui.form.on('Serial Port Reader', {
             // Set the scale_item value to the main form's field
             frm.set_value('scale_item', scale_item);
         });
+
+        frm.fields_dict.new_list.grid.wrapper.on('click', '.grid-row-check', function(event) {
+            // Get the name of the currently clicked row
+            var clickedRowName = $(event.target).closest('.grid-row').attr('data-name');
+        
+            // Iterate over all rows to uncheck others
+            frm.fields_dict.new_list.grid.grid_rows.forEach(function(row) {
+                if (row.doc.name !== clickedRowName) {
+                    row.doc.__checked = false; // Uncheck the row programmatically
+                    $(row.wrapper).find('.grid-row-check').prop('checked', false); // Uncheck the checkbox in the UI
+                }
+            });
+        
+            // Refresh the grid to reflect the changes in UI
+            frm.fields_dict.new_list.grid.refresh();
+        
+            // Get the scale_item field value of the checked row
+            var scale_item = frm.fields_dict.new_list.grid.grid_rows_by_docname[clickedRowName].doc.scale_item;
+        
+            // Set the scale_item value to the main form's field
+            frm.set_value('scale_item', scale_item);
+        });
         
         
 
@@ -417,20 +439,43 @@ frappe.ui.form.on('Serial Port Reader', {
 
     },
     clear: function (frm) {
-        frm.doc.scale_item = "";
-        frm.doc.gross_weight = 0;
-        frm.doc.gross_dt = "";
-        frm.doc.blank_weight = 0;
-        frm.doc.blank_dt = "";
-        frm.doc.net_weight = 0;
-        frm.doc.driver = "";
-        frm.doc.item_code = "";
-        frm.doc.vehicle = "";
-        frm.doc.status = "";
-        frm.doc.pot = "";
-        frm.doc.ship_type = "";
-        frm.doc.vehicle_selector = "";
-        frm.refresh();
+        //frm.doc.scale_item = "";
+        //frm.doc.gross_weight = 0;
+        //frm.doc.gross_dt = "";
+        //frm.doc.blank_weight = 0;
+        //frm.doc.blank_dt = "";
+        //frm.doc.net_weight = 0;
+        //frm.doc.driver = "";
+        //frm.doc.item_code = "";
+        //frm.doc.vehicle = "";
+        //frm.doc.status = "";
+        //frm.doc.pot = "";
+        //frm.doc.ship_type = "";
+        //frm.doc.vehicle_selector = "";
+        //frm.refresh();
+        frm.set_value('scale_item', "");
+        frm.set_value('gross_weight', 0);
+        frm.set_value('gross_dt', "");
+        frm.set_value('blank_weight', 0);
+        frm.set_value('blank_dt', "");
+        frm.set_value('net_weight', 0);
+        frm.set_value('driver', "");
+        frm.set_value('item_code', "");
+        frm.set_value('vehicle', "");
+        frm.set_value('status', "");
+        frm.set_value('pot', "");
+        frm.set_value('ship_type', "");
+        frm.set_value('vehicle_selector', "");
+    
+        //if the refresh_list button is not disabled, trigger it and disable it for 10 seconds
+        if($(`[data-fieldname="refresh_list"]`).find('button').prop('disabled') == false) {
+            frm.trigger('refresh_list');
+        }
+        let refresh_button = $(`[data-fieldname="refresh_list"]`).find('button');
+        refresh_button.prop('disabled', true); // Disable the button
+        setTimeout(function () {
+            refresh_button.prop('disabled', false);
+        }, 5000);
     },
     refresh_list: refresh_list,
     ship_type: function (frm) {
@@ -517,6 +562,37 @@ frappe.ui.form.on('Serial Port Reader', {
             frm.doc.net_weight = (frm.doc.gross_weight - frm.doc.blank_weight).toFixed(3);
             frm.refresh_field('net_weight');
         }
+    }
+});
+
+
+frappe.ui.form.on('Serial Port Reader N List', {
+    send_sms: function (frm, cdt, cdn) {
+        console.log("send sms "+cdt+' '+cdn);
+        //get the record details in this row
+        var row = locals[cdt][cdn];
+        console.log(row);
+        //send sms
+        frappe.call({
+            method: "shipping_management.shipping_management.doctype.serial_port_reader.serial_port_reader.send_scale_sms",
+            args: {
+                "scale_item": row.scale_item
+            },
+            callback: function (r) {
+                if (r.message) {
+                    //disable the button field in the row for 10 seconds
+                    let sms_button = $(`[data-name="${row.name}"] [data-fieldname="send_sms"]`).find('button');
+                    if(sms_button.length > 0) {
+                        sms_button.prop('disabled', true); // Disable the button
+                        // You can also add other manipulations here
+                        setTimeout(function () {
+                            sms_button.prop('disabled', false);
+                        }, 10000);
+                    }
+                    
+                }
+            }
+        });
     }
 });
 
@@ -750,7 +826,9 @@ function refresh_list(frm) {
         ],
         limit:100,
         filters: {
-            'status': ['in', ['2 正在装货', '4 正在卸货']]
+            'status': ['in', ['2 正在装货', '4 正在卸货']],
+            "pot":["descendants of",frm.doc.plant],
+            'stock_date': ['is', 'set'],
         }
     }).then(records => {
         let inProcessData = records.map(record => {
@@ -773,7 +851,8 @@ function refresh_list(frm) {
                 pot: record.pot,
                 gross_weight: grossWeight,
                 blank_weight: blankWeight,
-                time: time
+                time: time,
+
             };
         });
     
@@ -791,7 +870,63 @@ function refresh_list(frm) {
                 });
             }
             frm.refresh_field('in_process');
-            frm.refresh();
+    });
+    
+    //get new scale data
+    frappe.db.get_list('Scale Item', {
+        fields: [
+            'name', 
+            'type', 
+            'vehicle', 
+            'target_weight', 
+            'from_addr',
+            'to_addr',
+            'pot',
+            'driver',
+            'cell_number'
+        ],
+        limit:100,
+        filters: {
+            'pot': ['descendants of', frm.doc.plant],
+            'stock_date': ['is', 'not set'],
+            'type':['in', ['IN','OUT']],
+            'docstatus': ['!=', 2],
+            'status': ['not in', ['6 已完成', '9 已取消']]
+        }
+
+    }).then(records_n => {
+        let newData = records_n.map(record_n => {
+            return {
+                name: record_n.name,
+                vehicle: record_n.vehicle,
+                type: record_n.type,
+                pot: record_n.pot,
+                qty: record_n.target_weight,
+                from_addr: record_n.from_addr,
+                to_addr: record_n.to_addr,
+                driver: record_n.driver,
+                cell_number: record_n.cell_number
+            };
+        });
+    
+        frm.clear_table('new_list');
+            //add scale item to the child table
+            //and trigger update field which fetch from link field
+
+            for (let row of newData) {
+                let child = frm.add_child('new_list', {
+                    scale_item: row.name,
+                    ship_type: row.type,
+                    vehicle: row.vehicle,
+                    pot: row.pot,
+                    qty: row.qty,
+                    from_addr: row.from_addr,
+                    to_addr: row.to_addr,
+                    driver: row.driver,
+                    cell_number:row.cell_number,
+                });
+            }
+            frm.refresh_field('new_list');
     });
     
 }

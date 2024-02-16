@@ -25,6 +25,7 @@
   "date",
   "stock_date",
   "transporter",
+  "cell_number",
   "column_break_nzqdf",
   "company",
   "bill_type",
@@ -118,6 +119,7 @@
    "label": "\u57fa\u672c\u4fe1\u606f"
   },
   {
+   "columns": 1,
    "fieldname": "desc",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -185,6 +187,7 @@
   },
   {
    "allow_on_submit": 1,
+   "columns": 1,
    "fieldname": "date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -245,6 +248,7 @@
   },
   {
    "allow_on_submit": 1,
+   "columns": 1,
    "fieldname": "pot",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -278,6 +282,7 @@
    "allow_on_submit": 1,
    "fieldname": "from_addr",
    "fieldtype": "Small Text",
+   "in_list_view": 1,
    "label": "\u63d0\u8d27\u5730"
   },
   {
@@ -297,6 +302,7 @@
    "allow_on_submit": 1,
    "fieldname": "to_addr",
    "fieldtype": "Small Text",
+   "in_list_view": 1,
    "label": "\u9001\u8d27\u5730"
   },
   {
@@ -313,6 +319,7 @@
    "allow_on_submit": 1,
    "fieldname": "load_net_weight",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "\u88c5\u8f66\u51c0\u91cd",
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
@@ -355,6 +362,7 @@
    "allow_on_submit": 1,
    "fieldname": "offload_net_weight",
    "fieldtype": "Float",
+   "in_list_view": 1,
    "label": "\u5378\u8f66\u51c0\u91cd",
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
@@ -436,6 +444,7 @@
    "label": "\u9500\u552e\u51fa\u5e93\u5355"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "sales_invoice",
    "fieldtype": "Link",
    "in_standard_filter": 1,
@@ -603,7 +612,8 @@
    "allow_on_submit": 1,
    "fieldname": "verification_code",
    "fieldtype": "Data",
-   "label": "\u53f8\u673a\u9a8c\u8bc1\u7801"
+   "label": "\u53f8\u673a\u9a8c\u8bc1\u7801",
+   "read_only_depends_on": "eval:frappe.session.user != 'Administrator'"
   },
   {
    "allow_on_submit": 1,
@@ -686,8 +696,10 @@
   },
   {
    "allow_on_submit": 1,
+   "columns": 1,
    "fieldname": "stock_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "\u5165\u51fa\u5e93\u8fc7\u78c5\u65e5\u671f"
   },
@@ -727,12 +739,20 @@
    "fieldtype": "Datetime",
    "label": "\u5165\u51fa\u5e93\u65f6\u95f4",
    "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "driver.cell_number",
+   "fetch_if_empty": 1,
+   "fieldname": "cell_number",
+   "fieldtype": "Data",
+   "label": "\u624b\u673a\u53f7"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-05 20:52:46.887386",
+ "modified": "2024-02-16 22:46:44.223085",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

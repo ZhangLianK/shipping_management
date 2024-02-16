@@ -1,0 +1,118 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-02-11 12:22:34.658649",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "scale_item",
+  "ship_type",
+  "vehicle",
+  "qty",
+  "pot",
+  "from_addr",
+  "to_addr",
+  "driver",
+  "cell_number",
+  "send_sms"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "scale_item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u5355\u53f7",
+   "options": "Scale Item",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "ship_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7c7b\u522b",
+   "options": "Ship Type",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "vehicle",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u8f66\u53f7",
+   "options": "Vehicle",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "pot",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7f50\uff08\u5e93\u4f4d\uff09",
+   "options": "Warehouse",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "from_addr",
+   "fieldtype": "Small Text",
+   "label": "\u63d0\u8d27\u5730",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "to_addr",
+   "fieldtype": "Small Text",
+   "label": "\u5378\u8d27\u5730",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "\u9884\u88c5\u91cf",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "send_sms",
+   "fieldtype": "Button",
+   "in_list_view": 1,
+   "label": "\u53d1\u901a\u77e5"
+  },
+  {
+   "columns": 1,
+   "fieldname": "driver",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u53f8\u673a",
+   "options": "Driver",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fetch_from": "driver.cell_number",
+   "fieldname": "cell_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u53f8\u673a\u624b\u673a\u53f7",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-02-11 22:02:04.098360",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Serial Port Reader N List",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,26 +1,149 @@
 // Copyright (c) 2023, Alvin and contributors
 // For license information, please see license.txt
-frappe.ui.form.on('Shipping Management Tool', {
-    onload: function(frm) {
-        // Hide the save button
-        frm.disable_save();
-    },
-	ship_plan: function (frm) {
-		refresh_scale_item(frm);
-		},
-});
+
 
 frappe.ui.form.on("Scale Child", {
-	scale_child_add: function (frm) {
-		calculate_totals(frm);
+	form_render: function (frm, cdt, cdn) {
+		$('.grid-delete-row').remove();
+		var row = locals[cdt][cdn];
+
+		//make vehicle readnly if it has values
+		if (row.vehicle) {
+			//set read only
+			var grid_row = frm.fields_dict["scale_child"].grid.grid_rows_by_docname[cdn];
+
+			// Make the vehicle field read-only if it has a value
+			if (grid_row && grid_row.doc.vehicle) {
+				grid_row.toggle_editable("vehicle", false); // Pass fieldname and false to make it read-only
+			}
+		}
+
+		var row_name = row.scale_item;
+		if (row_name != 'N') {
+
+			// Target the row-actions element of the current row and remove existing custom action buttons
+			$(`div[data-idx='${row.idx}']`).find('.row-actions .custom-action-btn').remove();
+
+			// Append the new custom action button to the row-actions span
+			// Ensure the button is given a class for easy identification (e.g., 'custom-action-btn')
+			var button_html = `<button id="custom-action-${row_name}" class="btn btn-primary btn-sm pull-right hidden-xs custom-action-btn">保存</button>`;
+			$(`div[data-idx='${row.idx}']`).find('.row-actions').append(button_html);
+
+			// Bind the click event to the new button
+			$(`#custom-action-${row_name}`).on('click', function () {
+				// Implement your custom action here
+				console.log('Custom action button clicked for row', row_name);
+				// Example: Log the entire row object to console
+				console.log(row);
+				//send the row doc to the backend to save
+				frappe.call({
+					method: "shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.save_scale_item", // Replace with your app and module names
+					args: {
+						"doc_data": row // Pass the scale_child from the current form
+					},
+					callback: function (r) {
+						if (r.message == 'success') {
+							// You now have the saved scale child data returned from the server
+							let scale_child_doc = r.message;
+							frappe.msgprint("保存成功");
+							refresh_scale_item(frm);
+						}
+						else {
+							frappe.msgprint("保存失败 请联系管理员." + r.message);
+						}
+					}
+				});
+
+			});
+		}
 	},
-	qty: function (frm, cdt, cdn) {
+	scale_child_add: function (frm, cdt, cdn) {
+		let row = locals[cdt][cdn];
+		row.purchase_order = frm.doc.purchase_order
+		row.sales_invoice = frm.doc.sales_invoice
+		row.sales_order = frm.doc.sales_order
+		row.transporter = frm.doc.transporter
+		row.type = frm.doc.type
+		row.market_segment = frm.doc.market_segment
+		row.scale_item = 'N'
+		frm.refresh_field('scale_child');
+		updateVehicleFieldReadonlyStatus(frm)
+	},
+	before_scale_child_remove: function (frm, cdt, cdn) {
+		let row = locals[cdt][cdn];
+		if (row.scale_item && row.scale_item != 'N') {
+			frappe.call({
+				method: "shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.cancel_scale_child", // Replace with your app and module names
+				args: {
+					"scale_item": row.scale_item // Pass the scale_item from the current form
+				},
+				callback: function (r) {
+					if (r.message.status == 'success') {
+						// You now have the scale item data returned from the server
+						frm.set_value('assigned_qty', r.message.ship_plan.assigned_qty);
+						frappe.msgprint("取消成功");
+					}
+				}
+			});
+		}
+	},
+	scale_child_remove: function (frm, cdt, cdn) {
+		updateVehicleFieldReadonlyStatus(frm)
+	},
+	target_weight: function (frm, cdt, cdn) {
 		calculate_totals(frm);
 	},
 });
 
 frappe.ui.form.on('Shipping Management Tool', {
+	onload: function (frm) {
+		// Hide the save button
+		frm.disable_save();
+	},
+	export_xlsx: function (frm) {
+		if (!frm.doc.ship_plan) {
+			frappe.throw(__('请先选择物流计划'));
+			return;
+		}
+		let exp =true;
+		refresh_scale_item(frm,exp);
+	},
+	ship_plan: function (frm) {
+		if (frm.doc.ship_plan) {
+			refresh_scale_item(frm);
+		}
+		else {
+			frm.clear_table('scale_child');
+			frm.refresh_field('scale_child');
+		}
+	},
+	transporter: function (frm) {
+		refresh_scale_item(frm);
+	},
+	type: function (frm) {
+		refresh_scale_item(frm);
+	},
+	sales_order: function (frm) {
+		refresh_scale_item(frm);
+	},
+	sales_invoice: function (frm) {
+		refresh_scale_item(frm);
+	},
+	onload_post_render: function (frm) {
+		$('.container').css("max-width", "100%")
+	},
+	query_qty: function (frm) {
+		frm.set_value('variance_qty', frm.doc.current_qty - frm.doc.query_qty);
+	},
+	current_qty: function (frm) {
+		frm.set_value('variance_qty', frm.doc.current_qty - frm.doc.query_qty);
+	},
+
 	refresh: function (frm) {
+
+		frm.fields_dict['scale_child'].grid.wrapper.on('grid-row-updated grid-row-added grid-row-removed', function () {
+			updateVehicleFieldReadonlyStatus(frm);
+		});
 		//filter transporter list using supplier's is_transporter field
 		frm.set_query("transporter", function () {
 			return {
@@ -29,14 +152,22 @@ frappe.ui.form.on('Shipping Management Tool', {
 				}
 			};
 		});
-		//filter ship_plan using transporter field
-		frm.set_query("ship_plan", function () {
+		//filter sales invoice using sales order
+		frm.set_query("sales_invoice", function () {
 			return {
 				filters: {
-					"supplier": frm.doc.transporter
+					"sales_order": frm.doc.sales_order
 				}
 			};
 		});
+		//filter ship_plan using transporter field
+		//frm.set_query("ship_plan", function () {
+		//	return {
+		//		filters: {
+		//			"supplier": frm.doc.transporter
+		//		}
+		//	};
+		//});
 
 		// Hide the save button
 		frm.disable_save();
@@ -46,8 +177,8 @@ frappe.ui.form.on('Shipping Management Tool', {
 		frm.clear_table
 		//add a refresh button to refresh the scale child
 		frm.add_custom_button(__('刷新物流单'), function () {
-			if (!frm.doc.ship_plan) {
-				frappe.throw(__('请先选择物流计划'));
+			if (!frm.doc.ship_plan && !frm.doc.sales_invoice && !frm.doc.sales_order) {
+				frappe.throw(__('请先选择【物流计划】，或者【销售费用清单】，或者【销售订单】'));
 				return;
 			}
 			refresh_scale_item(frm);
@@ -69,13 +200,17 @@ frappe.ui.form.on('Shipping Management Tool', {
 							return;
 						}
 						else {
-						// You now have the saved doc returned from the server
-						let saved_doc = r.message;
-						frm.doc.name = saved_doc.name;
-						frappe.msgprint("保存成功");
-						refresh_scale_item(frm);
-						frm.doc.__unsaved = false;
-						frm.refresh();
+							// You now have the saved doc returned from the server
+							if (r.message== 'success') {
+								frappe.msgprint("保存成功");
+							}
+							else {
+								let ship_plan_doc = r.message;
+								frm.set_value('assigned_qty', ship_plan_doc.assigned_qty);
+								frappe.msgprint("保存成功");
+							}
+							frm.doc.__unsaved = false;
+							refresh_scale_item(frm);
 						}
 					}
 				}
@@ -144,41 +279,41 @@ frappe.ui.form.on('Shipping Management Tool', {
 			order_by: 'id asc',
 			limit: 'all'
 		}).then(r => {
-				if (r) {
-					// Add checkboxes and information to the container for each vehicle
-					$.each(r, function (i, vehicle) {
-						var $checkbox_wrapper = $('<div class="vehicle-row">').appendTo($multi_select_container);
+			if (r) {
+				// Add checkboxes and information to the container for each vehicle
+				$.each(r, function (i, vehicle) {
+					var $checkbox_wrapper = $('<div class="vehicle-row">').appendTo($multi_select_container);
 
-						// Create a checkbox for each vehicle
-						var $checkbox = $('<input type="checkbox" class="vehicle-checkbox">')
-							.data('vehicle-id', vehicle.id) // Store the vehicle ID
-							.data('vehicle-name', vehicle.name) // Store the vehicle name
-							.appendTo($checkbox_wrapper);
+					// Create a checkbox for each vehicle
+					var $checkbox = $('<input type="checkbox" class="vehicle-checkbox">')
+						.data('vehicle-id', vehicle.id) // Store the vehicle ID
+						.data('vehicle-name', vehicle.name) // Store the vehicle name
+						.appendTo($checkbox_wrapper);
 
-						// Display vehicle ID
-						var $id_span = $('<span class="vehicle-id">').text(vehicle.id).appendTo($checkbox_wrapper);
+					// Display vehicle ID
+					var $id_span = $('<span class="vehicle-id">').text(vehicle.id).appendTo($checkbox_wrapper);
 
-						// Display vehicle name (you can concatenate it with ID or keep it separate)
-						var $name_span = $('<span class="vehicle-name">').text(vehicle.name).appendTo($checkbox_wrapper);
+					// Display vehicle name (you can concatenate it with ID or keep it separate)
+					var $name_span = $('<span class="vehicle-name">').text(vehicle.name).appendTo($checkbox_wrapper);
 
-						// Handle checkbox click event
-						$checkbox.on('click', function () {
-							// Get all selected vehicles
-							var selected_vehicles = [];
-							$multi_select_container.find('.vehicle-checkbox:checked').each(function () {
-								var vehicleId = $(this).data('vehicle-id');
-								var vehicleName = $(this).data('vehicle-name');
-								selected_vehicles.push({
-									id: vehicleId,
-									name: vehicleName
-								});
+					// Handle checkbox click event
+					$checkbox.on('click', function () {
+						// Get all selected vehicles
+						var selected_vehicles = [];
+						$multi_select_container.find('.vehicle-checkbox:checked').each(function () {
+							var vehicleId = $(this).data('vehicle-id');
+							var vehicleName = $(this).data('vehicle-name');
+							selected_vehicles.push({
+								id: vehicleId,
+								name: vehicleName
 							});
-							// Do something with the selected vehicles
-							console.log('Selected vehicles:', selected_vehicles);
 						});
+						// Do something with the selected vehicles
+						console.log('Selected vehicles:', selected_vehicles);
 					});
-				}
+				});
 			}
+		}
 		);
 
 
@@ -204,8 +339,8 @@ frappe.ui.form.on('Shipping Management Tool', {
 
 		//add a button to the doctype, when click it get the checked vehicles and create new scale child into the child table
 		frm.add_custom_button(__('分配车辆'), function () {
-			if (!frm.doc.ship_plan) {
-				frappe.throw(__('请先选择物流计划'));
+			if (!frm.doc.ship_plan && !frm.doc.sales_invoice && !frm.doc.sales_order) {
+				frappe.throw(__('请选择【物流计划】，或者【销售费用清单】，或者【销售订单】'));
 				return;
 			}
 			// Get all selected vehicles
@@ -239,12 +374,16 @@ frappe.ui.form.on('Shipping Management Tool', {
 							var row = frm.add_child('scale_child', {
 								scale_item: scale_child_data.scale_item,
 								vehicle: scale_child_data.vehicle,
-								qty:scale_child_data.qty,
-								from_addr:frm.doc.from_addr,
-								to_addr:frm.doc.to_addr,
-								driver:scale_child_data.driver,
-								
-								
+								target_weight: scale_child_data.target_weight,
+								from_addr: frm.doc.from_addr,
+								to_addr: frm.doc.to_addr,
+								driver: scale_child_data.driver,
+								cell_number: scale_child_data.cell_number,
+								sales_order: frm.doc.sales_order,
+								sales_invoice: frm.doc.sales_invoice,
+								purchase_order: frm.doc.purchase_order,
+								transporter: frm.doc.transporter,
+								type: `${frm.doc.type ? frm.doc.type : "OTH"}`
 							});
 							row.id = vehicle.id
 							calculate_totals(frm);
@@ -257,7 +396,7 @@ frappe.ui.form.on('Shipping Management Tool', {
 			// Refresh the form to display the new rows
 
 		});
-		
+
 	},
 });
 
@@ -265,43 +404,89 @@ function calculate_totals(frm) {
 	//calculate the total qty from scale child table
 	let total_qty = 0;
 	for (let row of frm.doc.scale_child) {
-		total_qty += row.qty;
+		total_qty += row.target_weight;
 	}
-	frm.doc.assigned_qty = total_qty;
-	frm.doc.__unsaved = true;
-	frm.refresh();
+
+	frm.doc.current_qty = total_qty;
+	frm.refresh_field('current_qty');
+	frm.doc.variance_qty = frm.doc.current_qty - frm.doc.query_qty;
+	frm.refresh_field('variance_qty');
 }
 
 
-function refresh_scale_item(frm){
+function refresh_scale_item(frm,exp) {
 	//get all scale item related to this ship_plan
+	if(!frm.doc.ship_plan && !frm.doc.sales_invoice && !frm.doc.sales_order){
+		frappe.msgprint("请选择【物流计划】,或者【销售费用清单】，或者【销售订单】");
+		return;
+	}
 	frappe.call({
 		method: "shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.get_scale_childs", // Replace with your app and module names
 		args: {
-			"ship_plan": frm.doc.ship_plan // Pass the ship_plan from the current form
+			"ship_plan": frm.doc.ship_plan, // Pass the ship_plan from the current form
+			"type": frm.doc.type,
+			"transporter": frm.doc.transporter,
+			"sales_order": frm.doc.sales_order,
+			"sales_invoice": frm.doc.sales_invoice,
+			"export":exp
 		},
 		callback: function (r) {
 			if (r.message) {
-				// You now have the scale item data returned from the server
-				let scale_item_data = r.message;
-				//clear all scale_child table
-				frm.clear_table('scale_child');
-				//add scale item to the child table
-				for (let row of scale_item_data) {
-					frm.add_child('scale_child', {
-						scale_item: row.name,
-						qty: row.target_weight,
-						vehicle: row.vehicle,
-						from_addr: row.from_addr,
-						to_addr: row.to_addr,
-						driver: row.driver,
-						status: row.status,
-						id: row.id
-					});
+				if (r.message.includes('http')) {
+					window.location.href = r.message;
 				}
-				frm.refresh_field('scale_child');
-				calculate_totals(frm);
+				else  {
+					// You now have the scale item data returned from the server
+					let scale_item_data = r.message;
+					let total_qty = 0;
+					//clear all scale_child table
+					frm.clear_table('scale_child');
+					//add scale item to the child table
+					for (let row of scale_item_data) {
+						frm.add_child('scale_child', {
+							scale_item: row.name,
+							target_weight: row.target_weight,
+							vehicle: row.vehicle,
+							from_addr: row.from_addr,
+							to_addr: row.to_addr,
+							driver: row.driver,
+							status: row.status,
+							id: row.id,
+							cell_number: row.cell_number,
+							type: row.type,
+							sales_order: row.sales_order,
+							sales_invoice: row.sales_invoice,
+							purchase_order: row.purchase_order,
+							transporter: row.transporter,
+							pot: row.pot,
+							bill_type: row.bill_type
+						});
+						total_qty += row.target_weight
+					}
+					//wait until all grid row is added and DOM is rendered
+					frm.refresh_field('scale_child');
+					//update total qty of the scale child, and set tht value to query_qty field
+					frm.doc.query_qty = total_qty;
+					frm.doc.current_qty = total_qty;
+					frm.refresh_field('query_qty');
+					frm.refresh_field('current_qty');
+					frm.doc.variance_qty = frm.doc.current_qty - frm.doc.query_qty;
+					frm.refresh_field('variance_qty');
+				}
 			}
+			//check if r.message contains http
+			
+		}
+	});
+}
+
+function updateVehicleFieldReadonlyStatus(frm) {
+	
+	frm.fields_dict['scale_child'].grid.grid_rows.forEach((grid_row) => { // Replace 'child_table_fieldname' with the fieldname of your child table
+		if (grid_row.doc.vehicle) { // If vehicle has a value, make it read-only
+			grid_row.toggle_editable('vehicle', false); // Make vehicle field read-only
+		} else {
+			grid_row.toggle_editable('vehicle', true); // Make vehicle field editable
 		}
 	});
 }
