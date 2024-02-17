@@ -4,6 +4,7 @@
 
 frappe.ui.form.on("Scale Child", {
 	form_render: function (frm, cdt, cdn) {
+
 		$('.grid-delete-row').remove();
 		var row = locals[cdt][cdn];
 
@@ -99,6 +100,30 @@ frappe.ui.form.on('Shipping Management Tool', {
 	onload: function (frm) {
 		// Hide the save button
 		frm.disable_save();
+		frm.set_query("transporter", function () {
+			return {
+				filters: {
+					"is_transporter": 1
+				}
+			};
+		}
+		);
+		frm.set_query("sales_order", function () {
+			return {
+				filters: {
+					'status':['not in',["Closed","Completed"]]
+				}
+			};
+		}
+		);
+		frm.set_query("sales_invoice", function () {
+			return {
+				filters: [
+					['Sales Invoice Item', 'sales_order', '=', frm.doc.sales_order]
+				]
+			};
+		}
+		);
 	},
 	export_xlsx: function (frm) {
 		if (!frm.doc.ship_plan) {
@@ -141,25 +166,24 @@ frappe.ui.form.on('Shipping Management Tool', {
 
 	refresh: function (frm) {
 
-		frm.fields_dict['scale_child'].grid.wrapper.on('grid-row-updated grid-row-added grid-row-removed', function () {
-			updateVehicleFieldReadonlyStatus(frm);
-		});
-		//filter transporter list using supplier's is_transporter field
-		frm.set_query("transporter", function () {
-			return {
+		frm.fields_dict['scale_child'].grid.get_field('transporter').get_query = function(doc, cdt, cdn) {
+            // Here, you return an object with the filters you want to apply.
+            return {
 				filters: {
 					"is_transporter": 1
 				}
 			};
-		});
-		//filter sales invoice using sales order
-		frm.set_query("sales_invoice", function () {
-			return {
-				filters: {
-					"sales_order": frm.doc.sales_order
-				}
+        };
+
+		frm.fields_dict['scale_child'].grid.get_field('sales_invoice').get_query = function(doc, cdt, cdn) {
+			let row = locals[cdt][cdn];
+            // Here, you return an object with the filters you want to apply.
+            return {
+				filters: [
+					['Sales Invoice Item', 'sales_order', '=', row.sales_order]
+				]
 			};
-		});
+        };
 		//filter ship_plan using transporter field
 		//frm.set_query("ship_plan", function () {
 		//	return {

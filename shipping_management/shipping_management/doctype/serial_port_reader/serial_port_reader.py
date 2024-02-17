@@ -131,7 +131,7 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 def send_scale_sms(scale_item):
 		scale_item_doc = frappe.get_doc("Scale Item", scale_item)
 		company = scale_item_doc.company
-		driver_phone_number = frappe.get_value("Driver", scale_item_doc.driver, "cell_number")
+		driver_phone_number = scale_item_doc.cell_number
 		plant = scale_item_doc.pot.split(' - ')[0]
 		if scale_item_doc.type == 'IN':
 			type = '卸'
@@ -142,5 +142,5 @@ def send_scale_sms(scale_item):
 			driver_phone_number_list = json.dumps([driver_phone_number])
 			variable_list = json.dumps([plant,type])
 			#send sms to driver
-			#create_sms_log(company, "scale_notification", driver_phone_number_list, variable_list)
+			create_sms_log(company, "scale_notification", driver_phone_number_list, variable_list)
 			return {"status": "success"}

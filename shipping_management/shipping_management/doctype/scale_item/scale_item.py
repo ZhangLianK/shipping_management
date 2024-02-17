@@ -38,7 +38,7 @@ class ScaleItem(Document):
 			print('send sms')
 
 	def send_notification_sms(self):
-		driver_phone_number = frappe.get_value("Driver", self.driver, "cell_number")
+		driver_phone_number = self.cell_number
 		if driver_phone_number:
 			if not self.verification_code:
 				#generate verification code with number of 6 digits
@@ -348,7 +348,7 @@ class ScaleItem(Document):
 		#first get driver phone number
 		if self.driver:
 			driver_doc = frappe.get_doc("Driver", self.driver)
-			if driver_doc.cell_number and driver_doc.recv_sms:
+			if self.cell_number and driver_doc.recv_sms:
 				self.send_notification_sms()
 		
 		if self.purchase_order and self.target_weight:
