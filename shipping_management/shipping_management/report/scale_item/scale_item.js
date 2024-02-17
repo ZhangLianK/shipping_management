@@ -4,6 +4,7 @@
 let now = new Date();
 now.setDate(now.getDate()-1);
 yesterday_dt = frappe.datetime.get_datetime_as_string(now);
+$('.container').css("max-width","100%")
 
 frappe.query_reports["Scale Item"] = {
 	"filters": [
