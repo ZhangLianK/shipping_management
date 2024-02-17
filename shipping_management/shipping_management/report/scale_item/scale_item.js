@@ -1,6 +1,9 @@
 // Copyright (c) 2023, Alvin and contributors
 // For license information, please see license.txt
 /* eslint-disable */
+let now = new Date();
+now.setDate(now.getDate()-1);
+yesterday_dt = frappe.datetime.get_datetime_as_string(now);
 
 frappe.query_reports["Scale Item"] = {
 	"filters": [
@@ -10,7 +13,9 @@ frappe.query_reports["Scale Item"] = {
 			"label": "\u516c\u53f8",
 			"mandatory": 1,
 			"options": "Company",
-			"wildcard_filter": 0
+			"wildcard_filter": 0,
+			"default": frappe.defaults.get_user_default("company")
+
 		},
 		{
 			"fieldname": "transporter",
@@ -21,12 +26,19 @@ frappe.query_reports["Scale Item"] = {
 			"wildcard_filter": 0
 		},
 		{
-			"fieldname": "date",
+			"fieldname": "date_from",
 			"fieldtype": "Date",
-			"label": "\u8ba1\u5212\u65e5\u671f",
+			"label": "\u8ba1\u5212\u65e5\u671f\u5f00\u59cb",
 			"mandatory": 0,
 			"wildcard_filter": 0
-		},
+		   },
+		   {
+			"fieldname": "date_to",
+			"fieldtype": "Date",
+			"label": "\u8ba1\u5212\u65e5\u671f\u7ed3\u675f",
+			"mandatory": 0,
+			"wildcard_filter": 0
+		   },
 		{
 			"fieldname": "vehicle",
 			"fieldtype": "Link",
@@ -73,6 +85,38 @@ frappe.query_reports["Scale Item"] = {
 			"mandatory": 0,
 			"options": "Ship Plan",
 			"wildcard_filter": 0
-		}
+		},
+		{
+			"fieldname": "stock_dt_from",
+			"fieldtype": "Datetime",
+			"label": "\u5165\u51fa\u5e93\u65f6\u95f4\u5f00\u59cb",
+			"mandatory": 0,
+			"wildcard_filter": 0,
+			"default": yesterday_dt
+		   },
+		   {
+			"fieldname": "stock_dt_to",
+			"fieldtype": "Datetime",
+			"label": "\u5165\u51fa\u5e93\u65f6\u95f4\u7ed3\u675f",
+			"mandatory": 0,
+			"wildcard_filter": 0,
+			"default": frappe.datetime.now_datetime()
+		   },
+  			{
+  			 "fieldname": "pot",
+  			 "fieldtype": "Link",
+  			 "label": "\u7f50\uff08\u5e93\u4f4d\uff09",
+  			 "mandatory": 0,
+  			 "options": "Warehouse",
+  			 "wildcard_filter": 0
+  			},
+			  {
+			   "fieldname": "type",
+			   "fieldtype": "Link",
+			   "label": "\u7c7b\u578b",
+			   "mandatory": 0,
+			   "options": "Ship Type",
+			   "wildcard_filter": 0
+			  }
 	]
 };

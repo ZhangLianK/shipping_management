@@ -27,6 +27,12 @@
    "width": 0
   },
   {
+   "fieldname": "stock_dt",
+   "fieldtype": "Datetime",
+   "label": "\u5165\u51fa\u5e93\u65f6\u95f4",
+   "width": 0
+  },
+  {
    "fieldname": "vehicle",
    "fieldtype": "Data",
    "label": "\u8f66\u53f7",
@@ -158,9 +164,16 @@
    "wildcard_filter": 0
   },
   {
-   "fieldname": "date",
+   "fieldname": "date_from",
    "fieldtype": "Date",
-   "label": "\u8ba1\u5212\u65e5\u671f",
+   "label": "\u8ba1\u5212\u65e5\u671f\u5f00\u59cb",
+   "mandatory": 0,
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "date_to",
+   "fieldtype": "Date",
+   "label": "\u8ba1\u5212\u65e5\u671f\u7ed3\u675f",
    "mandatory": 0,
    "wildcard_filter": 0
   },
@@ -211,11 +224,41 @@
    "mandatory": 0,
    "options": "Ship Plan",
    "wildcard_filter": 0
+  },
+  {
+   "fieldname": "stock_dt_from",
+   "fieldtype": "Datetime",
+   "label": "\u5165\u51fa\u5e93\u65f6\u95f4\u5f00\u59cb",
+   "mandatory": 0,
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "stock_dt_to",
+   "fieldtype": "Datetime",
+   "label": "\u5165\u51fa\u5e93\u65f6\u95f4\u7ed3\u675f",
+   "mandatory": 0,
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "pot",
+   "fieldtype": "Link",
+   "label": "\u7f50\uff08\u5e93\u4f4d\uff09",
+   "mandatory": 0,
+   "options": "Warehouse",
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "label": "\u7c7b\u578b",
+   "mandatory": 0,
+   "options": "Ship Type",
+   "wildcard_filter": 0
   }
  ],
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2023-12-05 21:10:42.080985",
+ "modified": "2024-02-18 00:05:48.328412",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

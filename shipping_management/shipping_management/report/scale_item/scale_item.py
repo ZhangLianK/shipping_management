@@ -21,8 +21,11 @@ def get_conditions(filters):
     if filters.get("vehicle"):
         conditions = conditions + f" and sci.vehicle = '{filters.vehicle}'"
 
-    if filters.get("date"):
-        conditions = conditions + f" and sci.date = '{filters.date}'"
+    if filters.get("date_from"):
+        conditions = conditions + f" and sci.date >= '{filters.date_from}'"
+    
+    if filters.get("date_to"):
+        conditions = conditions + f" and sci.date <= '{filters.date_to}'" 
 
     if filters.get("status"):
         conditions = conditions + f" and sci.status = '{filters.status}'"
@@ -38,6 +41,18 @@ def get_conditions(filters):
     
     if filters.get("ship_plan"):
         conditions = conditions + f" and sci.ship_plan = '{filters.ship_plan}'"
+        
+    if filters.get("stock_dt_from"):
+        conditions = conditions + f" and sci.stock_dt >= '{filters.stock_dt_from}'"
+    
+    if filters.get("stock_dt_to"):
+        conditions = conditions + f" and sci.stock_dt <= '{filters.stock_dt_to}'"
+    
+    if filters.get("pot"):
+        conditions = conditions + f" and sci.pot = '{filters.pot}'"
+    
+    if filters.get("type"):
+        conditions = conditions + f" and sci.type = '{filters.type}'"
 
     return conditions
 
@@ -69,7 +84,8 @@ def get_data(conditions, filters):
             sci.sales_order,
             sci.sales_invoice,
             sci.delivery_note,
-            sci.ship_plan
+            sci.ship_plan,
+            sci.stock_dt
 
         from `tabScale Item`  sci
         left outer join `tabDriver` d
@@ -112,6 +128,12 @@ def get_columns():
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "\u65e5\u671f",
+   "width": 0
+  },
+  {
+   "fieldname": "stock_dt",
+   "fieldtype": "Datetime",
+   "label": "\u5165\u51fa\u5e93\u65f6\u95f4",
    "width": 0
   },
   {
