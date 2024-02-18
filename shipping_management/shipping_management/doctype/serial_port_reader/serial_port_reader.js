@@ -76,6 +76,13 @@ frappe.ui.form.on('Serial Port Reader', {
                     $(row.wrapper).find('.grid-row-check').prop('checked', false); // Uncheck the checkbox in the UI
                 }
             });
+
+            frm.fields_dict.new_list.grid.grid_rows.forEach(function(row) {
+                if (row.doc.name !== clickedRowName) {
+                    row.doc.__checked = false; // Uncheck the row programmatically
+                    $(row.wrapper).find('.grid-row-check').prop('checked', false); // Uncheck the checkbox in the UI
+                }
+            });
         
             // Refresh the grid to reflect the changes in UI
             frm.fields_dict.in_process.grid.refresh();
@@ -93,6 +100,13 @@ frappe.ui.form.on('Serial Port Reader', {
         
             // Iterate over all rows to uncheck others
             frm.fields_dict.new_list.grid.grid_rows.forEach(function(row) {
+                if (row.doc.name !== clickedRowName) {
+                    row.doc.__checked = false; // Uncheck the row programmatically
+                    $(row.wrapper).find('.grid-row-check').prop('checked', false); // Uncheck the checkbox in the UI
+                }
+            });
+
+            frm.fields_dict.in_process.grid.grid_rows.forEach(function(row) {
                 if (row.doc.name !== clickedRowName) {
                     row.doc.__checked = false; // Uncheck the row programmatically
                     $(row.wrapper).find('.grid-row-check').prop('checked', false); // Uncheck the checkbox in the UI

@@ -370,6 +370,28 @@ class ScaleItem(Document):
 			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan,ignore_permissions=True)
 			ship_plan.assigned_qty = ship_plan.assigned_qty + self.target_weight
 			ship_plan.save(ignore_permissions=True)
+
+		if self.vehicle:
+			#check if the vehicle is exist in the vehicle master
+			if not frappe.db.exists("Vehicle", self.vehicle):
+			#try:
+			#	vehicle_doc = frappe.get_doc("Vehicle", self.vehicle,ignore_permissions=True)
+			#except:
+				#create new vehicle
+				vehicle_doc = frappe.new_doc("Vehicle")
+				vehicle_doc.license_plate = self.vehicle
+				vehicle_doc.make = "未知"
+				vehicle_doc.model = "未知"
+				vehicle_doc.last_odometer = 0
+				vehicle_doc.uom = "Litre"
+				vehicle_doc.fuel_type = "Diesel"
+				vehicle_doc.company = None
+				vehicle_doc.insert(
+					ignore_permissions=True, # ignore write permissions during insert
+					ignore_links=True, # ignore Link validation in the document
+					ignore_if_duplicate=True, # dont insert if DuplicateEntryError is thrown
+					ignore_mandatory=True) # insert even if mandatory fields are not set
+				vehicle_doc.db_set('company', None)
 	
 	def on_cancel(self):
 		#get all users that have role of "Scale Manager"
@@ -715,7 +737,7 @@ def start_end_shipping(action, scale_item, mileage,image_base64, verification_co
 		""" if scale_item_doc.verification_code != verification_code:
 			frappe.throw("验证码不正确")
 			return """
-      
+	  
 		if action == 'start':
 			
 			#except this scale item, check if there is any other scale item that not ended. please using field to_dt to check

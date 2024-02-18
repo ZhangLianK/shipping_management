@@ -102,7 +102,7 @@ def save_doc(doc_data):
             else:
                 scale_item = frappe.new_doc('Scale Item')
                 scale_item.company = doc.company
-                scale_item.transporter = doc.transporter
+                scale_item.transporter = scale_child.transporter
                 scale_item.driver = scale_child.driver
                 scale_item.vehicle = scale_child.vehicle
                 
@@ -112,8 +112,9 @@ def save_doc(doc_data):
                 scale_item.sales_order = scale_child.sales_order
                 scale_item.sales_invoice = scale_child.sales_invoice
                 scale_item.type = scale_child.type
-                scale_item.from_addr = doc.from_addr
-                scale_item.to_addr = doc.to_addr
+                scale_item.from_addr = scale_child.from_addr
+                scale_item.to_addr = scale_child.to_addr
+                scale_item.pot = scale_item.pot
                 if doc.date:
                     scale_item.date = doc.date
                 else:

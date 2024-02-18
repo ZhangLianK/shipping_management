@@ -176,6 +176,7 @@
   },
   {
    "columns": 1,
+   "fetch_if_empty": 1,
    "fieldname": "target_weight",
    "fieldtype": "Float",
    "in_list_view": 1,
@@ -185,7 +186,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-02-15 19:57:04.238048",
+ "modified": "2024-02-18 16:02:21.722946",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Child",
