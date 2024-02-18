@@ -53,6 +53,9 @@ def get_conditions(filters):
     
     if filters.get("type"):
         conditions = conditions + f" and sci.type = '{filters.type}'"
+    
+    if filters.get("market_segment"):
+        conditions = conditions + f" and sci.market_segment = '{filters.market_segment}'"
 
     return conditions
 
