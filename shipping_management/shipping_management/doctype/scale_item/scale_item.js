@@ -407,10 +407,9 @@ frappe.ui.form.on('Scale Item', {
             body {
                 margin-top: 1rem;
                 width: 210mm;
-                height: 70mm;
-                padding-top: 5%;
-                padding-left: 10%;
-                padding-right: 10%;
+                height: 90mm;
+                padding-right: 3%;
+                padding-left: 3%;
             }
             table {
                 width: 100%;
@@ -460,9 +459,8 @@ frappe.ui.form.on('Scale Item', {
                 }
                 body {
                     margin-top: 1rem;
-                    padding-top: 5%;
-                    padding-left: 10%;
-                    padding-right: 10%;
+                    padding-left: 3%;
+                    padding-right: 3%;
                     page-break-inside: avoid;
                 }
                 nav {
@@ -527,7 +525,7 @@ frappe.ui.form.on('Scale Item', {
     </div>
     <table>
       <tr>
-        <th>车号</th>
+        <td>车号</td>
         <td>${doc.vehicle}</td>
         <th>毛重</th>
         <td>${doc.gross_weight}</td>
