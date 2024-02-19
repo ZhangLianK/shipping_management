@@ -1322,9 +1322,8 @@ function print_lb(frm){
                 margin-top: 1rem;
                 width: 210mm;
                 height: 70mm;
-                padding-top: 5%;
-                padding-left: 10%;
-                padding-right: 10%;
+                padding-left: 3%;
+                padding-right: 3%;
             }
             table {
                 width: 100%;
@@ -1374,9 +1373,8 @@ function print_lb(frm){
                 }
                 body {
                     margin-top: 1rem;
-                    padding-top: 5%;
-                    padding-left: 10%;
-                    padding-right: 10%;
+                    padding-left: 3%;
+                    padding-right: 3%;
                     page-break-inside: avoid;
                 }
                 nav {
@@ -1436,7 +1434,7 @@ function print_lb(frm){
         </div>
         <div class = "shd">
             <p class = "shd_txt">单号: ${doc.scale_item}</p>
-            <p class="shd_txt">【${doc.ship_type === 'IN' ? '入' : doc.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot}</p>
+            <p class="shd_txt">【${doc.ship_type === 'IN' ? '入' : doc.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot.split(' - ')[1]}</p>
         </div>
     </div>
     <table>
@@ -1448,14 +1446,14 @@ function print_lb(frm){
       </tr>
       <tr>
         <th>货名</th>
-        <td>${doc.item_code}</td>
+        <td></td>
               <th>毛重时间</th>
         <td>${doc.gross_dt}</td>
 
       </tr>
       <tr>
         <th>发货单位</th>
-        <td>${doc.ship_type === 'IN' ? doc.from : ''}</td>
+        <td></td>
 
         <th>皮重</th>
         <td>${doc.blank_weight}</td>
