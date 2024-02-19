@@ -1317,7 +1317,7 @@ function print_lb(frm){
         <title>称重计量单</title>
         <style>
             body {
-                margin-top: 1rem;
+                margin-top: 0.5rem;
                 width: 210mm;
                 height: 70mm;
                 padding-left: 3%;
@@ -1329,6 +1329,8 @@ function print_lb(frm){
             table, th, td {
                 border: 0.1rem solid black;
                 border-collapse: collapse;
+                padding-top: 1%;
+                padding-bottom: 1%;
             }
             th {
                 width: 20%;
@@ -1370,7 +1372,7 @@ function print_lb(frm){
                     size: 210mm 70mm;
                 }
                 body {
-                    margin-top: 1rem;
+                    margin-top: 0.5rem;
                     padding-left: 3%;
                     padding-right: 3%;
                     page-break-inside: avoid;
@@ -1384,6 +1386,8 @@ function print_lb(frm){
                 table, th, td {
                     border: 0.1rem solid black;
                     border-collapse: collapse;
+                    padding-top: 1%;
+                    padding-bottom: 1%;
                 }
                 th {
                     width: 20%;
