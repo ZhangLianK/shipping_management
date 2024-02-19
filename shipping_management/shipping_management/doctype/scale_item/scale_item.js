@@ -235,9 +235,8 @@ frappe.ui.form.on('Scale Item', {
                 margin-top: 1rem;
                 width: 210mm;
                 height: 70mm;
-                padding-top: 5%;
-                padding-left: 10%;
-                padding-right: 10%;
+                padding-left: 3%;
+                padding-right: 3%;
             }
             table {
                 width: 100%;
@@ -287,9 +286,8 @@ frappe.ui.form.on('Scale Item', {
                 }
                 body {
                     margin-top: 1rem;
-                    padding-top: 5%;
-                    padding-left: 10%;
-                    padding-right: 10%;
+                    padding-left: 3%;
+                    padding-right: 3%;
                     page-break-inside: avoid;
                 }
                 nav {

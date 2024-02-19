@@ -1149,9 +1149,8 @@ function print_lb(frm){
                 margin-top: 1rem;
                 width: 210mm;
                 height: 70mm;
-                padding-top: 5%;
-                padding-left: 10%;
-                padding-right: 10%;
+                padding-left: 3%;
+                padding-right: 3%;
             }
             table {
                 width: 100%;
@@ -1201,9 +1200,8 @@ function print_lb(frm){
                 }
                 body {
                     margin-top: 1rem;
-                    padding-top: 5%;
-                    padding-left: 10%;
-                    padding-right: 10%;
+                    padding-left: 3%;
+                    padding-right: 3%;
                     page-break-inside: avoid;
                 }
                 nav {
