@@ -56,6 +56,20 @@ def get_conditions(filters):
     
     if filters.get("market_segment"):
         conditions = conditions + f" and sci.market_segment = '{filters.market_segment}'"
+        
+    #check user permissions set for this user againest parent warehouse and get all child warehouses
+    parent_warehouses = frappe.get_all("User Permission", filters={"user": frappe.session.user, "allow": "Warehouse"}, pluck="for_value")
+    warehouses=[]
+    if parent_warehouses:
+        for parent_warehouse in parent_warehouses:
+            warehouses_doc = frappe.get_doc("Warehouse", parent_warehouse)
+            warehouses += frappe.get_all("Warehouse", filters={"lft": (">", warehouses_doc.lft), "rgt": ("<", warehouses_doc.rgt)}, pluck="name")
+            if warehouses:
+                if len(warehouses) > 1:
+                    warehouses = tuple(warehouses)
+                    conditions = conditions + f" and sci.pot in {warehouses}"
+                else:
+                    conditions = conditions + f" and sci.pot = '{warehouses[0]}'"
 
     return conditions
 
