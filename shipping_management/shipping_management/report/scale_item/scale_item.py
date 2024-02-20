@@ -96,6 +96,10 @@ def get_data(conditions, filters):
             sci.load_net_weight,
             sci.offload_net_weight,
             sci.offload_net_weight - sci.load_net_weight as net_variance,
+            sci.load_gross_weight,
+            sci.offload_gross_weight,
+            sci.load_blank_weight,
+            sci.offload_blank_weight,
             sci.purchase_order,
             sci.purchase_receipt,
             sci.sales_order,
@@ -217,6 +221,30 @@ def get_columns():
    "fieldname": "net_variance",
    "fieldtype": "Float",
    "label": "\u51c0\u91cd\u76c8\u4e8f",
+   "width": 0
+  },
+    {
+   "fieldname": "load_gross_weight",
+   "fieldtype": "Float",
+   "label": "\u88c5\u8f66\u6bdb\u91cd",
+   "width": 0
+  },
+  {
+   "fieldname": "load_blank_weight",
+   "fieldtype": "Float",
+   "label": "\u88c5\u8f66\u76ae\u91cd",
+   "width": 0
+  },
+  {
+   "fieldname": "offload_gross_weight",
+   "fieldtype": "Float",
+   "label": "\u5378\u8f66\u6bdb\u91cd",
+   "width": 0
+  },
+  {
+   "fieldname": "offload_blank_weight",
+   "fieldtype": "Float",
+   "label": "\u5378\u8f66\u76ae\u91cd",
    "width": 0
   },
   {

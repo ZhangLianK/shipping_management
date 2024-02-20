@@ -99,6 +99,30 @@
    "width": 0
   },
   {
+   "fieldname": "load_gross_weight",
+   "fieldtype": "Float",
+   "label": "\u88c5\u8f66\u6bdb\u91cd",
+   "width": 0
+  },
+  {
+   "fieldname": "load_blank_weight",
+   "fieldtype": "Float",
+   "label": "\u88c5\u8f66\u76ae\u91cd",
+   "width": 0
+  },
+  {
+   "fieldname": "offload_gross_weight",
+   "fieldtype": "Float",
+   "label": "\u5378\u8f66\u6bdb\u91cd",
+   "width": 0
+  },
+  {
+   "fieldname": "offload_blank_weight",
+   "fieldtype": "Float",
+   "label": "\u5378\u8f66\u76ae\u91cd",
+   "width": 0
+  },
+  {
    "fieldname": "purchase_order",
    "fieldtype": "Link",
    "label": "\u91c7\u8d2d\u8ba2\u5355",
@@ -266,7 +290,7 @@
  ],
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2024-02-18 09:46:38.300646",
+ "modified": "2024-02-20 16:45:39.893490",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
