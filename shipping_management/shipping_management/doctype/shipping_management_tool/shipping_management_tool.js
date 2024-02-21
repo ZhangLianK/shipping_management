@@ -66,9 +66,10 @@ frappe.ui.form.on("Scale Child", {
 		row.transporter = frm.doc.transporter
 		row.type = frm.doc.type
 		row.market_segment = frm.doc.market_segment
+		row.from_addr = frm.doc.from_addr
 		row.scale_item = 'N'
 		frm.refresh_field('scale_child');
-		updateVehicleFieldReadonlyStatus(frm)
+		//updateVehicleFieldReadonlyStatus(frm)
 	},
 	before_scale_child_remove: function (frm, cdt, cdn) {
 		let row = locals[cdt][cdn];
@@ -89,7 +90,7 @@ frappe.ui.form.on("Scale Child", {
 		}
 	},
 	scale_child_remove: function (frm, cdt, cdn) {
-		updateVehicleFieldReadonlyStatus(frm)
+		//updateVehicleFieldReadonlyStatus(frm)
 	},
 	target_weight: function (frm, cdt, cdn) {
 		calculate_totals(frm);
