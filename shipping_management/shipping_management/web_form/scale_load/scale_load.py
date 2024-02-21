@@ -101,11 +101,11 @@ def ocr_image(load_image_upload_value,scale_item):
 	for ent in main_obj_list:
 		pattern = r"\d+\.\d+|\d+"
 		match str(ent['Name']):
-			case "皮重" | "空重":
+			case "皮重" | "空重" | "一次重量":
 				info.Tare = eval(re.search(pattern, str(ent["Value"])).group())
-			case "毛重":
+			case "毛重" | "二次重量":
 				info.ToughWeight = eval(re.search(pattern, str(ent["Value"])).group())
-			case "净重":
+			case "净重" | "净重重量":
 				info.NetWeight = eval(re.search(pattern, str(ent["Value"])).group())
 			case "车号":
 				info.VehicleNo = str(ent["Value"])

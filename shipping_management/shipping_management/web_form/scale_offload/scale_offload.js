@@ -135,6 +135,11 @@ frappe.ready(function () {
 								frappe.web_form.set_value("offload_gross_weight", r.message._ToughWeight/1000);
 								frappe.web_form.set_value("offload_net_weight", r.message._NetWeight/1000);
 							}
+							else {
+								frappe.web_form.set_value("offload_blank_weight", r.message._Tare);
+								frappe.web_form.set_value("offload_gross_weight", r.message._ToughWeight);
+								frappe.web_form.set_value("offload_net_weight", r.message._NetWeight);
+							}
 						}
 						else {
 							console.log("r.message is null");
