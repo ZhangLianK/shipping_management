@@ -54,7 +54,6 @@
    "fetch_if_empty": 1,
    "fieldname": "status",
    "fieldtype": "Data",
-   "in_list_view": 1,
    "label": "\u72b6\u6001",
    "read_only": 1
   },
@@ -119,14 +118,17 @@
    "options": "Purchase Order"
   },
   {
+   "columns": 1,
    "fieldname": "sales_order",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "\u9500\u552e\u8ba2\u5355",
    "options": "Sales Order"
   },
   {
    "fieldname": "sales_invoice",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "\u9500\u552e\u8d39\u7528\u6e05\u5355",
    "options": "Sales Invoice"
   },
@@ -186,7 +188,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-02-21 10:38:40.845932",
+ "modified": "2024-02-22 11:53:00.535462",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Child",

@@ -401,72 +401,17 @@ frappe.ui.form.on('Scale Item', {
         }
             else {
                 var html_content = `
-            <!DOCTYPE html>
-    <html xmlns="http://www.w3.org/1999/html" lang="zh" >
-    <head>
-        <title>称重计量单</title>
-        <style>
-            body {
-                margin-top: 1rem;
-                width: 210mm;
-                height: 90mm;
-                padding-right: 3%;
-                padding-left: 3%;
-            }
-            table {
-                width: 100%;
-            }
-            table, th, td {
-                border: 0.1rem solid black;
-                border-collapse: collapse;
-            }
-            th {
-                width: 20%;
-                padding-left: 1%;
-                text-align: left;
-            }
-            td {
-                width: 30%;
-                padding-left: 1%;
-                text-align: left;
-            }
-            .header {
-                display: flex;
-                justify-content: space-between;
-            }
-            .title {
-                text-align: center;
-            }
-            .signature {
-                display: flex;
-                justify-content: space-between;
-                margin-top: 0.5rem;
-            }
-            .hd_txt {
-                text-align: left;
-            }
-            .shd_txt {
-                text-align: right;
-            }
-            .hd {
-                float: left;
-            }
-            .shd {
-                float: right;
-            }
-
-            @media print {
-                @page {
-                    size: 210mm 70mm;
-                }
+                <!DOCTYPE html>
+        <html xmlns="http://www.w3.org/1999/html" lang="zh" >
+        <head>
+            <title>称重计量单</title>
+            <style>
                 body {
-                    margin-top: 1rem;
+                    margin-top: 0.5rem;
+                    width: 210mm;
+                    height: 70mm;
                     padding-left: 3%;
                     padding-right: 3%;
-                    page-break-inside: avoid;
-                }
-                nav {
-                    display: none;
                 }
                 table {
                     width: 100%;
@@ -474,6 +419,8 @@ frappe.ui.form.on('Scale Item', {
                 table, th, td {
                     border: 0.1rem solid black;
                     border-collapse: collapse;
+                    padding-top:1%;
+                    padding-bottom:1%;
                 }
                 th {
                     width: 20%;
@@ -509,64 +456,122 @@ frappe.ui.form.on('Scale Item', {
                 .shd {
                     float: right;
                 }
-            }
-        </style>
-    </head>
-    <body>
-    <div id = "printableArea">
-    <div class="header">
-        <div class = "hd">
-            <h3 class="hd_txt">称重计量单</h3>
-            <p class="hd_txt"></p>
-
+    
+                @media print {
+                    @page {
+                        size: 210mm 70mm;
+                    }
+                    body {
+                        margin-top: 0.5rem;
+                        padding-left: 3%;
+                        padding-right: 3%;
+                        page-break-inside: avoid;
+                    }
+                    nav {
+                        display: none;
+                    }
+                    table {
+                        width: 100%;
+                    }
+                    table, th, td {
+                        border: 0.1rem solid black;
+                        border-collapse: collapse;
+                        padding-top:1%;
+                        padding-bottom:1%;
+                    }
+                    th {
+                        width: 20%;
+                        padding-left: 1%;
+                        text-align: left;
+                    }
+                    td {
+                        width: 30%;
+                        padding-left: 1%;
+                        text-align: left;
+                    }
+                    .header {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                    .title {
+                        text-align: center;
+                    }
+                    .signature {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-top: 0.5rem;
+                    }
+                    .hd_txt {
+                        text-align: left;
+                    }
+                    .shd_txt {
+                        text-align: right;
+                    }
+                    .hd {
+                        float: left;
+                    }
+                    .shd {
+                        float: right;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+        <div id = "printableArea">
+        <div class="header">
+            <div class = "hd">
+                <h3 class="hd_txt">称重计量单</h3>
+                <p class="hd_txt"></p>
+    
+            </div>
+            <div class = "shd">
+                <p class = "shd_txt">单号: ${doc.name}</p>
+                <p class="shd_txt">【${doc.type === 'IN' ? '入' : doc.type === 'OUT' ? '出' : ''}】 ${doc.pot.split(' - ')[1]}</p>
+            </div>
         </div>
-        <div class = "shd">
-            <p class = "shd_txt">单号: ${doc.scale_item}</p>
-            <p class="shd_txt">【${doc.ship_type === 'IN' ? '入' : doc.ship_type === 'OUT' ? '出' : ''}】 ${doc.pot}</p>
+        <table>
+          <tr>
+            <th>车号</th>
+            <td>${doc.vehicle}</td>
+            <th>毛重</th>
+            <td>${doc.type === 'IN' ? doc.offload_gross_weight : doc.type === 'OUT' ? doc.load_gross_weight : ''}</td>
+          </tr>
+          <tr>
+            <th>货名</th>
+            <td></td>
+                  <th>毛重时间</th>
+            <td>${doc.type === 'IN' ? doc.offload_gross_dt : doc.type === 'OUT' ? doc.load_gross_dt : ''}</td>
+    
+          </tr>
+          <tr>
+            <th>发货单位</th>
+            <td>______</td>
+    
+            <th>皮重</th>
+            <td>${doc.type === 'IN' ? doc.offload_blank_weight : doc.type === 'OUT' ? doc.load_blank_weight : ''}</td>
+          </tr>
+          <tr>
+            <th>收货单位</th>
+            <td>______</td>
+                  <th>皮重时间</th>
+            <td>${doc.type === 'IN' ? doc.offload_blank_dt : doc.type === 'OUT' ? doc.load_blank_dt : ''}</td>
+          </tr>
+          <tr>
+            <th>打印时间</th>
+            <td>${get_date_time()}</td>
+                <th>净重</th>
+            <td>${doc.type === 'IN' ? doc.offload_net_weight : doc.type === 'OUT' ? doc.load_net_weight : ''}</td>
+          </tr>
+        </table>
+    
+        <div class="signature">
+            <p class="hd">过磅员: ${frappe.session.user_fullname}</p>
+            <p class="shd">司机: _________________</p>
         </div>
-    </div>
-    <table>
-      <tr>
-        <td>车号</td>
-        <td>${doc.vehicle}</td>
-        <th>毛重</th>
-        <td>${doc.gross_weight}</td>
-      </tr>
-      <tr>
-        <th>货名</th>
-        <td>${doc.item_code}</td>
-              <th>毛重时间</th>
-        <td>${doc.gross_dt}</td>
-
-      </tr>
-      <tr>
-        <th>发货单位</th>
-        <td>${doc.ship_type === 'IN' ? doc.from : ''}</td>
-
-        <th>皮重</th>
-        <td>${doc.blank_weight}</td>
-      </tr>
-      <tr>
-        <th>收货单位</th>
-        <td>______</td>
-              <th>皮重时间</th>
-        <td>${doc.blank_dt}</td>
-      </tr>
-      <tr>
-        <th>打印时间</th>
-        <td>${get_date_time()}</td>
-            <th>净重</th>
-        <td>${doc.net_weight}</td>
-      </tr>
-    </table>
-
-    <div class="signature">
-        <p class="hd">过磅员: ${frappe.session.user_fullname}</p>
-        <p class="shd">司机: _________________</p>
-    </div>
-    </div>
-    </body>
-    </html>`;
+        </div>
+        </body>
+        </html>
+                `;
             }
             // Replace placeholders with actual data from the form
             //html_content = html_content.replace('{}', doc.name); // repeat for other fields
@@ -577,7 +582,7 @@ frappe.ui.form.on('Scale Item', {
 
 
         //set the pot to company's default transit warehouse if the type is DIRC
-        if (frm.doc.type == 'DIRC' && frm.doc.company) {
+        if (frm.doc.type == 'DIRC' && frm.doc.company && !frm.doc.pot) {
             frappe.db.get_value('Company', frm.doc.company, 'default_in_transit_warehouse', function (r) {
                 frm.set_value('pot', r.default_transit_warehouse);
             });

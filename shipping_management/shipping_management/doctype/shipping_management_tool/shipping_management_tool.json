@@ -25,6 +25,8 @@
   "purchase_order",
   "column_break_g6dcs",
   "sales_order",
+  "column_break_lqrjg",
+  "order_note",
   "column_break_oozw7",
   "sales_invoice",
   "section_break_m1rbr",
@@ -151,6 +153,7 @@
   {
    "fieldname": "sales_invoice",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "\u9500\u552e\u8d39\u7528\u6e05\u5355",
    "options": "Sales Invoice"
   },
@@ -224,12 +227,22 @@
    "fieldtype": "Float",
    "label": "\u672c\u6b21\u589e/\u6539\u603b\u91cf",
    "read_only": 1
+  },
+  {
+   "fieldname": "column_break_lqrjg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "sales_order.order_note",
+   "fieldname": "order_note",
+   "fieldtype": "Data",
+   "label": "\u8ba2\u5355\u5907\u6ce8"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-16 22:24:50.002219",
+ "modified": "2024-02-22 13:33:49.146009",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping Management Tool",

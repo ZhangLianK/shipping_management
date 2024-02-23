@@ -11,7 +11,8 @@
   "\u9ed8\u8ba4\u8d39\u7528\u5355\u4ef7_section",
   "yayun_price",
   "fanfee_price",
-  "round_value"
+  "round_value",
+  "transporter"
  ],
  "fields": [
   {
@@ -41,12 +42,18 @@
    "fieldname": "round_value",
    "fieldtype": "Float",
    "label": "\u8fd0\u8f93\u65f6\u957f\u53d6\u6574\u6807\u51c6"
+  },
+  {
+   "fieldname": "transporter",
+   "fieldtype": "Link",
+   "label": "\u9ed8\u8ba4\u627f\u8fd0\u5546",
+   "options": "Supplier"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-11-25 18:06:07.389592",
+ "modified": "2024-02-22 13:46:48.406977",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping Management Setting",

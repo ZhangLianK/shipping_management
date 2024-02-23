@@ -67,6 +67,13 @@ frappe.ui.form.on("Scale Child", {
 		row.type = frm.doc.type
 		row.market_segment = frm.doc.market_segment
 		row.from_addr = frm.doc.from_addr
+		//if doc.order_note contains '送到' then set the bill_type to 'SD'
+		if (frm.doc.order_note && (frm.doc.order_note.includes('送到') || frm.doc.order_note.includes('送'))) {
+			row.bill_type = 'SD'
+		}
+		else {
+			row.bill_type = 'ZT'
+		}
 		row.scale_item = 'N'
 		frm.refresh_field('scale_child');
 		//updateVehicleFieldReadonlyStatus(frm)
@@ -95,6 +102,50 @@ frappe.ui.form.on("Scale Child", {
 	target_weight: function (frm, cdt, cdn) {
 		calculate_totals(frm);
 	},
+	pot: function (frm, cdt, cdn) {
+		let row = locals[cdt][cdn];
+		//get the parent warehouse of pot from the warehouse doctype 
+		if (row.type == 'IN' || row.type == 'OUT') {
+			frappe.db.get_value('Warehouse', row.pot, 'parent_warehouse').then(r => {
+				if (r) {
+					if (row.type == 'IN') {
+						row.to_addr = r.message.parent_warehouse.split('-')[0];
+					}
+					else if (row.type == 'OUT') {
+						row.from_addr = r.message.parent_warehouse.split('-')[0];
+					}
+					frm.refresh_field('scale_child');
+				}
+			});
+		}
+	},
+	type: function (frm, cdt, cdn) {
+		let row = locals[cdt][cdn];
+		if (row.type == 'IN' || row.type == 'OUT') {
+			frappe.db.get_value('Warehouse', row.pot, 'parent_warehouse').then(r => {
+				if (r) {
+					if (row.type == 'IN') {
+						row.to_addr = r.message.parent_warehouse.split('-')[0];
+					}
+					else if (row.type == 'OUT') {
+						row.from_addr = r.message.parent_warehouse.split('-')[0];
+					}
+					frm.refresh_field('scale_child');
+				}
+			});
+		}
+		//get the parent warehouse of pot from the warehouse doctype 
+		else if (row.type == 'DIRC') {
+			//get the default in-transit warehouse for the company
+			frappe.db.get_value('Company', frm.doc.company, 'default_in_transit_warehouse').then(r => {
+				if (r) {
+					//set the pot 
+					row.pot = r.message.default_in_transit_warehouse;
+					frm.refresh_field('scale_child');
+				}
+			});
+		}
+	}
 });
 
 frappe.ui.form.on('Shipping Management Tool', {
@@ -112,7 +163,7 @@ frappe.ui.form.on('Shipping Management Tool', {
 		frm.set_query("sales_order", function () {
 			return {
 				filters: {
-					'status':['not in',["Closed","Completed"]]
+					'status': ['not in', ["Closed", "Completed"]]
 				}
 			};
 		}
@@ -131,8 +182,8 @@ frappe.ui.form.on('Shipping Management Tool', {
 			frappe.throw(__('请先选择物流计划'));
 			return;
 		}
-		let exp =true;
-		refresh_scale_item(frm,exp);
+		let exp = true;
+		refresh_scale_item(frm, exp);
 	},
 	ship_plan: function (frm) {
 		if (frm.doc.ship_plan) {
@@ -167,32 +218,27 @@ frappe.ui.form.on('Shipping Management Tool', {
 
 	refresh: function (frm) {
 
-		frm.fields_dict['scale_child'].grid.get_field('transporter').get_query = function(doc, cdt, cdn) {
-            // Here, you return an object with the filters you want to apply.
-            return {
+		frm.fields_dict['scale_child'].grid.get_field('transporter').get_query = function (doc, cdt, cdn) {
+			// Here, you return an object with the filters you want to apply.
+			return {
 				filters: {
 					"is_transporter": 1
 				}
 			};
-        };
+		};
 
-		frm.fields_dict['scale_child'].grid.get_field('sales_invoice').get_query = function(doc, cdt, cdn) {
+		frm.fields_dict['scale_child'].grid.get_field('sales_invoice').get_query = function (doc, cdt, cdn) {
 			let row = locals[cdt][cdn];
-            // Here, you return an object with the filters you want to apply.
-            return {
+			// Here, you return an object with the filters you want to apply.
+			return {
 				filters: [
 					['Sales Invoice Item', 'sales_order', '=', row.sales_order]
 				]
 			};
-        };
-		//filter ship_plan using transporter field
-		//frm.set_query("ship_plan", function () {
-		//	return {
-		//		filters: {
-		//			"supplier": frm.doc.transporter
-		//		}
-		//	};
-		//});
+		};
+		//updaten field from_addr or to_addr after the pot is set
+		frm.fields_dict['scale_child'].grid.get_field('pot')
+
 
 		// Hide the save button
 		frm.disable_save();
@@ -226,7 +272,7 @@ frappe.ui.form.on('Shipping Management Tool', {
 						}
 						else {
 							// You now have the saved doc returned from the server
-							if (r.message== 'success') {
+							if (r.message == 'success') {
 								frappe.msgprint("保存成功");
 							}
 							else {
@@ -293,13 +339,12 @@ frappe.ui.form.on('Shipping Management Tool', {
 			'overflow-y': 'auto',
 			'max-height': '300px', // Set a max height with scroll
 		});
-		// default company
-		var company = frappe.defaults.get_user_default("Company");
-
+		//get  default_transporter from session default
+		let transporter = frappe.user_defaults.default_transporter;
 		frappe.db.get_list('Vehicle', {
 			fields: ['name', 'id'],
 			filters: {
-				'company': company
+				'transporter': transporter
 			},
 			order_by: 'id asc',
 			limit: 'all'
@@ -340,8 +385,7 @@ frappe.ui.form.on('Shipping Management Tool', {
 			}
 		}
 		);
-
-
+		
 		const css = `
 		.vehicle-row {
 			display: flex;
@@ -409,8 +453,15 @@ frappe.ui.form.on('Shipping Management Tool', {
 								purchase_order: frm.doc.purchase_order,
 								transporter: frm.doc.transporter,
 								type: `${frm.doc.type ? frm.doc.type : "OTH"}`
+								
 							});
 							row.id = vehicle.id
+							if (frm.doc.order_note && (frm.doc.order_note.includes('送到') || frm.doc.order_note.includes('送'))) {
+								row.bill_type = 'SD'
+							}
+							else {
+								row.bill_type = 'ZT'
+							}
 							calculate_totals(frm);
 							frm.refresh();
 						}
@@ -421,6 +472,66 @@ frappe.ui.form.on('Shipping Management Tool', {
 			// Refresh the form to display the new rows
 
 		});
+
+		frm.add_custom_button(__('批量分配销售订单'), function () {
+			//create a dialog to let user to input sales order and sales invoice
+			let d = new frappe.ui.Dialog({
+				'title': '批量分配销售订单',
+				'fields': [
+					{
+						'label': '销售订单',
+						'fieldname': 'sales_order',
+						'fieldtype': 'Link',
+						'options': 'Sales Order',
+						'reqd': 0,
+						'get_query': function () {
+							return {
+								filters: {
+									'status': ['not in', ["Closed", "Completed"]]
+								}
+							}
+						}
+					},
+					{
+						'label': '销售费用清单',
+						'fieldname': 'sales_invoice',
+						'fieldtype': 'Link',
+						'options': 'Sales Invoice',
+						'reqd': 0,
+						'get_query': function () {
+							return {
+								filters: [
+									['Sales Invoice Item', 'sales_order', '=', d.fields_dict.sales_order.get_value()]
+								]
+							}
+						}
+					}
+				],
+				primary_action: function () {
+					//get all scale child related that checked in the frm.doc.scale_child table
+					let scale_childs = frm.doc.scale_child;
+					//find all scale child that was checked by user
+					let checked_scale_childs = scale_childs.filter(function (row) {
+						return row.__checked == 1;
+					}
+					);
+					if (checked_scale_childs.length == 0) {
+						frappe.msgprint("请先选择要分配的行");
+						return;
+					}
+					// set the sales order and sales invoice to the checked scale child
+					for (let row of checked_scale_childs) {
+						row.sales_order = d.fields_dict.sales_order.get_value();
+						row.sales_invoice = d.fields_dict.sales_invoice.get_value();
+					}
+					d.hide();
+					frm.refresh_field('scale_child');
+				}
+			});
+			d.show();
+
+		}
+		);
 
 	},
 });
@@ -439,9 +550,9 @@ function calculate_totals(frm) {
 }
 
 
-function refresh_scale_item(frm,exp) {
+function refresh_scale_item(frm, exp) {
 	//get all scale item related to this ship_plan
-	if(!frm.doc.ship_plan && !frm.doc.sales_invoice && !frm.doc.sales_order){
+	if (!frm.doc.ship_plan && !frm.doc.sales_invoice && !frm.doc.sales_order) {
 		frappe.msgprint("请选择【物流计划】,或者【销售费用清单】，或者【销售订单】");
 		return;
 	}
@@ -453,14 +564,14 @@ function refresh_scale_item(frm,exp) {
 			"transporter": frm.doc.transporter,
 			"sales_order": frm.doc.sales_order,
 			"sales_invoice": frm.doc.sales_invoice,
-			"export":exp
+			"export": exp
 		},
 		callback: function (r) {
 			if (r.message) {
 				if (r.message.includes('http')) {
 					window.location.href = r.message;
 				}
-				else  {
+				else {
 					// You now have the scale item data returned from the server
 					let scale_item_data = r.message;
 					let total_qty = 0;
@@ -500,13 +611,13 @@ function refresh_scale_item(frm,exp) {
 				}
 			}
 			//check if r.message contains http
-			
+
 		}
 	});
 }
 
 function updateVehicleFieldReadonlyStatus(frm) {
-	
+
 	frm.fields_dict['scale_child'].grid.grid_rows.forEach((grid_row) => { // Replace 'child_table_fieldname' with the fieldname of your child table
 		if (grid_row.doc.vehicle) { // If vehicle has a value, make it read-only
 			grid_row.toggle_editable('vehicle', false); // Make vehicle field read-only

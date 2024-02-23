@@ -227,7 +227,10 @@ def update_scale_item_from_child(scale_item, scale_child):
         'type',
         'driver',
         'cell_number',
-        'pot'
+        'pot',
+        'sales_invoice',
+        'sales_order',
+        'bill_type',
     ]
     
     # Track if any field value has changed

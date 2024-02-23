@@ -228,22 +228,44 @@ class ScaleItem(Document):
 		old_doc = self.get_doc_before_save()
 		old_target_weight = old_doc.target_weight
 
-		if self.purchase_order:
+		if self.purchase_order and not self.target_weight == old_target_weight:
 			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order,ignore_permissions=True)
 			purchase_order.qty_vehicle  = purchase_order.qty_vehicle + self.target_weight - old_target_weight
 			purchase_order.save(ignore_permissions=True)
 
-		if self.sales_order:
+		if self.sales_order and self.sales_order == old_doc.sales_order and old_doc.sales_order:
 			sales_order = frappe.get_doc("Sales Order", self.sales_order, ignore_permissions=True)
 			sales_order.qty_vehicle  = sales_order.qty_vehicle + self.target_weight - old_target_weight
 			sales_order.save(ignore_permissions=True)
+		elif self.sales_order and old_doc.sales_order and self.sales_order != old_doc.sales_order:
+			sales_order = frappe.get_doc("Sales Order", self.sales_order,ignore_permissions=True)
+			sales_order.qty_vehicle  = sales_order.qty_vehicle + self.target_weight
+			sales_order.save(ignore_permissions=True)
+			old_sales_order = frappe.get_doc("Sales Order", old_doc.sales_order,ignore_permissions=True)
+			old_sales_order.qty_vehicle  = old_sales_order.qty_vehicle - old_target_weight
+			old_sales_order.save(ignore_permissions=True)
+		elif self.sales_order and not old_doc.sales_order:
+			sales_order = frappe.get_doc("Sales Order", self.sales_order,ignore_permissions=True)
+			sales_order.qty_vehicle  = sales_order.qty_vehicle + self.target_weight
+			sales_order.save(ignore_permissions=True)
 
-		if self.sales_invoice:
+		if self.sales_invoice and self.sales_invoice == old_doc.sales_invoice and old_doc.sales_invoice:
 			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
 			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight - old_target_weight
 			sales_invoice.save(ignore_permissions=True)
+		elif self.sales_invoice and old_doc.sales_invoice and self.sales_invoice != old_doc.sales_invoice:
+			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
+			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight
+			sales_invoice.save(ignore_permissions=True)
+			old_sales_invoice = frappe.get_doc("Sales Invoice", old_doc.sales_invoice,ignore_permissions=True)
+			old_sales_invoice.qty_vehicle  = old_sales_invoice.qty_vehicle - old_target_weight
+			old_sales_invoice.save(ignore_permissions=True)
+		elif self.sales_invoice and not old_doc.sales_invoice:
+			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
+			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight
+			sales_invoice.save(ignore_permissions=True)
 		
-		if self.ship_plan:
+		if self.ship_plan and not self.target_weight == old_target_weight:
 			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan,ignore_permissions=True)
 			ship_plan.assigned_qty = ship_plan.assigned_qty + self.target_weight - old_target_weight
 			ship_plan.save(ignore_permissions=True)
@@ -314,6 +336,18 @@ class ScaleItem(Document):
 		#frappe.msgprint("before_update_after_submit")
 		self.change_status()
 		self.validate_status()
+
+		if self.type == 'IN' and (self.offload_blank_dt or self.offload_gross_dt):
+			if self.offload_blank_dt:
+				self.stock_dt = self.offload_blank_dt
+			else:
+				self.stock_dt = self.offload_gross_dt
+		
+		if self.type == 'OUT' and (self.load_gross_dt or self.load_blank_dt):
+			if self.load_gross_dt:
+				self.stock_dt = self.load_gross_dt
+			else:
+				self.stock_dt = self.load_blank_dt
   
 		if self.type == 'IN' and self.market_segment == 'XXX':
 			#self.calculate_weight()
@@ -339,7 +373,7 @@ class ScaleItem(Document):
 				#get original target weight of the scale item
 		old_doc = self.get_doc_before_save()
 		old_target_weight = old_doc.target_weight
-		if self.target_weight != old_target_weight:
+		if self.target_weight != old_target_weight or self.sales_invoice != old_doc.sales_invoice or self.sales_order != old_doc.sales_order:
 			self.update_order_scale_weight()
 	
 	def on_submit(self):
