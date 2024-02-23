@@ -340,14 +340,27 @@ class ScaleItem(Document):
 		if self.type == 'IN' and (self.offload_blank_dt or self.offload_gross_dt) and not self.stock_dt:
 			if self.offload_blank_dt:
 				self.stock_dt = self.offload_blank_dt
+				#get the left 10 characters of the string to get the date
+				self.stock_date = self.offload_blank_dt[0:10]
 			else:
 				self.stock_dt = self.offload_gross_dt
+				self.stock_date = self.offload_gross_dt[0:10]
 		
 		if self.type == 'OUT' and (self.load_gross_dt or self.load_blank_dt) and not self.stock_dt:
 			if self.load_gross_dt:
 				self.stock_dt = self.load_gross_dt
+				self.stock_date = self.load_gross_dt[0:10]
 			else:
 				self.stock_dt = self.load_blank_dt
+				self.stock_date = self.load_blank_dt[0:10]
+
+		if self.type == 'DIRC' and self.bill_type == 'ZT' and not self.stock_dt and self.load_gross_dt:
+			self.stock_dt = self.load_gross_dt
+			self.stock_date = self.load_gross_dt[0:10]
+		
+		if self.type == 'DIRC' and self.bill_type == 'SD' and not self.stock_dt and self.offload_blank_dt:
+			self.stock_dt = self.offload_blank_dt
+			self.stock_date = self.offload_blank_dt[0:10]
   
 		if self.type == 'IN' and self.market_segment == 'XXX':
 			#self.calculate_weight()
