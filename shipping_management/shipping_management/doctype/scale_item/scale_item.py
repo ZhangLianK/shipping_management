@@ -337,13 +337,13 @@ class ScaleItem(Document):
 		self.change_status()
 		self.validate_status()
 
-		if self.type == 'IN' and (self.offload_blank_dt or self.offload_gross_dt):
+		if self.type == 'IN' and (self.offload_blank_dt or self.offload_gross_dt) and not self.stock_dt:
 			if self.offload_blank_dt:
 				self.stock_dt = self.offload_blank_dt
 			else:
 				self.stock_dt = self.offload_gross_dt
 		
-		if self.type == 'OUT' and (self.load_gross_dt or self.load_blank_dt):
+		if self.type == 'OUT' and (self.load_gross_dt or self.load_blank_dt) and not self.stock_dt:
 			if self.load_gross_dt:
 				self.stock_dt = self.load_gross_dt
 			else:
