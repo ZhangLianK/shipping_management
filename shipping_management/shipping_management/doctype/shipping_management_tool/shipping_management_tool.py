@@ -114,7 +114,7 @@ def save_doc(doc_data):
                 scale_item.type = scale_child.type
                 scale_item.from_addr = scale_child.from_addr
                 scale_item.to_addr = scale_child.to_addr
-                scale_item.pot = scale_item.pot
+                scale_item.pot = scale_child.pot
                 if doc.date:
                     scale_item.date = doc.date
                 else:

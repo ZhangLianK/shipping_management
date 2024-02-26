@@ -95,6 +95,7 @@ frappe.ui.form.on("Scale Child", {
 				}
 			});
 		}
+		calculate_totals(frm);
 	},
 	scale_child_remove: function (frm, cdt, cdn) {
 		//updateVehicleFieldReadonlyStatus(frm)
