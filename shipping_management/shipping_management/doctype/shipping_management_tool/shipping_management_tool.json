@@ -28,6 +28,7 @@
   "column_break_lqrjg",
   "order_note",
   "column_break_oozw7",
+  "bill_type",
   "sales_invoice",
   "section_break_m1rbr",
   "from_addr",
@@ -235,13 +236,20 @@
    "fetch_from": "sales_order.order_note",
    "fieldname": "order_note",
    "fieldtype": "Data",
-   "label": "\u8ba2\u5355\u5907\u6ce8"
+   "label": "\u8ba2\u5355\u5907\u6ce8",
+   "read_only": 1
+  },
+  {
+   "fieldname": "bill_type",
+   "fieldtype": "Link",
+   "label": "\u7ed3\u7b97\u7c7b\u578b",
+   "options": "Scale Type"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-26 14:45:14.543973",
+ "modified": "2024-02-26 22:26:36.420751",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping Management Tool",

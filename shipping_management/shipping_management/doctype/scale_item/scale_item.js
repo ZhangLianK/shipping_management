@@ -684,20 +684,12 @@ frappe.ui.form.on('Scale Item', {
         // add custom button to create delivery note
         if (!frm.is_new() && frm.doc.docstatus !== 2 && (frm.doc.type == 'OUT' || frm.doc.type == 'DIRC')) {
             frm.add_custom_button(__('Create Delivery Note'), function () {
-                if (!frm.doc.pot && frm.doc.type == 'OUT') {
-                    frappe.throw(__('无出罐信息！'));
-                }
-                else if (!frm.doc.purchase_receipt && frm.doc.type == 'DIRC') {
-                    frappe.throw(__('无入库单,无法创建出库单！'));
-                }
-                else if (frm.is_dirty()) {
+ 
+                if (frm.is_dirty()) {
                     frappe.throw(__('请先保存！'));
+                    return;
                 }
                 else {
-                    if (frm.doc.delivery_note) {
-                        frappe.throw(__('已经创建出库单，请勿多次创建！请检查已经创建的出库单！'));
-                    }
-                    else {
                         var currentDate = new Date();
                         var formattedDate = frappe.format(currentDate, { fieldtype: "Date" });
                         var delivery_dates = [formattedDate];
@@ -707,8 +699,6 @@ frappe.ui.form.on('Scale Item', {
                             freeze_message: __("Creating Delivery Note ...")
 
                         })
-
-                    }
                 }
             });
         }

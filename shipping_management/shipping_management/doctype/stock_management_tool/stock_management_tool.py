@@ -60,7 +60,14 @@ def set_missing_values(source, target):
 
 @frappe.whitelist()
 def make_purchase_receipt(source_name, target_doc=None):
+    
 	source_doc = frappe.get_doc("Scale Item", source_name)	
+	if source_doc.type == 'IN' and not source_doc.pot:
+		frappe.throw('无【罐（库位）】信息')
+	
+	if source_doc.purchase_receipt:
+		frappe.throw('该物流单已经创建了采购收货单！')
+  
 	def update_parent(obj, target,source_parent):
 		print(target)
 		target.scale_item = source_doc.name
@@ -133,6 +140,14 @@ def make_purchase_receipt(source_name, target_doc=None):
 def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 	from erpnext.stock.doctype.packed_item.packed_item import make_packing_list
 	source_doc = frappe.get_doc("Scale Item", source_name)
+	if source_doc.type == 'OUT' and not source_doc.pot:
+		frappe.throw('无【罐（库位）】信息')
+  
+	if source_doc.delivery_note:
+		frappe.throw('该物流单已经创建了出库单！')
+	
+	if source_doc.type == 'DIRC' and not source_doc.purchase_receipt:
+		frappe.throw('外卖物流单必须先创建采购收货单！')
 	source = source_doc.sales_order
 	if source_doc.sales_invoice:
 		source_si = source_doc.sales_invoice

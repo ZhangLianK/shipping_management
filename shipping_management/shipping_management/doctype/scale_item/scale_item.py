@@ -337,6 +337,11 @@ class ScaleItem(Document):
 		self.change_status()
 		self.validate_status()
 
+		if self.type == 'DIRC' and not self.pot:
+			#get the company default in transit warehouse
+			company_default_warehouse = frappe.get_value("Company", self.company, "default_in_transit_warehouse")
+			self.pot = company_default_warehouse
+
 		if self.type == 'IN' and (self.offload_blank_dt or self.offload_gross_dt) and not self.stock_dt:
 			if self.offload_blank_dt:
 				self.stock_dt = self.offload_blank_dt
@@ -555,6 +560,16 @@ def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 
 	source_doc = frappe.get_doc("Scale Item", source_name)
 	source = source_doc.sales_order
+ 
+	if source_doc.type == 'OUT' and not source_doc.pot:
+		frappe.throw('无【罐（库位）】信息')
+  
+	if source_doc.delivery_note:
+		frappe.throw('该物流单已经创建了出库单！')
+	
+	if source_doc.type == 'DIRC' and not source_doc.purchase_receipt:
+		frappe.throw('外卖物流单必须先创建采购收货单！')
+  
 	if source_doc.sales_invoice:
 		source_si = source_doc.sales_invoice
 		source_si_doc = frappe.get_doc("Sales Invoice", source_si)

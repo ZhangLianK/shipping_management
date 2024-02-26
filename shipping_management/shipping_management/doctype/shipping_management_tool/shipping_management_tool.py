@@ -141,7 +141,7 @@ def save_doc(doc_data):
 
 
 @frappe.whitelist()
-def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order=None, sales_order=None, sales_invoice=None,export=None):
+def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order=None, sales_order=None, sales_invoice=None,export=None,bill_type=None):
     # Initialize the filters dictionary with a condition that's always true
     filters = {'status': ['!=', '9 已取消']}
     
@@ -158,6 +158,8 @@ def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order
         filters['sales_order'] = sales_order
     if sales_invoice is not None and not sales_invoice == '':
         filters['sales_invoice'] = sales_invoice
+    if bill_type is not None and not bill_type == '':
+        filters['bill_type'] = bill_type
 
     # Fetch all scale item docs according to ship_plan and any other provided filters
     scale_items = frappe.get_all('Scale Item', 

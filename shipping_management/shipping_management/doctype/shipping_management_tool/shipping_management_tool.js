@@ -208,6 +208,9 @@ frappe.ui.form.on('Shipping Management Tool', {
 	sales_invoice: function (frm) {
 		refresh_scale_item(frm);
 	},
+	bill_type: function (frm) {
+		refresh_scale_item(frm);
+	},
 	onload_post_render: function (frm) {
 		$('.container').css("max-width", "100%")
 	},
@@ -256,40 +259,8 @@ frappe.ui.form.on('Shipping Management Tool', {
 			}
 			refresh_scale_item(frm);
 		});
-		//set page primary action
-		frm.page.set_primary_action(__('保存'), function () {
 
-			//call backend function to save the doc
-			frappe.call({
-				method: "shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.save_doc", // Replace with your app and module names
-				args: {
-					"doc_data": frm.doc // Pass the current form data
-				},
-				callback: function (r) {
-					if (r.message) {
-						//  check if any error returned from the server
-						if (r.message.error) {
-							frappe.throw(r.message.error);
-							return;
-						}
-						else {
-							// You now have the saved doc returned from the server
-							if (r.message == 'success') {
-								frappe.msgprint("保存成功");
-							}
-							else {
-								let ship_plan_doc = r.message;
-								frm.set_value('assigned_qty', ship_plan_doc.assigned_qty);
-								frappe.msgprint("保存成功");
-							}
-							frm.doc.__unsaved = false;
-							refresh_scale_item(frm);
-						}
-					}
-				}
-			});
-		});
-
+		
 		// Empty the sidebar to avoid duplicating items on refresh
 		frm.page.sidebar.empty();
 		// Create a search box and prepend it to the sidebar
@@ -534,6 +505,40 @@ frappe.ui.form.on('Shipping Management Tool', {
 
 		}
 		);
+		frm.add_custom_button(__('保存'), function () {
+
+			//call backend function to save the doc
+			frappe.call({
+				method: "shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.save_doc", // Replace with your app and module names
+				args: {
+					"doc_data": frm.doc // Pass the current form data
+				},
+				callback: function (r) {
+					if (r.message) {
+						//  check if any error returned from the server
+						if (r.message.error) {
+							frappe.throw(r.message.error);
+							return;
+						}
+						else {
+							// You now have the saved doc returned from the server
+							if (r.message == 'success') {
+								frappe.msgprint("保存成功");
+							}
+							else {
+								let ship_plan_doc = r.message;
+								frm.set_value('assigned_qty', ship_plan_doc.assigned_qty);
+								frappe.msgprint("保存成功");
+							}
+							frm.doc.__unsaved = false;
+							refresh_scale_item(frm);
+						}
+					}
+				}
+			});
+		});
+		$("[data-label='%E4%BF%9D%E5%AD%98']").css({"background-color": "#007bff", "color": "white"});
+
 
 	},
 });
@@ -566,7 +571,8 @@ function refresh_scale_item(frm, exp) {
 			"transporter": frm.doc.transporter,
 			"sales_order": frm.doc.sales_order,
 			"sales_invoice": frm.doc.sales_invoice,
-			"export": exp
+			"export": exp,
+			"bill_type": frm.doc.bill_type
 		},
 		callback: function (r) {
 			if (r.message) {
