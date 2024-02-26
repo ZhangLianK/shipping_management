@@ -478,7 +478,13 @@ def set_missing_values(source, target):
 
 @frappe.whitelist()
 def make_purchase_receipt(source_name, target_doc=None):
-	source_doc = frappe.get_doc("Scale Item", source_name)	
+	source_doc = frappe.get_doc("Scale Item", source_name)
+	if source_doc.type == 'IN' and not source_doc.pot:
+		frappe.throw('无【罐（库位）】信息')
+	
+	if source_doc.purchase_receipt:
+		frappe.throw('该物流单已经创建了采购收货单！')
+
 	def update_parent(obj, target,source_parent):
 		print(target)
 		target.scale_item = source_doc.name

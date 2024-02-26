@@ -99,7 +99,7 @@ frappe.ui.form.on("Scale Child", {
 		calculate_totals(frm);
 	},
 	scale_child_remove: function (frm, cdt, cdn) {
-		//updateVehicleFieldReadonlyStatus(frm)
+		calculate_totals(frm);
 	},
 	target_weight: function (frm, cdt, cdn) {
 		calculate_totals(frm);
@@ -461,7 +461,7 @@ frappe.ui.form.on('Shipping Management Tool', {
 							if (frm.doc.order_note && (frm.doc.order_note.includes('送到') || frm.doc.order_note.includes('送'))) {
 								row.bill_type = 'SD'
 							}
-							else {
+							else if (frm.doc.order_note && (frm.doc.order_note.includes('自提'))){
 								row.bill_type = 'ZT'
 							}
 							calculate_totals(frm);

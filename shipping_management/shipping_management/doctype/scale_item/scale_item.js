@@ -642,11 +642,7 @@ frappe.ui.form.on('Scale Item', {
                 }
             };
         });
-        // read only if purchase receipt or delivery note is created
-        //if (frm.doc.purchase_receipt || frm.doc.delivery_note) {
-        //    frm.set_df_property('get_pot', 'hidden', 1);
-        //    frm.set_df_property('pot', 'read_only', 1);
-        //}
+
         // add custom button to complete the scale item
         if ((frm.doc.status == '5 已卸货' && frm.doc.type == 'IN' && frm.doc.purchase_receipt)
             || (frm.doc.status == '5 已卸货' && frm.doc.type == 'OUT' && frm.doc.delivery_note)
@@ -668,27 +664,20 @@ frappe.ui.form.on('Scale Item', {
         if (frm.doc.docstatus == 1 && (frm.doc.type == 'IN' || frm.doc.type == 'DIRC')) {
 
             frm.add_custom_button(__('Create Purchase Receipt'), function () {
-                if (!frm.doc.pot && frm.doc.type == 'IN') {
 
-                    frappe.throw(__('无【罐（库位）】信息！'));
 
-                }
-                else if (frm.is_dirty()) {
+                if (frm.is_dirty()) {
                     frappe.throw(__('请先保存！'));
+                    return;
                 }
-                else {
-                    if (frm.doc.purchase_receipt) {
-                        frappe.throw(__('已经创建入库单，请勿多次创建！请检查已经创建的关联入库单！'));
-                    }
 
-                    else {
-                        frappe.model.open_mapped_doc({
+                frappe.model.open_mapped_doc({
                             method: "shipping_management.shipping_management.doctype.scale_item.scale_item.make_purchase_receipt",
                             frm: cur_frm,
                             freeze_message: __("Creating Purchase Receipt ...")
                         })
-                    }
-                }
+                    
+                
             });
         }
 
