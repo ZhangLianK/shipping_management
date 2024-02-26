@@ -216,6 +216,7 @@
    "depends_on": "eval: doc.type == 'OUT' || doc.type == 'DIRC'",
    "fieldname": "bill_type",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": " \u7ed3\u7b97\u7c7b\u578b",
    "mandatory_depends_on": "eval: doc.type == 'OUT' || doc.type == 'DIRC'",
    "options": "Scale Type"
@@ -752,7 +753,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-16 22:46:44.223085",
+ "modified": "2024-02-25 00:57:34.184988",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

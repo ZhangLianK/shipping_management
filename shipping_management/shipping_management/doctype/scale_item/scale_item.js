@@ -643,10 +643,10 @@ frappe.ui.form.on('Scale Item', {
             };
         });
         // read only if purchase receipt or delivery note is created
-        if (frm.doc.purchase_receipt || frm.doc.delivery_note) {
-            frm.set_df_property('get_pot', 'hidden', 1);
-            frm.set_df_property('pot', 'read_only', 1);
-        }
+        //if (frm.doc.purchase_receipt || frm.doc.delivery_note) {
+        //    frm.set_df_property('get_pot', 'hidden', 1);
+        //    frm.set_df_property('pot', 'read_only', 1);
+        //}
         // add custom button to complete the scale item
         if ((frm.doc.status == '5 已卸货' && frm.doc.type == 'IN' && frm.doc.purchase_receipt)
             || (frm.doc.status == '5 已卸货' && frm.doc.type == 'OUT' && frm.doc.delivery_note)

@@ -1,0 +1,168 @@
+{
+ "actions": [],
+ "autoname": "autoincrement",
+ "creation": "2024-02-25 10:00:32.651078",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "vehicle",
+  "target_weight",
+  "load_net_weight",
+  "offload_net_weight",
+  "column_break_in0a2",
+  "type",
+  "pot",
+  "column_break_mcwz0",
+  "scale_item",
+  "status",
+  "bill_type",
+  "section_break_gnhfr",
+  "purchase_order",
+  "purchase_receipt",
+  "column_break_lzg3v",
+  "sales_order",
+  "delivery_note"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "vehicle",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u8f66\u53f7",
+   "options": "Vehicle",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fetch_if_empty": 1,
+   "fieldname": "target_weight",
+   "fieldtype": "Float",
+   "label": "\u9884\u88c5\u91cf",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_in0a2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 1,
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7c7b\u578b",
+   "options": "Ship Type",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "pot",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7f50\uff08\u5e93\u4f4d\uff09",
+   "options": "Warehouse",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_mcwz0",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 1,
+   "fieldname": "scale_item",
+   "fieldtype": "Link",
+   "label": "\u7269\u6d41\u8ba1\u91cf\u5355\u53f7",
+   "options": "Scale Item",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "columns": 1,
+   "fetch_from": "scale_item.status",
+   "fetch_if_empty": 1,
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u72b6\u6001",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "bill_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7ed3\u7b97\u7c7b\u578b",
+   "options": "Scale Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_gnhfr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "columns": 1,
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u91c7\u8d2d\u8ba2\u5355",
+   "options": "Purchase Order",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "purchase_receipt",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u91c7\u8d2d\u5165\u5e93\u5355",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_lzg3v",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 1,
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u9500\u552e\u8ba2\u5355",
+   "options": "Sales Order",
+   "read_only": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "delivery_note",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u9500\u552e\u51fa\u5e93\u5355",
+   "read_only": 1
+  },
+  {
+   "fieldname": "load_net_weight",
+   "fieldtype": "Float",
+   "label": "\u88c5\u8f66\u51c0\u91cd",
+   "read_only": 1
+  },
+  {
+   "fieldname": "offload_net_weight",
+   "fieldtype": "Float",
+   "label": "\u5378\u8f66\u51c0\u91cd",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-02-25 11:03:53.157538",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Stock Child",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

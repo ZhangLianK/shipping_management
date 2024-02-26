@@ -123,6 +123,7 @@ def save_doc(doc_data):
                 if doc.ship_plan:
                     ship_plan = frappe.get_doc('Ship Plan', doc.ship_plan)
                     scale_item.desc= ship_plan.plan_desc
+                    scale_item.item = ship_plan.item
                     scale_item.ship_plan = ship_plan.name
                     
                 

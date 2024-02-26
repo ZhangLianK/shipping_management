@@ -1,0 +1,121 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-02-25 09:52:26.870505",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "column_break_xudq5",
+  "type",
+  "section_break_incyt",
+  "ship_plan",
+  "column_break_decq1",
+  "purchase_order",
+  "column_break_g6dcs",
+  "sales_order",
+  "column_break_lqrjg",
+  "order_note",
+  "section_break_m1rbr",
+  "stock_childs"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u516c\u53f8",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_xudq5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "label": "\u7c7b\u578b",
+   "options": "Ship Type"
+  },
+  {
+   "fieldname": "section_break_incyt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "ship_plan",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u7269\u6d41\u8ba1\u5212",
+   "options": "Ship Plan"
+  },
+  {
+   "fieldname": "column_break_decq1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "ship_plan.purchase_order",
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "\u91c7\u8d2d\u8ba2\u5355",
+   "options": "Purchase Order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_g6dcs",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "\u9500\u552e\u8ba2\u5355",
+   "options": "Sales Order"
+  },
+  {
+   "fieldname": "column_break_lqrjg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "sales_order.order_note",
+   "fieldname": "order_note",
+   "fieldtype": "Data",
+   "label": "\u8ba2\u5355\u5907\u6ce8"
+  },
+  {
+   "fieldname": "section_break_m1rbr",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "stock_childs",
+   "fieldtype": "Table",
+   "label": "\u7269\u6d41\u5355",
+   "options": "Stock Child"
+  }
+ ],
+ "hide_toolbar": 1,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-02-25 17:35:56.796619",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Stock Management Tool",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
