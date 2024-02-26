@@ -67,11 +67,12 @@ frappe.ui.form.on("Scale Child", {
 		row.type = frm.doc.type
 		row.market_segment = frm.doc.market_segment
 		row.from_addr = frm.doc.from_addr
+		row.to_addr = frm.doc.to_addr
 		//if doc.order_note contains '送到' then set the bill_type to 'SD'
 		if (frm.doc.order_note && (frm.doc.order_note.includes('送到') || frm.doc.order_note.includes('送'))) {
 			row.bill_type = 'SD'
 		}
-		else {
+		else if (frm.doc.order_note && (frm.doc.order_note.includes('自提'))) {
 			row.bill_type = 'ZT'
 		}
 		row.scale_item = 'N'

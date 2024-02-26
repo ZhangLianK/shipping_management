@@ -91,7 +91,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "ship_plan.to_addr",
    "fieldname": "to_addr",
    "fieldtype": "Small Text",
    "label": "\u9001\u8d27\u5730"
@@ -242,7 +241,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-22 13:33:49.146009",
+ "modified": "2024-02-26 14:45:14.543973",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping Management Tool",
