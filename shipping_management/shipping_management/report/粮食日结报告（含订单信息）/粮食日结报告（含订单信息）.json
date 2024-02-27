@@ -1,0 +1,38 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2024-01-16 13:12:31.200603",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2024-01-16 14:09:52.358592",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "\u7cae\u98df\u65e5\u7ed3\u62a5\u544a\uff08\u542b\u8ba2\u5355\u4fe1\u606f\uff09",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Scale Item",
+ "report_name": "\u7cae\u98df\u65e5\u7ed3\u62a5\u544a\uff08\u542b\u8ba2\u5355\u4fe1\u606f\uff09",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "\u7269\u6d41\uff08\u4ed3\u5e93\uff09"
+  },
+  {
+   "role": "\u7269\u6d41"
+  },
+  {
+   "role": "\u7269\u6d41\uff08\u9500\u552e\uff09"
+  },
+  {
+   "role": "\u7269\u6d41\uff08\u91c7\u8d2d\uff09"
+  }
+ ]
+}
