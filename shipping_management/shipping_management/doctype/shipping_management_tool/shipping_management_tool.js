@@ -69,12 +69,7 @@ frappe.ui.form.on("Scale Child", {
 		row.from_addr = frm.doc.from_addr
 		row.to_addr = frm.doc.to_addr
 		//if doc.order_note contains '送到' then set the bill_type to 'SD'
-		if (frm.doc.order_note && (frm.doc.order_note.includes('送到') || frm.doc.order_note.includes('送'))) {
-			row.bill_type = 'SD'
-		}
-		else if (frm.doc.order_note && (frm.doc.order_note.includes('自提'))) {
-			row.bill_type = 'ZT'
-		}
+		row.bill_type = frm.doc.bill_type
 		row.scale_item = 'N'
 		frm.refresh_field('scale_child');
 		//updateVehicleFieldReadonlyStatus(frm)
@@ -176,8 +171,28 @@ frappe.ui.form.on('Shipping Management Tool', {
 					['Sales Invoice Item', 'sales_order', '=', frm.doc.sales_order]
 				]
 			};
+		});
+		frm.set_query("ship_plan", function () {
+			return {
+				filters: {
+					'status': ['not in', ["完成"]]
+				}
+			};
+		});
+	},
+	order_note: function (frm) {
+		if (frm.doc.order_note && (frm.doc.order_note.includes('送到') || frm.doc.order_note.includes('送'))) {
+			frm.doc.bill_type = 'SD'
+			frm.refresh_field('bill_type');
 		}
-		);
+		else if (frm.doc.order_note && (frm.doc.order_note.includes('自提'))) {
+			frm.doc.bill_type = 'ZT'
+			frm.refresh_field('bill_type');
+		}
+		else {
+			frm.doc.bill_type = ''
+			frm.refresh_field('bill_type');
+		}
 	},
 	export_xlsx: function (frm) {
 		if (!frm.doc.ship_plan) {
@@ -425,16 +440,12 @@ frappe.ui.form.on('Shipping Management Tool', {
 								sales_invoice: frm.doc.sales_invoice,
 								purchase_order: frm.doc.purchase_order,
 								transporter: frm.doc.transporter,
-								type: `${frm.doc.type ? frm.doc.type : "OTH"}`
+								type: `${frm.doc.type ? frm.doc.type : "OTH"}`,
+								bill_type: frm.doc.bill_type
 								
 							});
 							row.id = vehicle.id
-							if (frm.doc.order_note && (frm.doc.order_note.includes('送到') || frm.doc.order_note.includes('送'))) {
-								row.bill_type = 'SD'
-							}
-							else if (frm.doc.order_note && (frm.doc.order_note.includes('自提'))){
-								row.bill_type = 'ZT'
-							}
+							
 							calculate_totals(frm);
 							frm.refresh();
 						}

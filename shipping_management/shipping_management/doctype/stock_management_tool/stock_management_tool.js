@@ -13,7 +13,9 @@ frappe.ui.form.on("Stock Child", {
 		$('.grid-append-row').remove();
 		var row = locals[cdt][cdn];
 		var row_name = row.scale_item;
-		if (row.type == "IN" && row.status == "5 已卸货" && !row.purchase_receipt) {
+		if ((!row.purchase_receipt && row.type == "IN" && row.status.slice(0,1) >= '5') ||
+			(!row.purchase_receipt && row.type == "DIRC" && row.status.slice(0,1) >= '3' && row.bill_type == "ZT") ||
+			(!row.purchase_receipt && row.type == "DIRC" && row.status.slice(0,1) >= '3' && row.bill_type == "SD")){
 			//add a refresh button to refresh the scale child
 			
 
