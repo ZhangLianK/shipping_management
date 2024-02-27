@@ -10,9 +10,10 @@
                 <a href="/shipping_viewer?scale_item={{ scale_item.name }}" style="background:#F4F5F6" class="list-group-item list-group-item-action flex-column align-items-start">
                     <div class="d-flex w-100 justify-content-between">
                         <h5 class="mb-1">{{ scale_item.name }}</h5>
-                        <small>{{ scale_item.date }}</small>
+                        <h6>{{ scale_item.item_status }}</h6>
                     </div>
                     <br>
+                    <p class="mb-1">计划日期: {{ scale_item.date }}</p>
                     <p class="mb-1">状态: {{ scale_item.status }}</p>
                     <p class="mb-1">车号: {{ scale_item.vehicle }}</p>
                     <p class="mb-1">装货地: {{ scale_item.from_addr }}</p>
