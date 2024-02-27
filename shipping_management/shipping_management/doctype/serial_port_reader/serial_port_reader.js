@@ -710,7 +710,9 @@ async function openClose(frm) {
                         }
                         
                         if (char === '\x03' && isMessageStarted) { // ETX
-                            displayInScreen(frm, currentMessage);
+                            //get the first 7 characters of the message
+                            let currentMessage_end = currentMessage.substring(0, 7);
+                            displayInScreen(frm, currentMessage_end);
                             isMessageStarted = false; // Reset for next message
                             currentMessage = ''; // Clear current message
                             continue;
