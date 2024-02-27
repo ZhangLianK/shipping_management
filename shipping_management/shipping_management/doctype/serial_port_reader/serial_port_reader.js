@@ -642,6 +642,8 @@ async function openClose(frm) {
                 var flowcontrol = frm.doc.flowcontrol;
                 var stopchar = frm.doc.stopchar;
                 var reverse = frm.doc.reverse;
+                let currentMessage = '';
+                let isMessageStarted = false;
 
 
                 // Open the serial port with the selected baud rate
