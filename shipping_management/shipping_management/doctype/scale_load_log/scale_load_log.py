@@ -8,7 +8,7 @@ class ScaleLoadLog(Document):
     #after save, update the scale item
 	def on_update(self):
 		scale_item_doc = frappe.get_doc("Scale Item",self.scale_item,ignore_permissions=True)
-		if scale_item_doc.type == "IN" or scale_item_doc.type == "DIRC":
+		if scale_item_doc.type == "IN" or scale_item_doc.type == "DIRC" or scale_item_doc.type == "OTH":
 			if self.load_gross_weight:
 				scale_item_doc.load_gross_weight = self.load_gross_weight
 			if self.load_blank_weight:

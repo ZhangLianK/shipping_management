@@ -8,7 +8,7 @@ class ScaleOffloadLog(Document):
 
 	def on_update(self):
 		scale_item_doc = frappe.get_doc("Scale Item",self.scale_item,ignore_permissions=True)
-		if scale_item_doc.type == "OUT" or scale_item_doc.type == "DIRC":
+		if scale_item_doc.type == "OUT" or scale_item_doc.type == "DIRC" or scale_item_doc.type == "OTH":
 			if self.offload_gross_weight:
 				scale_item_doc.offload_gross_weight = self.offload_gross_weight
 			if self.offload_blank_weight:
