@@ -477,11 +477,10 @@ frappe.ui.form.on('Shipping Management Tool', {
 						}
 					},
 					{
-						'label': '销售费用清单',
-						'fieldname': 'sales_invoice',
-						'fieldtype': 'Link',
-						'options': 'Sales Invoice',
-						'reqd': 0,
+						'label': '送货地',
+						'fieldname': 'to_addr',
+						'fieldtype': 'Data',
+						'reqd': 1,
 						'get_query': function () {
 							return {
 								filters: [
@@ -492,7 +491,22 @@ frappe.ui.form.on('Shipping Management Tool', {
 					}
 				],
 				primary_action: function () {
-					//get all scale child related that checked in the frm.doc.scale_child table
+					//get the sales order's order note
+					
+					frappe.db.get_value('Sales Order', d.fields_dict.sales_order.get_value(), 'order_note').then(r => {
+						let bill_type = '';
+						if (r) {
+							if (r.message.order_note.includes('送到') || r.message.order_note.includes('送')) {
+								bill_type = 'SD';
+							}
+							else if (r.message.order_note.includes('自提')) {
+								bill_type = 'ZT';
+							}
+							else {
+								bill_type = '';
+							}
+						}
+						//get all scale child related that checked in the frm.doc.scale_child table
 					let scale_childs = frm.doc.scale_child;
 					//find all scale child that was checked by user
 					let checked_scale_childs = scale_childs.filter(function (row) {
@@ -506,10 +520,16 @@ frappe.ui.form.on('Shipping Management Tool', {
 					// set the sales order and sales invoice to the checked scale child
 					for (let row of checked_scale_childs) {
 						row.sales_order = d.fields_dict.sales_order.get_value();
-						row.sales_invoice = d.fields_dict.sales_invoice.get_value();
+						row.to_addr = d.fields_dict.to_addr.get_value();
+						row.bill_type = bill_type;
+						if (row.type == 'OTH'){
+							row.type = 'DIRC';
+						}
 					}
 					d.hide();
 					frm.refresh_field('scale_child');
+					});
+					
 				}
 			});
 			d.show();
