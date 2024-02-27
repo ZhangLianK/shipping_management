@@ -384,13 +384,46 @@
             window.location.href = path
         });
         // Start Button Click Handler
-        $("#start").click(function(){
-            $('#startModal').modal('show');
-        });
+        //$("#start").click(function(){
+        //    $('#startModal').modal('show');
+        //});
 
         // End Button Click Handler - Shows Modal
-        $("#end").click(function(){
-            //make sure load net weight and offload net weight is not blank if the status is not '9 已取消'
+        //$("#end").click(function(){
+        //    //make sure load net weight and offload net weight is not blank if the status is not '9 已取消'
+        //    let status = "{{ status }}";
+        //    let load_net_weight = parseFloat("{{ load_net_weight }}")
+        //    let offload_net_weight = parseFloat("{{ offload_net_weight }}")
+//
+        //    if (status != '9 已取消'){
+        //        if (!load_net_weight || !offload_net_weight){
+        //            frappe.msgprint("请先上传装车信息和卸车信息!");
+        //            return;
+        //        }
+        //    }
+        //    $('#endModal').modal('show');
+        //});
+        
+        let confirm_end = document.querySelector("#end");
+        // Confirm End Button in Modal
+        confirm_end.addEventListener('click', function(ev){
+            //let mileage_end = $("#endModal #mileage").val();
+            
+            //check convas_end is not blank
+            //if (canvas_end.getAttribute('status') != 'ok'){
+            //    frappe.msgprint("请拍摄里程表图片!");
+            //    return;
+            //}
+
+
+            //let image_base64_end = canvas_end.toDataURL('image/png').split(',')[1];
+
+            // Example: Stripping the prefix if present
+            //if (!mileage_end || !image_base64_end){
+            //    frappe.msgprint("请填写所有必要信息，里程、验证码和图片");
+            //    return;
+            //}
+             //make sure load net weight and offload net weight is not blank if the status is not '9 已取消'
             let status = "{{ status }}";
             let load_net_weight = parseFloat("{{ load_net_weight }}")
             let offload_net_weight = parseFloat("{{ offload_net_weight }}")
@@ -401,47 +434,26 @@
                     return;
                 }
             }
-            $('#endModal').modal('show');
-        });
-        
-        let confirm_end = document.querySelector('#endModal #confirmEnd');
-        // Confirm End Button in Modal
-        confirm_end.addEventListener('click', function(ev){
-            let mileage_end = $("#endModal #mileage").val();
-            
-            //check convas_end is not blank
-            if (canvas_end.getAttribute('status') != 'ok'){
-                frappe.msgprint("请拍摄里程表图片!");
-                return;
-            }
-
-
-            let image_base64_end = canvas_end.toDataURL('image/png').split(',')[1];
-
-            // Example: Stripping the prefix if present
-            if (!mileage_end || !image_base64_end){
-                frappe.msgprint("请填写所有必要信息，里程、验证码和图片");
-                return;
-            }
 
             frappe.call({
                 method: "shipping_management.shipping_management.doctype.scale_item.scale_item.start_end_shipping",
                 args: {
                     "action": 'end',
                     "scale_item": "{{ scale_item }}",
-                    "mileage": mileage_end,
-                    "image_base64": image_base64_end,
+                    //"mileage": mileage_end,
+                    //"image_base64": image_base64_end,
                 },
                 callback: function(r) {
                     if(r.message) {
                         if (r.message.status == "success"){
                             frappe.msgprint("运单结束成功！结束时间为" + frappe.datetime.now_datetime());
+                            window.location.reload();
                         }
                         else{
                             frappe.msgprint(r.message);
                         }
                     }
-                    $('#endModal').modal('hide'); // Hide Modal
+                    //$('#endModal').modal('hide'); // Hide Modal
                 }
             });
         });
@@ -481,39 +493,40 @@
 //end button camera end
 
 // Confirm Start Button in Modal
-let confirm_start = document.querySelector('#startModal #confirmStart');
+let confirm_start = document.querySelector('#start');
 confirm_start.addEventListener('click', function(ev){
-    let mileage_start = $("#startModal #mileage").val();
-    console.log(mileage_start)
-    if (canvas_start.getAttribute('status') != 'ok'){
-        frappe.msgprint("请拍摄里程表图片!");
-        return;
-    }
-    let image_base64_start = canvas_start.toDataURL('image/png').split(',')[1];
+    //let mileage_start = $("#startModal #mileage").val();
+    //console.log(mileage_start)
+    //if (canvas_start.getAttribute('status') != 'ok'){
+    //    frappe.msgprint("请拍摄里程表图片!");
+    //    return;
+    //}
+    //let image_base64_start = canvas_start.toDataURL('image/png').split(',')[1];
     // Example: Stripping the prefix if present
 
-    if (!mileage_start || !image_base64_start){
-        frappe.msgprint("请填写所有必要信息，里程,手机号，验证码和里程表图片");
-        return;
-    }
+    //if (!mileage_start || !image_base64_start){
+    //    frappe.msgprint("请填写所有必要信息，里程,手机号，验证码和里程表图片");
+    //    return;
+    //}
     frappe.call({
         method: "shipping_management.shipping_management.doctype.scale_item.scale_item.start_end_shipping",
         args: {
             "action": 'start',
             "scale_item": "{{ scale_item }}",
-            "mileage": mileage_start,
-            "image_base64": image_base64_start
+            //"mileage": mileage_start,
+            //"image_base64": image_base64_start
         },
         callback: function(r) {
             if(r.message) {
                 if (r.message.status == "success"){
                     frappe.msgprint("运单开始！开始时间为" + frappe.datetime.now_datetime());
+                    window.location.reload();
                 }
                 else{
                     frappe.msgprint(r.message);
                 }
             }
-            $('#startModal').modal('hide'); // Hide Modal
+            //$('#startModal').modal('hide'); // Hide Modal
         }
     });
 });

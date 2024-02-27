@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"OGVjfP75Ac\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Shipping</span>\",\"col\":12}},{\"id\":\"LPI-6dKJCC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Scale Item\",\"col\":3}},{\"id\":\"slWnqAPc9w\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u7269\u6d41\u8ba1\u91cf\u5355\u660e\u7ec6\u62a5\u544a\",\"col\":3}},{\"id\":\"bir3onWbvJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u62a5\u53f7\u5355\",\"col\":3}},{\"id\":\"5QhogLdCnU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u5730\u78c5\u8ba1\u91cf\u53f0\",\"col\":3}},{\"id\":\"UV0bQeZCLd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u8f66\u8f86\u8c03\u5ea6\u5de5\u5177\",\"col\":3}},{\"id\":\"zzGTbwrQ7g\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u7269\u6d41\u8ba1\u5212\",\"col\":3}},{\"id\":\"fQkJq9hdkk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u7269\u6d41\u8fd0\u8d39\uff08\u8f66\u961f\u7528\uff09\",\"col\":3}},{\"id\":\"Dzjvf6r2N3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u8fd0\u8d39\u8ba1\u7b97\",\"col\":3}},{\"id\":\"05DkTrD4pm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u7269\u6d41\u5355\u5165\u51fa\u5e93\u5de5\u5177\",\"col\":3}},{\"id\":\"VNW33MrpVV\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"tj04nqaBMo\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u65b0\u914d\u8f66\",\"col\":4}},{\"id\":\"pnCFQsR-xo\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5df2\u88c5\u8f66\",\"col\":4}},{\"id\":\"5He0PpmiLp\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5df2\u5378\u8f66\",\"col\":4}},{\"id\":\"7tf5FRmGKD\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5165\u5e93\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}},{\"id\":\"FognSN8k_s\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u51fa\u5e93\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}},{\"id\":\"a5ff4rm9Ji\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5916\u5356\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}}]",
+ "content": "[{\"id\":\"OGVjfP75Ac\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Shipping</span>\",\"col\":12}},{\"id\":\"LPI-6dKJCC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Scale Item\",\"col\":3}},{\"id\":\"slWnqAPc9w\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u7269\u6d41\u8ba1\u91cf\u5355\u660e\u7ec6\u62a5\u544a\",\"col\":3}},{\"id\":\"bir3onWbvJ\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u62a5\u53f7\u5355\",\"col\":3}},{\"id\":\"5QhogLdCnU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u5730\u78c5\u8ba1\u91cf\u53f0\",\"col\":3}},{\"id\":\"UV0bQeZCLd\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u8f66\u8f86\u8c03\u5ea6\u5de5\u5177\",\"col\":3}},{\"id\":\"zzGTbwrQ7g\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u7269\u6d41\u8ba1\u5212\",\"col\":3}},{\"id\":\"fQkJq9hdkk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u7269\u6d41\u8fd0\u8d39\uff08\u8f66\u961f\u7528\uff09\",\"col\":3}},{\"id\":\"Dzjvf6r2N3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u8fd0\u8d39\u8ba1\u7b97\",\"col\":3}},{\"id\":\"05DkTrD4pm\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u7269\u6d41\u5355\u5165\u51fa\u5e93\u5de5\u5177\",\"col\":3}},{\"id\":\"fxZy95qEWA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u53f8\u673a\",\"col\":3}},{\"id\":\"TKVPh-DSNo\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u8f66\u8f86\",\"col\":3}},{\"id\":\"VNW33MrpVV\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"tj04nqaBMo\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u65b0\u914d\u8f66\",\"col\":4}},{\"id\":\"pnCFQsR-xo\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5df2\u88c5\u8f66\",\"col\":4}},{\"id\":\"5He0PpmiLp\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5df2\u5378\u8f66\",\"col\":4}},{\"id\":\"7tf5FRmGKD\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5165\u5e93\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}},{\"id\":\"FognSN8k_s\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u51fa\u5e93\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}},{\"id\":\"a5ff4rm9Ji\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"\u5916\u5356\uff08\u8fdb\u884c\u4e2d\uff09\",\"col\":4}}]",
  "creation": "2023-07-29 21:48:53.064421",
  "custom_blocks": [],
  "docstatus": 0,
@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "Shipping",
  "links": [],
- "modified": "2024-02-26 08:14:42.106097",
+ "modified": "2024-02-27 12:43:47.948850",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping",
@@ -73,6 +73,13 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "\u53f8\u673a",
+   "link_to": "Driver",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "\u7269\u6d41\u8ba1\u91cf\u5355\u660e\u7ec6\u62a5\u544a",
    "link_to": "Scale Item",
    "type": "Report"
@@ -103,6 +110,13 @@
    "doc_view": "List",
    "label": "\u7269\u6d41\u8ba1\u5212",
    "link_to": "Ship Plan",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "\u8f66\u8f86",
+   "link_to": "Vehicle",
    "type": "DocType"
   },
   {

@@ -798,7 +798,7 @@ def get_scale_item():
 
 
 @frappe.whitelist(allow_guest=True)
-def start_end_shipping(action, scale_item, mileage,image_base64, verification_code=None):
+def start_end_shipping(action, scale_item, mileage=None,image_base64=None, verification_code=None):
 	try:
 		
 		scale_item_doc = frappe.get_doc("Scale Item", scale_item,ignore_permissions=True)
@@ -823,10 +823,10 @@ def start_end_shipping(action, scale_item, mileage,image_base64, verification_co
 			if scale_item_doc.from_dt:
 				frappe.throw("出车时间已经设定，切勿重复操作")
 			else:
-				file_url = save_base64_image(image_base64, f"{scale_item}_start.png")
+				#file_url = save_base64_image(image_base64, f"{scale_item}_start.png")
 				scale_item_doc.from_dt = frappe.utils.now_datetime()
-				scale_item_doc.mileage_start = mileage
-				scale_item_doc.start_img = file_url
+				#scale_item_doc.mileage_start = mileage
+				#scale_item_doc.start_img = file_url
 				
 
 		elif action == 'end':
@@ -840,11 +840,11 @@ def start_end_shipping(action, scale_item, mileage,image_base64, verification_co
 			if scale_item_doc.to_dt:
 				frappe.throw("出车时间已经设定，切勿重复操作")
 			else:
-				file_url = save_base64_image(image_base64, f"{scale_item}_end.png")
+				#file_url = save_base64_image(image_base64, f"{scale_item}_end.png")
 				scale_item_doc.to_dt = frappe.utils.now_datetime()
-				scale_item_doc.mileage_end = mileage
-				scale_item_doc.end_img = file_url
-				scale_item_doc.verification_code = None
+				#scale_item_doc.mileage_end = mileage
+				#scale_item_doc.end_img = file_url
+				#scale_item_doc.verification_code = None
 		scale_item_doc.save(ignore_permissions=True)
 		frappe.response["message"] = {
 			"status": "success"
