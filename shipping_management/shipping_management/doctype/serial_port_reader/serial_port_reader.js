@@ -696,6 +696,27 @@ async function openClose(frm) {
                             receivedData = "";
                         }
                     }
+                    else if (frm.doc.market_segment == '宏赫-成品油')
+                    {
+                        const char = value[i];
+            
+                        if (char === '\x02') { // STX
+                            isMessageStarted = true;
+                            currentMessage = ''; // Reset message buffer
+                            continue; // Skip adding STX to message
+                        }
+                        
+                        if (char === '\x03' && isMessageStarted) { // ETX
+                            displayInScreen(frm, currentMessage);
+                            isMessageStarted = false; // Reset for next message
+                            currentMessage = ''; // Clear current message
+                            continue;
+                        }
+                        
+                        if (isMessageStarted) {
+                            currentMessage += char;
+                        }
+                    }
                     else {
                         //log 
                         receivedData = value;
