@@ -698,6 +698,7 @@ async function openClose(frm) {
                     }
                     else if (frm.doc.market_segment == '宏赫-成品油')
                     {
+                        for (let i = 0; i < value.length; i++) {
                         const char = value[i];
             
                         if (char === '\x02') { // STX
@@ -716,6 +717,7 @@ async function openClose(frm) {
                         if (isMessageStarted) {
                             currentMessage += char;
                         }
+                    }
                     }
                     else {
                         //log 
