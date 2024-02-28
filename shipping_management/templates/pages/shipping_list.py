@@ -18,7 +18,7 @@ def get_scale_items():
         scale_items = []
         if drivers:
             for driver in drivers:
-                scale_items += frappe.get_all('Scale Item', filters={'driver': driver.name, 'to_dt':''}, fields=['name', 'status', 'date', 'vehicle', 'from_dt', 'to_dt'])
+                scale_items += frappe.get_all('Scale Item', filters={'driver': driver.name, 'to_dt':''}, fields=['name', 'status', 'date', 'vehicle', 'from_dt', 'to_dt','from_addr', 'to_addr'])
                 for item in scale_items:
                     if not item['from_dt'] and not item['to_dt']:
                         item['item_status'] = '未开始'
