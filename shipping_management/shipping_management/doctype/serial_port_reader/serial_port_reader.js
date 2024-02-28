@@ -162,6 +162,19 @@ frappe.ui.form.on('Serial Port Reader', {
                                         doc.shuifen).replace('${r}',
                                         doc.rongzhong).replace('${pot}',
                                         doc.pot.split(' - ')[0]);
+                            
+                            if (template.v2) {
+                                html_content = html_content.replace('${v2}', template.v2);
+                            }
+                            if (template.v3) {
+                                html_content = html_content.replace('${v3}', template.v3);
+                            }
+                            if (template.v4) {
+                                html_content = html_content.replace('${v4}', template.v4);
+                            }
+                            if (template.v5) {
+                                html_content = html_content.replace('${v5}', template.v5);
+                            }
                             // Call the print function
                             print_html_label(html_content);
                         }
