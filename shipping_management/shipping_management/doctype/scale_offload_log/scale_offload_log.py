@@ -17,12 +17,12 @@ class ScaleOffloadLog(Document):
 				scale_item_doc.offload_net_weight = self.offload_net_weight
 	
 			if self.offload_image_upload:
-				scale_item_doc.offload_image_upload = self.offload_image_upload
+				scale_item_doc.offload_image_upload = self.offload_image_upload.replace("/private","")
 	
 			scale_item_doc.save(ignore_permissions=True)
 		else:
 			if self.offload_image_upload:
-				scale_item_doc.offload_image_upload = self.offload_image_upload
+				scale_item_doc.offload_image_upload = self.offload_image_upload.replace("/private","")
 				scale_item_doc.save(ignore_permissions=True)
   
 """ 	def validate(self):

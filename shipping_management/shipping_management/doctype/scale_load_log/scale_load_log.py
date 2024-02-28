@@ -18,14 +18,12 @@ class ScaleLoadLog(Document):
 	
 			if self.load_image_upload:
 				#remove the private path from the url to make it public
-				self.load_image_upload = self.load_image_upload.replace("/private","")
-				scale_item_doc.load_image_upload = self.load_image_upload
-	
+				scale_item_doc.load_image_upload = self.load_image_upload.replace("/private","")
 			scale_item_doc.save(ignore_permissions=True)
 		else:
 			if self.load_image_upload:
-				self.load_image_upload = self.load_image_upload.replace("/private","")
-				scale_item_doc.load_image_upload = self.load_image_upload
+				scale_item_doc.load_image_upload = self.load_image_upload.replace("/private","")
+				scale_item_doc.save(ignore_permissions=True)
 	
 """ 	def validate(self):
 		#check the scale item's verification code is equal to the verification code from web form
