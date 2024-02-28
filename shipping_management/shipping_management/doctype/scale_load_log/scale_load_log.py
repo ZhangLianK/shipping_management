@@ -17,12 +17,11 @@ class ScaleLoadLog(Document):
 				scale_item_doc.load_net_weight = self.load_net_weight
 	
 			if self.load_image_upload:
-				#remove the private path from the url to make it public
-				scale_item_doc.load_image_upload = self.load_image_upload.replace("/private","")
+				scale_item_doc.load_image_upload = self.load_image_upload
 			scale_item_doc.save(ignore_permissions=True)
 		else:
 			if self.load_image_upload:
-				scale_item_doc.load_image_upload = self.load_image_upload.replace("/private","")
+				scale_item_doc.load_image_upload = self.load_image_upload
 				scale_item_doc.save(ignore_permissions=True)
 	
 """ 	def validate(self):
