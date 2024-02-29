@@ -81,7 +81,11 @@ def ocr_image(load_image_upload_value,scale_item):
 	#generate file full path from file name
 	current_dir = os.getcwd()
 	site_home = frappe.utils.get_site_name(frappe.local.request.host)
-	file_path = current_dir  +"/" + site_home + load_image_upload_value
+	#if file is uploaded in public/files folder
+	if load_image_upload_value.startswith('/files/'):
+		file_path = current_dir  +"/" + site_home + "/public" + load_image_upload_value
+	else:
+		file_path = current_dir  +"/" + site_home + load_image_upload_value
  
 	frappe.publish_realtime(event=scale_item, message={'progress': 20,'total': 100},user='Guest')
  
