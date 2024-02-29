@@ -180,7 +180,7 @@ frappe.ui.form.on('Scale Item', {
         <th>毛重</th>
         <td>${doc.gross_weight}</td>
         <th>杂质</th>
-        <td class = "info">${doc.zazhi ? doc.zazhi : ''}</td>
+        <td class = "info"></td>
       </tr>
       <tr>
         <th>货名</th>
@@ -188,7 +188,7 @@ frappe.ui.form.on('Scale Item', {
         <th>毛重时间</th>
         <td>${doc.gross_dt}</td>
         <th>容重</th>
-        <td class = "info">${doc.rongzhong ? doc.rongzhong : ''}</td>
+        <td class = "info"></td>
       </tr>
       <tr>
         <th>发货单位</th>
@@ -196,7 +196,7 @@ frappe.ui.form.on('Scale Item', {
         <th>皮重</th>
         <td>${doc.blank_weight}</td>
         <th>霉变</th>
-        <td class = "info">${doc.meibian ? doc.meibian : ''}</td>
+        <td class = "info"></td>
       </tr>
       <tr>
         <th>收货单位</th>
@@ -204,7 +204,7 @@ frappe.ui.form.on('Scale Item', {
               <th>皮重时间</th>
         <td>${doc.blank_dt}</td>
         <th>水分</th>
-        <td class = "info">${doc.shuifen ? doc.shuifen : ''}</td>
+        <td class = "info"></td>
       </tr>
       <tr>
         <th>打印时间</th>
