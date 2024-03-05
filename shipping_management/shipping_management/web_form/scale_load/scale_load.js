@@ -55,7 +55,7 @@ frappe.ready(function () {
 			// Select the 'Set all private' button by its text content among buttons in the modal-footer
 			const buttons = document.querySelectorAll('.modal-footer button');
 			buttons.forEach(button => {
-				if (button.textContent.trim() === 'Set all private') {
+				if (button.textContent.trim() === 'Set all private' || button.textContent.trim() === 'Set all public' || button.textContent.trim() === '设为隐私文件') {
 					button.remove(); // Remove the button from the DOM
 				}
 				//set the other button to be right side
@@ -64,6 +64,18 @@ frappe.ready(function () {
 				}
 			});
 		}
+
+		function removeLinkUpload() {
+			//select the button which contains the text "Link"
+			const buttons = document.querySelectorAll('.btn-file-upload');
+			buttons.forEach(button => {
+				if (button.textContent.trim() === 'Link' || button.textContent.trim() === 'Camera'
+					|| button.textContent.trim() === '连' || button.textContent.trim() === '相机'){
+					button.remove(); // Remove the button from the DOM
+				}
+			});
+		}
+
 
 		// Create a MutationObserver to monitor changes in the DOM
 		const observer = new MutationObserver((mutations) => {
@@ -80,6 +92,7 @@ frappe.ready(function () {
 						if (node.nodeType === Node.ELEMENT_NODE &&
 							(node.matches('.modal-content') || node.querySelector('.modal-content'))) {
 							removeSetAllPrivateButton();
+							removeLinkUpload();
 						}
 					});
 				}
@@ -156,9 +169,6 @@ frappe.ready(function () {
 		else {
 			console.log("scale_item is not set");
 		}
-
-		//add event listener so that when field load_image_upload is changed, then console log a message
-
 	});
 
 	//discard action

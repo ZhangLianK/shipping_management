@@ -21,6 +21,7 @@
   "vehicle_selector",
   "vehicle",
   "driver",
+  "yayun",
   "column_break_zlxzc",
   "date",
   "stock_date",
@@ -67,15 +68,16 @@
   "offload_image_upload",
   "offload_image",
   "\u5173\u8054\u4fe1\u606f_tab",
-  "transport_fee",
+  "baohao_text",
   "column_break_n3j8m",
   "ship_plan",
-  "section_break_jo6pq",
   "purchase_order",
   "purchase_receipt",
   "stock_dt",
+  "transport_fee",
   "column_break_0pcxq",
   "sales_order",
+  "order_note",
   "sales_invoice",
   "delivery_note",
   "verification_code",
@@ -197,6 +199,7 @@
    "reqd": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "transporter",
    "fieldtype": "Link",
    "in_standard_filter": 1,
@@ -409,10 +412,6 @@
    "label": "\u8fd0\u8d39\u5355"
   },
   {
-   "fieldname": "section_break_jo6pq",
-   "fieldtype": "Section Break"
-  },
-  {
    "allow_on_submit": 1,
    "fieldname": "purchase_order",
    "fieldtype": "Link",
@@ -518,7 +517,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval: doc.market_segment == '\u6210\u54c1\u6cb9'",
+   "depends_on": "eval: doc.market_segment != '\u7cae\u98df'",
    "fieldname": "\u8d39\u7528\u8be6\u60c5_tab",
    "fieldtype": "Tab Break",
    "label": "\u8d39\u7528\u8be6\u60c5"
@@ -748,12 +747,32 @@
    "fieldname": "cell_number",
    "fieldtype": "Data",
    "label": "\u624b\u673a\u53f7"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "baohao_text",
+   "fieldtype": "Text Editor",
+   "label": "\u62a5\u53f7\u6587\u672c"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "yayun",
+   "fieldtype": "Link",
+   "label": "\u62bc\u8fd0\u5458",
+   "options": "Yayun"
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "sales_order.order_note",
+   "fieldname": "order_note",
+   "fieldtype": "Data",
+   "label": "\u8ba2\u5355\u5907\u6ce8"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-25 00:57:34.184988",
+ "modified": "2024-03-04 01:37:05.115179",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

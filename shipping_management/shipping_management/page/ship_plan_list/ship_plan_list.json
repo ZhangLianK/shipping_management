@@ -1,0 +1,19 @@
+{
+ "content": null,
+ "creation": "2024-02-28 22:05:04.618898",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2024-02-28 22:05:04.618898",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "ship-plan-list",
+ "owner": "Administrator",
+ "page_name": "ship-plan-list",
+ "roles": [],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Ship Plan List"
+}

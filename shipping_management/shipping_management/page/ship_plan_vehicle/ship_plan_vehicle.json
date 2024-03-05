@@ -1,0 +1,19 @@
+{
+ "content": null,
+ "creation": "2024-02-28 23:00:14.219151",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2024-02-28 23:00:14.219151",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "ship-plan-vehicle",
+ "owner": "Administrator",
+ "page_name": "ship-plan-vehicle",
+ "roles": [],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "Ship Plan Vehicle"
+}

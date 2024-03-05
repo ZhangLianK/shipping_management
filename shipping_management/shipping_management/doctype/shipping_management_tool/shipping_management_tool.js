@@ -329,23 +329,22 @@ frappe.ui.form.on('Shipping Management Tool', {
 		});
 		//get  default_transporter from session default
 		let transporter = frappe.user_defaults.default_transporter;
-		frappe.db.get_list('Vehicle', {
-			fields: ['name', 'id'],
-			filters: {
-				'transporter': transporter
-			},
-			order_by: 'id asc',
-			limit: 'all'
+		frappe.call({
+			method: "shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.get_vehicles", // Replace with your app and module names
+			args: {
+				"transporter": transporter // Pass the transporter from the current form
+			}
 		}).then(r => {
-			if (r) {
+			if (r.message) {
 				// Add checkboxes and information to the container for each vehicle
-				$.each(r, function (i, vehicle) {
+				$.each(r.message, function (i, vehicle) {
 					var $checkbox_wrapper = $('<div class="vehicle-row">').appendTo($multi_select_container);
 
 					// Create a checkbox for each vehicle
 					var $checkbox = $('<input type="checkbox" class="vehicle-checkbox">')
 						.data('vehicle-id', vehicle.id) // Store the vehicle ID
 						.data('vehicle-name', vehicle.name) // Store the vehicle name
+						.data('vehicle-in-process', vehicle.processing) // Store the vehicle in_process
 						.appendTo($checkbox_wrapper);
 
 					// Display vehicle ID
@@ -354,6 +353,9 @@ frappe.ui.form.on('Shipping Management Tool', {
 					// Display vehicle name (you can concatenate it with ID or keep it separate)
 					var $name_span = $('<span class="vehicle-name">').text(vehicle.name).appendTo($checkbox_wrapper);
 
+					// Display vehicle in_process
+					var $in_process_span = $('<span class="vehicle-in-process">').text(vehicle.processing).appendTo($checkbox_wrapper);
+
 					// Handle checkbox click event
 					$checkbox.on('click', function () {
 						// Get all selected vehicles
@@ -361,9 +363,11 @@ frappe.ui.form.on('Shipping Management Tool', {
 						$multi_select_container.find('.vehicle-checkbox:checked').each(function () {
 							var vehicleId = $(this).data('vehicle-id');
 							var vehicleName = $(this).data('vehicle-name');
+							var vehicleInProcess = $(this).data('vehicle-in-process');
 							selected_vehicles.push({
 								id: vehicleId,
-								name: vehicleName
+								name: vehicleName,
+								in_process: vehicleInProcess
 							});
 						});
 						// Do something with the selected vehicles

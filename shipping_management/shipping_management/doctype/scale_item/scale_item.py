@@ -20,9 +20,23 @@ import random
 import string
 from tencent_integration.tencent_integration.doctype.tencent_sms_log.tencent_sms_log import create_sms_log
 import json
+import re
 
 
 class ScaleItem(Document):
+	def update_vehicle_in_process(self):
+		if self.vehicle and frappe.db.exists("Vehicle", self.vehicle):
+			vehicle = frappe.get_doc("Vehicle", self.vehicle)
+			vehicle.wheels = vehicle.wheels + 1
+			vehicle.save(ignore_permissions=True)
+
+	def cancel_vehicle_in_process(self):
+		if self.vehicle and frappe.db.exists("Vehicle", self.vehicle):
+			vehicle = frappe.get_doc("Vehicle", self.vehicle)
+			if vehicle.wheels > 0:
+				vehicle.wheels = vehicle.wheels - 1
+				vehicle.save(ignore_permissions=True)
+			
 	def get_verification_code(self):
 		driver_phone_number = frappe.get_value("Driver", self.driver, "cell_number")
 		if driver_phone_number:
@@ -336,8 +350,13 @@ class ScaleItem(Document):
 		#frappe.msgprint("before_update_after_submit")
 		self.change_status()
 		self.validate_status()
-
-		if self.type == 'DIRC' and not self.pot:
+		if self.to_dt:
+			self.cancel_vehicle_in_process()
+   
+		if self.sales_order:
+			self.order_note = frappe.get_value("Sales Order", self.sales_order, "order_note")
+   
+		if self.type == 'DIRC':
 			#get the company default in transit warehouse
 			company_default_warehouse = frappe.get_value("Company", self.company, "default_in_transit_warehouse")
 			self.pot = company_default_warehouse
@@ -395,7 +414,7 @@ class ScaleItem(Document):
 			self.update_order_scale_weight()
 	
 	def on_submit(self):
-		
+		self.update_vehicle_in_process()
 		#create notification sms
 		#first get driver phone number
 		if self.driver:
@@ -446,10 +465,12 @@ class ScaleItem(Document):
 				vehicle_doc.db_set('company', None)
 	
 	def on_cancel(self):
+		self.cancel_vehicle_in_process()
+		
 		#get all users that have role of "Scale Manager"
 		scale_manager = frappe.get_all("Has Role", filters={'role': 'Scale Manager Dummy'}, fields=['parent'])
 		scale_manager_list = [item.parent for item in scale_manager]
-
+  
 		#if self.status[0] >= '3' and frappe.session.user != 'Administrator' and frappe.session.user not in scale_manager_list:
 		#	frappe.throw(("当前状态无法取消！如果需要取消，请联系部门负责人！"), frappe.ValidationError)
 		#else:
@@ -916,4 +937,78 @@ def get_verification_code(scale_item,cell_number):
 		}
 
 
+@frappe.whitelist(allow_guest=True)
+def update_baohao_text(baohao_template,scale_items):
+	if not baohao_template:
+		frappe.response["message"] = {
+			"status": "error",
+			"message": "没有找到保号模板"
+		}
 
+	baohao_text_list = []
+	try:
+		scale_items = json.loads(scale_items)
+		for scale_item in scale_items:
+			scale_item_doc = frappe.get_doc("Scale Item", scale_item)
+			#get the driver doc
+			if scale_item_doc.driver:
+				driver_doc = frappe.get_doc("Driver", scale_item_doc.driver)
+			if scale_item_doc.vehicle:
+				vehicle_doc = frappe.get_doc("Vehicle", scale_item_doc.vehicle)
+				if vehicle_doc.yayun:
+					yayun_doc = frappe.get_doc("Yayun", vehicle_doc.yayun)
+	
+			vehicle_baohao = {
+				"driver_name": driver_doc.full_name if scale_item_doc.driver else '',
+				"driver_cell_number": driver_doc.cell_number if scale_item_doc.driver else '',
+				"driver_pid": driver_doc.pid if scale_item_doc.driver else '',
+				"license_number": driver_doc.license_number if scale_item_doc.driver else '',
+				"name": vehicle_doc.license_plate if vehicle_doc.license_plate else '',
+				"standard_qty": scale_item_doc.target_weight if scale_item_doc.target_weight else 0,
+				"guahao": vehicle_doc.guahao if vehicle_doc.guahao else '',
+				"transport_license_number": vehicle_doc.transport_license_number if vehicle_doc.transport_license_number else '',
+				"weight":vehicle_doc.weight if vehicle_doc.weight else '',
+				"zhoushu": cint(vehicle_doc.zhoushu) if vehicle_doc.zhoushu else '',
+				"xiguan":  '是' if vehicle_doc.xiguan==1 else '否',
+				"prev_item": vehicle_doc.prev_item 	if vehicle_doc.prev_item else '',
+				"yayun_name": yayun_doc.yayun_name if vehicle_doc.yayun else '',
+				"yayun_cell_number": yayun_doc.cell_number if vehicle_doc.yayun else '',
+				"yayun_pid": yayun_doc.pid if vehicle_doc.yayun else '',
+			}
+			#get template doc
+			template_doc = frappe.get_doc("Baohao Template", baohao_template)
+			#the template is jinja tempalte so we need to render it with the scale item data
+			baohao_text = frappe.render_template(template_doc.template, {"vehicle_baohao": vehicle_baohao})
+			if scale_item_doc.baohao_text == '<div class="ql-editor read-mode"><p><br></p></div>' or not scale_item_doc.baohao_text:
+				scale_item_doc.baohao_text = baohao_text
+				scale_item_doc.save(ignore_permissions=True)
+
+			baohao_text_list.append(scale_item_doc.baohao_text)
+
+		result = "<br>".join(baohao_text_list)
+		result = convert_to_pure_html(result)
+		frappe.response["message"] = {	
+			"status": "success",
+			"baohao_text": result
+		}
+
+	except Exception as e:
+		#frappe.log_error('scale API update faile', str(e))
+		frappe.response["message"] = {
+			"status": "error",
+			"message": str(e)
+		}
+  
+  
+def convert_to_pure_html(html_content):
+	  # Remove <div> and </div> tags
+	html_content = re.sub(r'</?div[^>]*>', '', html_content)
+
+	# Replace <p> tags with <br> tags. This will remove the opening <p> tag and replace closing </p> tags with <br>.
+	html_content = re.sub(r'<p[^>]*>', '', html_content)  # Remove start <p> tags
+	html_content = re.sub(r'</p>', '<br>', html_content)  # Replace end </p> tags with <br>
+
+	print(html_content)
+	return html_content
+
+	

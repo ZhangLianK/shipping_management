@@ -2,6 +2,26 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Scale Item', {
+    onload: function (frm) {
+        
+    },
+    onload_post_render: function (frm) {
+        if (frappe.route_options && frappe.route_options.tab) {
+            // Logic to switch to the specified tab
+            let tabName = frappe.route_options.tab;
+
+            //get tab panel which has active class
+            let activeTab = $('.tab-pane.active')[0].id;
+            if (activeTab != tabName) {
+                $(`#${activeTab}`).removeClass('active');
+                $(`#${activeTab}-tab`).removeClass('active');
+                // Example: Activate the tab based on the tab name or index
+                $(`#${tabName}`).tab('show');
+                $(`#${tabName}`).addClass('active');
+                $(`#${tabName}-tab`).addClass('active');
+            }
+        }
+    },
 
     refresh: function (frm) {
         

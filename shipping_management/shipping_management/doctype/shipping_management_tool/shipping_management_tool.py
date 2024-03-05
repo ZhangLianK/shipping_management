@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+import json
 
 class ShippingManagementTool(Document):
 	pass
@@ -34,6 +35,7 @@ def save_scale_item(doc_data):
         scale_doc.purchase_order = doc.purchase_order
         scale_doc.sales_order = doc.sales_order
         scale_doc.sales_invoice = doc.sales_invoice
+        scale_doc.transporter = doc.transporter
         
         scale_doc.save(ignore_permissions=True)
         return 'success'
@@ -257,4 +259,137 @@ def update_scale_item_from_child(scale_item, scale_child):
         return False  # Return False to indicate no changes were made
 
 
+@frappe.whitelist()
+def get_vehicles(transporter=None):
+    if not transporter is None and not transporter == '':
+        filters = {'transporter': transporter}
+    else:
+        filters = {}
+        
+    vehicle_list = frappe.get_all('Vehicle', 
+                                  filters=filters, 
+                                  fields=['name', 'id'],
+                                  order_by='id'
+                                  )
+    
+    #loop the vehicle list and get how many scale items are in processing
+    #if the scale_item has no to_dt, then it is in processing
+    for vehicle in vehicle_list:
+        scale_items = frappe.get_all('Scale Item', 
+                                     filters=[['vehicle', '=', vehicle['name']],["Scale Item","from_dt","is","not set"]
+                                                ],
+                                     fields=['name']
+                                     )
+        vehicle['processing'] = len(scale_items)
+    return vehicle_list
 
+
+@frappe.whitelist()
+def save_scale_item_m(ship_plan_name, vehicles):
+    try:
+        # Create a new Ship Plan doc
+        ship_plan = frappe.get_doc('Ship Plan', ship_plan_name)
+        # Loop through the vehicles and create a new Scale Item for each
+        data = frappe.form_dict['vehicles']  # 'vehicles' is the key for your JSON string
+        vehicles = json.loads(data) 
+        for vehicle in vehicles:
+            scale_item = frappe.new_doc('Scale Item')
+            scale_item.company = ship_plan.company
+            scale_item.vehicle = vehicle['vehicle_id']
+            vehicle_doc = frappe.get_doc('Vehicle', vehicle['vehicle_id'])
+            if vehicle_doc.transporter:
+                scale_item.transporter = vehicle_doc.transporter
+            if vehicle_doc.driver:
+                scale_item.driver = vehicle_doc.driver
+                driver_doc = frappe.get_doc('Driver', vehicle_doc.driver)
+                if driver_doc.cell_number:
+                    scale_item.cell_number = driver_doc.cell_number
+            
+            scale_item.target_weight = vehicle['quantity']
+            scale_item.type = 'OTH'
+            scale_item.date = ship_plan.date
+            scale_item.ship_plan = ship_plan_name
+            scale_item.save(ignore_permissions=True)
+        return 'success'
+    except Exception as e:
+        frappe.throw(frappe.get_traceback())
+        raise e
+    
+    
+@frappe.whitelist()
+def cancel_scale_items(scale_items):
+    #parse the json to a python object
+    scale_items = frappe.parse_json(scale_items)
+    results = []
+    for scale_item in scale_items:
+        try:
+            scale_item_doc = frappe.get_doc('Scale Item', scale_item)
+            scale_item_doc.cancel()
+            results.append({
+                'status': 'success',
+                'vehicle': scale_item_doc.vehicle,
+                'scale_item': scale_item_doc.name
+                })
+        except Exception as e:
+            results.append({
+                'status': 'error',
+                'vehicle': scale_item_doc.vehicle,
+                'scale_item': scale_item_doc.name,
+                'error': e
+                })
+    return results
+
+            
+            
+@frappe.whitelist()
+def assign_warehouse_to_scale_items(scale_items, warehouse):
+    #parse the json to a python object
+    scale_items = frappe.parse_json(scale_items)
+    results = []
+    for scale_item in scale_items:
+        try:
+            scale_item_doc = frappe.get_doc('Scale Item', scale_item)
+            scale_item_doc.pot = warehouse
+            scale_item_doc.type = 'IN'
+            scale_item_doc.to_addr = warehouse.split(' - ')[0]
+            scale_item_doc.save(ignore_permissions=True)
+            results.append({
+                'status': 'success',
+                'vehicle': scale_item_doc.vehicle,
+                'scale_item': scale_item_doc.name
+                })
+        except Exception as e:
+            results.append({
+                'status': 'error',
+                'vehicle': scale_item_doc.vehicle,
+                'scale_item': scale_item_doc.name,
+                'error': e
+                })
+    return results
+
+@frappe.whitelist()
+def assign_sales_order_to_scale_items(scale_items, sales_order, to_addr):
+    #parse the json to a python object
+    scale_items = frappe.parse_json(scale_items)
+    results = []
+    for scale_item in scale_items:
+        try:
+            scale_item_doc = frappe.get_doc('Scale Item', scale_item)
+            scale_item_doc.sales_order = sales_order
+            scale_item_doc.type = 'DIRC'
+            scale_item_doc.to_addr = to_addr
+            scale_item_doc.bill_type = 'SD'
+            scale_item_doc.save(ignore_permissions=True)
+            results.append({
+                'status': 'success',
+                'vehicle': scale_item_doc.vehicle,
+                'scale_item': scale_item_doc.name
+                })
+        except Exception as e:
+            results.append({
+                'status': 'error',
+                'vehicle': scale_item_doc.vehicle,
+                'scale_item': scale_item_doc.name,
+                'error': e
+                })
+    return results
