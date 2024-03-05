@@ -309,6 +309,7 @@ def save_scale_item_m(ship_plan_name, vehicles):
             scale_item.type = 'OTH'
             scale_item.date = ship_plan.date
             scale_item.ship_plan = ship_plan_name
+            scale_item.from_addr = ship_plan.from_addr
             scale_item.save(ignore_permissions=True)
         return 'success'
     except Exception as e:
