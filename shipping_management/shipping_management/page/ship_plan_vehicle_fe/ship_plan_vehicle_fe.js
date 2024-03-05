@@ -521,27 +521,59 @@ function fetchAndPopulateSalesOrderDropdown() {
 
 function addSalesOrderField(){
 	$('.sales-order-selection').empty()
+
 	let salesOrderField = frappe.ui.form.make_control({
         parent: $('.sales-order-selection'),
         df: {
             label: '销售订单',
             fieldtype: 'Link',
             options: 'Sales Order',
-			filters: {
-				'status': ['not in', ['Completed', 'Closed','Cancelled']]
+			get_query: function () {
+				let ship_plan_name = frappe.route_options.ship_plan;
+				return {
+					query: 'shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.get_filtered_sales_orders',
+					filters: {
+						'ship_plan': ship_plan_name
+					}
+				}
 			},
             onchange: function() {
-                // Action to take when a Sales Order is selected
-                console.log('Selected Sales Order:', this.get_value());
+				// Action to take when a Sales Order is selected
+				console.log('Selected Sales Order:', this.get_value());
 				//get the selected sales order
 				const selectedSalesOrder = this.get_value();
+				//get the ship plan name from route options
+				const ship_plan_name = frappe.route_options.ship_plan;
 				//get the order note of the selected sales order
 				frappe.db.get_value('Sales Order', selectedSalesOrder, 'order_note').then(r => {
 					if (r) {
 						$('#order_note').text(r.message.order_note);
 					}
 				});
-            }
+			
+				// Fetch a Ship Plan Item based on the selected Sales Order and Ship Plan
+				frappe.db.get_list('Ship Plan Item', {
+					fields: ['name', 'sales_order', 'parent', 'to_addr'], // Specify the fields you want to fetch
+					filters: {
+						'sales_order': selectedSalesOrder,
+						'parent': ship_plan_name
+					},
+					limit: 1 // Assuming you want to fetch only one matching Ship Plan Item
+				}).then(shipPlanItems => {
+					if (shipPlanItems && shipPlanItems.length > 0) {
+						// Found at least one matching Ship Plan Item
+						const shipPlanItem = shipPlanItems[0]; // Take the first one since limit is 1
+						console.log('Found Ship Plan Item:', shipPlanItem);
+						// Perform further actions as needed, e.g., display some details on the UI
+						//set the item's to_addr to the input field
+						$('.to-addr input').val( shipPlanItem.to_addr);
+					} else {
+						// No matching Ship Plan Item found
+						console.log('No matching Ship Plan Item found for selected Sales Order and Ship Plan.');
+					}
+				});
+			}
+			
         },
         render_input: true
     });
@@ -823,7 +855,6 @@ function init_page(wrapper, shipPlanName, transporterName) {
 					scale_items: selectedScaleItemNames
 				},
 				callback: function (r) {
-					``
 					if (r.message) {
 						for (let result of r.message) {
 							// Handle each result as needed

@@ -1,0 +1,23 @@
+{
+ "content": null,
+ "creation": "2024-03-05 17:50:49.269353",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2024-03-05 17:50:49.269353",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "ship-plan-fen",
+ "owner": "Administrator",
+ "page_name": "ship-plan-fen",
+ "roles": [
+  {
+   "role": "\u7269\u6d41\uff08\u5206\u91cf\uff09"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "\u9500\u552e\u5206\u91cf"
+}

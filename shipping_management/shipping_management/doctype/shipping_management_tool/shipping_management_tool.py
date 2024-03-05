@@ -394,3 +394,150 @@ def assign_sales_order_to_scale_items(scale_items, sales_order, to_addr):
                 'error': e
                 })
     return results
+
+
+@frappe.whitelist()
+def assign_warehouse_to_ship_plan(ship_plan, warehouse, v_qty):
+    try:
+        ship_plan_doc = frappe.get_doc('Ship Plan', ship_plan)
+        #add a child to child table plan_items,the doctype is Ship Plan Item
+        ship_plan_item = ship_plan_doc.append('plan_items', {})
+        ship_plan_item.type = 'IN'
+        ship_plan_item.to_addr = warehouse.split(' - ')[0]
+        ship_plan_item.v_qty = v_qty
+        ship_plan_item.pot = warehouse
+        ship_plan_doc.save(ignore_permissions=True)
+        return 'success'
+    except Exception as e:
+        return e
+
+@frappe.whitelist()
+def update_warehouse_to_ship_plan(ship_plan, warehouse, v_qty, item_name):
+    try:
+        ship_plan_doc = frappe.get_doc('Ship Plan', ship_plan)
+        #get the ship plan item using item_name
+        for item in ship_plan_doc.plan_items:
+            if item.name == item_name:
+                item.type = 'IN'
+                item.to_addr = warehouse.split(' - ')[0]
+                item.v_qty = v_qty
+                item.pot = warehouse
+                ship_plan_doc.save(ignore_permissions=True)
+                return 'success'
+    except Exception as e:
+        return e
+    
+    
+@frappe.whitelist()
+def assign_sales_order_to_ship_plan(ship_plan, sales_order, to_addr, v_qty, order_note):
+    try:
+        ship_plan_doc = frappe.get_doc('Ship Plan', ship_plan)
+        #add a child to child table plan_items,the doctype is Ship Plan Item
+        ship_plan_item = ship_plan_doc.append('plan_items', {})
+        ship_plan_item.type = 'DIRC'
+        ship_plan_item.to_addr = to_addr
+        ship_plan_item.v_qty = v_qty
+        ship_plan_item.sales_order = sales_order
+        ship_plan_item.order_note = order_note
+        ship_plan_doc.save(ignore_permissions=True)
+        return 'success'
+    except Exception as e:
+        return e
+    
+@frappe.whitelist()
+def update_sales_order_to_ship_plan(ship_plan, sales_order, to_addr, v_qty, order_note, item_name):
+    try:
+        ship_plan_doc = frappe.get_doc('Ship Plan', ship_plan)
+        for item in ship_plan_doc.plan_items:
+            if item.name == item_name:
+                item.type = 'DIRC'
+                item.to_addr = to_addr
+                item.v_qty = v_qty
+                item.sales_order = sales_order
+                item.order_note = order_note
+                ship_plan_doc.save(ignore_permissions=True)
+                return 'success'
+        #get the ship plan item using item_name
+    except Exception as e:
+        return e
+
+@frappe.whitelist()
+def cancel_ship_plan_items(ship_plan,items):
+    ship_plan_doc = frappe.get_doc('Ship Plan', ship_plan)
+    #parse the json to a python object
+    items = frappe.parse_json(items)
+    success_count = 0
+    error_count = 0
+    try:
+        for ship_plan_item in ship_plan_doc.plan_items:
+            if ship_plan_item.name in items:
+
+                    ship_plan_doc.get('plan_items').remove(ship_plan_item)
+                    success_count += 1
+        ship_plan_doc.save(ignore_permissions=True)
+        return {
+            'status': 'success',
+            'success_count': success_count,
+            }
+        
+    except Exception as e:
+        return {
+            'status': 'error',
+            'error': e
+            }
+
+@frappe.whitelist()
+def get_filtered_sales_orders(doctype, txt, searchfield, start, page_len, filters):
+    import json
+    if isinstance(filters, str):
+        filters = json.loads(filters)
+
+    ship_plan = filters.get('ship_plan') if filters else None
+    permitted_companies = get_user_permitted_companies()
+
+    # Convert start and page_len to integers
+    start = int(start)
+    page_len = int(page_len)
+
+    # Prepare the SQL query, including a filter for permitted companies
+    sales_order_fields = "`tabSales Order`.`name`, `tabSales Order`.`order_note`, `tabShip Plan Item`.`to_addr`,`tabShip Plan Item`.`v_qty`"
+
+    company_conditions = ""
+    if permitted_companies:
+        company_placeholders = ', '.join(['%s'] * len(permitted_companies))
+        company_conditions = f"AND `tabSales Order`.`company` IN ({company_placeholders})"
+
+    results = frappe.db.sql(f"""
+        SELECT {sales_order_fields}
+        FROM `tabSales Order`
+        INNER JOIN `tabShip Plan Item` ON `tabShip Plan Item`.`sales_order` = `tabSales Order`.`name`
+        WHERE `tabSales Order`.`docstatus` < 2
+        AND `tabSales Order`.`status` NOT IN ('Completed', 'Closed', 'Cancelled')
+        AND (`tabSales Order`.`{searchfield}` LIKE %s OR `tabSales Order`.`order_note` LIKE %s)
+        AND (%s IS NULL OR `tabShip Plan Item`.`parent` = %s)
+        {company_conditions}
+        ORDER BY
+            CASE WHEN `tabSales Order`.`name` LIKE %s THEN 0 ELSE 1 END,
+            CASE WHEN `tabSales Order`.`order_note` LIKE %s THEN 0 ELSE 1 END,
+            `tabSales Order`.`modified` DESC
+        LIMIT %s, %s
+    """, [
+        f"%{txt}%", f"%{txt}%", ship_plan, ship_plan,
+        f"%{txt}%", f"%{txt}%"
+    ] + permitted_companies + [start, page_len])
+
+    return results
+
+
+        
+def get_user_permitted_companies():
+    """Fetch a list of companies the user has permission to access."""
+    user = frappe.session.user
+    companies = frappe.get_list('User Permission',
+                                fields=['for_value'],
+                                filters={
+                                    'user': user,
+                                    'allow': 'Company',
+                                    'apply_to_all_doctypes': 0
+                                })
+    return [company.for_value for company in companies]

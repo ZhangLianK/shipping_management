@@ -34,7 +34,9 @@
   "section_break_lg2jo",
   "from_addr",
   "column_break_ov0kr",
-  "to_addr"
+  "to_addr",
+  "section_break_tgddv",
+  "plan_items"
  ],
  "fields": [
   {
@@ -190,11 +192,21 @@
    "fieldname": "card_number",
    "fieldtype": "Data",
    "label": "\u63d0\u8d27\u5c0f\u5361\u53f7"
+  },
+  {
+   "fieldname": "plan_items",
+   "fieldtype": "Table",
+   "label": "\u5206\u91cf\u4fe1\u606f",
+   "options": "Ship Plan Item"
+  },
+  {
+   "fieldname": "section_break_tgddv",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-05 11:13:32.507514",
+ "modified": "2024-03-05 23:50:32.020795",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Ship Plan",
@@ -219,5 +231,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "plan_desc"
+ "title_field": "plan_desc",
+ "track_changes": 1
 }
