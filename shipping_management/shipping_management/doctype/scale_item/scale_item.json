@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "autoname": "naming_series:",
  "creation": "2023-07-29 22:31:05.650899",
  "default_view": "List",
@@ -220,7 +221,7 @@
    "fieldname": "bill_type",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": " \u7ed3\u7b97\u7c7b\u578b",
+   "label": "\u7ed3\u7b97\u7c7b\u578b",
    "mandatory_depends_on": "eval: doc.type == 'OUT' || doc.type == 'DIRC'",
    "options": "Scale Type"
   },
@@ -416,7 +417,7 @@
    "fieldname": "purchase_order",
    "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": " \u91c7\u8d2d\u5355",
+   "label": "\u91c7\u8d2d\u5355",
    "options": "Purchase Order"
   },
   {
@@ -772,7 +773,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-03-04 01:37:05.115179",
+ "modified": "2024-03-05 10:42:26.843140",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

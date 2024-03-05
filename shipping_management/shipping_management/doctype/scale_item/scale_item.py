@@ -283,8 +283,20 @@ class ScaleItem(Document):
 			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan,ignore_permissions=True)
 			ship_plan.assigned_qty = ship_plan.assigned_qty + self.target_weight - old_target_weight
 			ship_plan.save(ignore_permissions=True)
+
+	def before_validate(self):
+		#check if ship plan is exist, if yes then get the company and purchase order from ship plan
+		if self.ship_plan:
+			ship_plan_doc = frappe.get_doc("Ship Plan", self.ship_plan)
+			if not self.company:
+				self.company = ship_plan_doc.company
+			if not self.purchase_order:
+				self.purchase_order = ship_plan_doc.purchase_order
+			if not self.date:
+				self.date = ship_plan_doc.date
    
 	def before_save(self):
+		
 		if self.market_segment == '粮食':
 			if self.type == 'IN' and self.offload_net_weight and self.price_ls and not self.amount_ls:
 				self.amount_ls = self.offload_net_weight * self.price_ls
