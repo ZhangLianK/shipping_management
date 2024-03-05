@@ -62,7 +62,7 @@ frappe.pages['ship-plan-list'].on_page_load = function (wrapper) {
 				filters: {
 					'status': ['!=', '完成'],
 				},
-				fields: ['name', 'date', 'qty', 'status','assigned_qty'],
+				fields: ['name', 'date', 'qty', 'status','assigned_qty','plan_desc'],
 				limit: 'all',
 				order_by: 'creation desc',
 			},
@@ -77,14 +77,19 @@ frappe.pages['ship-plan-list'].on_page_load = function (wrapper) {
 					$.each(r.message, function (index, ship_plan) {
 						var card_html = `<div class="ship-plan-card">
 							<div class="ship-plan-header">
-								<h4 class="ship-plan-title">${ship_plan.name}</h4>
+								<h4 class="ship-plan-desc">${ship_plan.plan_desc}</h4>
 								<span class="status-label">${ship_plan.status}</span>
 							</div>
 							<div class="ship-plan-body">
-								<p>计划日期: ${ship_plan.date}</p>
-								<p>计划量: ${ship_plan.qty}  
+
+								<p>计划量: ${ship_plan.qty} 
+								<span style='float:right'>${ship_plan.name}</span>
+								</p>
+
+								<p> 计划日期: ${ship_plan.date}
 								<span style='float:right'>已配运量: ${ship_plan.assigned_qty}</span>
 								</p>
+
 							</div>
 						</div>`;
 						

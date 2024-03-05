@@ -6,7 +6,10 @@ frappe.ui.form.on('Ship Plan', {
 
 	// }
 	from_addr: function(frm) {
-		frm.doc.plan_desc = frm.doc.from_addr
-		frm.refresh_field('plan_desc');
+		if (!frm.doc.from_addr) {
+			frm.set_value('plan_desc', frm.doc.from_addr);
+			frm.refresh_field('plan_desc');
+		}
+		
 	},
 });
