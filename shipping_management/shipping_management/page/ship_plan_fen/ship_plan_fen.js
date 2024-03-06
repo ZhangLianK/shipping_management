@@ -215,7 +215,7 @@ function fetchAndDisplayItems() {
 			parent: ship_plan_name
 		},
 		fields: ['name', 'type', 'sales_order', 'pot', 'v_qty', 'to_addr', 'order_note'],
-		order_by: 'type asc, creation asc',
+		order_by: 'creation',
 		limit: 'all'
 	}).then(function (r) {
 
@@ -580,6 +580,7 @@ function init_page(wrapper, shipPlanName, transporterName) {
 			<button class="btn assign-warehouse-btn">入库</button>
 			<button class="btn assign-sales-order-btn btn-secondary">外卖</button>
 			<button class="btn btn-primary save-so-btn" style="display: none;">保存</button>
+			<button class="btn btn-secondary info-btn">概要</button>
         </div>
     `;
 	contentWrapper.append(buttonsHtml);
@@ -600,12 +601,14 @@ function init_page(wrapper, shipPlanName, transporterName) {
 		$('.edit-btn').hide();
 		$('.cancel-btn').hide();
 		$('.save-so-btn').show();
+		$('.info-btn').hide();
 		$('.back-btn').off('click');
 		$('.back-btn').click(function () {
 			$('.save-so-btn').hide();
 			$('.cancel-btn').show();
 			$('.assign-warehouse-btn').show();
 			$('.assign-sales-order-btn').show();
+			$('.info-btn').show();
 			$('.warehouse-selection-container').hide();
 			$('.sales-order-assignment-container').hide()
 			$('.items-container').show();
@@ -637,6 +640,7 @@ function init_page(wrapper, shipPlanName, transporterName) {
 		$('.save-btn').show()
 		$('.edit-btn').hide();
 		$('.cancel-btn').hide();
+		$('.info-btn').hide();
 
 		//reset back-btn so that it can go back to the scale items,clear all other click events
 		$('.back-btn').off('click');
@@ -646,6 +650,7 @@ function init_page(wrapper, shipPlanName, transporterName) {
 			$('.assign-warehouse-btn').show();
 			$('.warehouse-selection-container').hide();
 			$('.items-container').show();
+			$('.info-btn').show();
 
 			fetchAndDisplayItems();
 			//reset back-btn so that it can go back to the ship-plan-list,clear all other click events
@@ -936,6 +941,21 @@ function init_page(wrapper, shipPlanName, transporterName) {
 		} else {
 			frappe.msgprint(__('No scale items selected.'));
 		}
+	});
+
+	$('.info-btn').click(function () {
+		//according to the item card info, generate text with following format
+		//1. order_note, to_addr, v_qty, sales_order
+
+		//get the all item card info
+		const items = $('.item');
+		let info = '';
+		items.each(function (index, item) {
+			info += `${$(item).find('h5').text()},卸${$(item).find('span[data-to_addr]').text()}, ${$(item).find('span[data-v_qty]').text()}车, ${$(item).find('span[data-id]').text().substring(8,18)} \n`;
+		});
+
+		//display the info in a dialog
+		frappe.msgprint(info);
 	});
 
 }
