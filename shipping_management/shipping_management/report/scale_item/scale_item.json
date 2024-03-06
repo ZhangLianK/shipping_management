@@ -163,6 +163,18 @@
    "label": "\u7269\u6d41\u8ba1\u5212",
    "options": "Ship Plan",
    "width": 0
+  },
+  {
+   "fieldname": "from_addr",
+   "fieldtype": "Data",
+   "label": "\u63d0\u8d27\u5730",
+   "width": 0
+  },
+  {
+   "fieldname": "to_addr",
+   "fieldtype": "Data",
+   "label": "\u9001\u8d27\u5730",
+   "width": 0
   }
  ],
  "creation": "2023-08-07 13:58:06.845047",
@@ -290,7 +302,7 @@
  ],
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2024-03-06 09:45:46.399553",
+ "modified": "2024-03-06 10:03:02.341481",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

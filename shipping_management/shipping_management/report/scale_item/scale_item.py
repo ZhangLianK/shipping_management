@@ -106,7 +106,9 @@ def get_data(conditions, filters):
             sci.sales_invoice,
             sci.delivery_note,
             sci.ship_plan,
-            sci.stock_dt
+            sci.stock_dt,
+            sci.from_addr,
+            sci.to_addr
 
         from `tabScale Item`  sci
         left outer join `tabDriver` d
@@ -287,6 +289,18 @@ def get_columns():
    "fieldtype": "Link",
    "label": "\u7269\u6d41\u8ba1\u5212",
    "options": "Ship Plan",
+   "width": 0
+  },
+  {
+   "fieldname": "from_addr",
+   "fieldtype": "Data",
+   "label": "\u63d0\u8d27\u5730",
+   "width": 0
+  },
+  {
+   "fieldname": "to_addr",
+   "fieldtype": "Data",
+   "label": "\u9001\u8d27\u5730",
    "width": 0
   }
   
