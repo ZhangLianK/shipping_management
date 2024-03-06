@@ -220,7 +220,11 @@ function fetchAndDisplayItems() {
 	}).then(function (r) {
 
 		if (r) {
-
+			// Calculate the total v_qty
+			let total_v_qty = 0;
+			r.forEach(item => {
+				total_v_qty += item.v_qty;
+			});
 			// Clear existing items
 			$('.items-container').empty();
 			// Display each scale item in the container
@@ -230,7 +234,10 @@ function fetchAndDisplayItems() {
 			$('.assign-sales-order-btn').show();
 			$('.cancel-btn').hide()
 			$('.edit-btn').hide()
+			//set the total v_qty in ship plan info
+			$('#total_v_qty').text(total_v_qty);
 		}
+
 
 	});
 }
@@ -247,8 +254,8 @@ function display_ship_plan_info() {
 			<p><span id="transporter-name">承运商：${transporterName ? transporterName : '所有'}</span>
 			<span id="ship-plan-name" style="float:right">${doc.name}</span>
 			</p>
-			<p><span>计划量: ${doc.qty}</span>
-			<span style="float:right">已配:${doc.assigned_qty}</span></p>
+			<p><span>计划总量: ${doc.qty} 吨</span>
+			<span style="float:right">已配车量:${doc.assigned_qty} 吨</span></p>
 			<span id="baohao_template" style = "display:none">${doc.baohao_template ? doc.baohao_template : ''}</span>
 		`);
 	});
@@ -474,6 +481,9 @@ function init_page(wrapper, shipPlanName, transporterName) {
 	const shipPlanInfo = $(`
         <div class="ship-plan-info">
         </div>
+		<p style = "font-weight:bold;">当前列表总车数: <span  id = "total_v_qty">
+		</span></p>
+		</div>
     `);
 	//clear ship plan info and regenerate it
 	contentWrapper.append(shipPlanInfo);

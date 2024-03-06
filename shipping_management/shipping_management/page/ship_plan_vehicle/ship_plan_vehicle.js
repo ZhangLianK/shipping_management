@@ -118,6 +118,9 @@ frappe.pages['ship-plan-vehicle'].on_page_load = function (wrapper) {
 		$('.scale-items-container').empty();
 		$('.vehicles-container').empty();
 	}
+	page.set_primary_action(__('Refresh'), function () {
+		fetchAndDisplayScaleItems();
+	}, 'refresh');
 };
 
 frappe.pages['ship-plan-vehicle'].on_page_show = function (wrapper) {
@@ -154,12 +157,17 @@ function fetchAndDisplayScaleItems() {
 		}).then(function (r) {
 
 			if (r) {
-
+				//calculate the total target_weight of the scale items
+				let total_target_weight = 0;
+					r.forEach(item => {
+					total_target_weight += parseFloat(item.target_weight);
+				});
 				// Clear existing items
 				$('.scale-items-container').empty();
 				// Display each scale item in the container
 				display_scale_items(r);
 				$('.scale-items-container').show();
+				$('#total_target').text(total_target_weight);
 			}
 		
 	});
@@ -177,8 +185,8 @@ function display_ship_plan_info() {
 			<p><span id="transporter-name">承运商：${transporterName?transporterName:'所有'}</span>
 			<span id="ship-plan-name" style="float:right">${doc.name}</span>
 			</p>
-			<p><span>计划量: ${doc.qty}</span>
-			<span style="float:right">已配:${doc.assigned_qty}</span></p>
+			<p><span>计划总量: ${doc.qty} 吨</span>
+			<span style="float:right">已配车量:${doc.assigned_qty} 吨</span></p>
 			<span id="baohao_template" style = "display:none">${doc.baohao_template?doc.baohao_template:''}</span>
 		`);
 		});
@@ -231,8 +239,8 @@ function display_scale_items(scale_items) {
 		});
 		// Finally, append the jQuery object to your container
 		$('.scale-items-container').append($itemHtml);
-
 	});
+
 }
 
 
@@ -247,6 +255,10 @@ function init_page(wrapper, shipPlanName, transporterName) {
 	const shipPlanInfo = $(`
         <div class="ship-plan-info">
         </div>
+		<div class = "total_target">
+		<p style = "font-weight:bold;">当前列表总量: <span  id = "total_target">
+		</span> 吨</p>
+		</div>
     `);
 	//clear ship plan info and regenerate it
 	contentWrapper.append(shipPlanInfo);
@@ -317,6 +329,7 @@ function init_page(wrapper, shipPlanName, transporterName) {
 
 	$('.back-btn').click(function () {
 		frappe.set_route('ship-plan-list');
+
 	});
 
 	$('.assign-btn').click(function () {
@@ -379,10 +392,10 @@ function init_page(wrapper, shipPlanName, transporterName) {
 							// Handle each result as needed
 							if (result.status === 'success') {
 								// Optionally, remove the cancelled items from the UI
-								frappe.msgprint(__('Selected scale items have been cancelled.'+result.scale_item + result.vehicle));
+								frappe.msgprint(__('已取消：'+result.scale_item + ' - ' + result.vehicle));
 							}
 							else{
-								frappe.msgprint(__('There was an issue cancelling the selected scale items.'+result.scale_item + result.vehicle));
+								frappe.msgprint(__('取消失败：'+result.scale_item + ' - ' + result.vehicle));
 							}
 						}
 					} else {
@@ -390,10 +403,11 @@ function init_page(wrapper, shipPlanName, transporterName) {
 						frappe.msgprint(__('There was an issue cancelling the selected scale items.'));
 					}
 					fetchAndDisplayScaleItems();
+					display_ship_plan_info();
 				}
 			});
 		} else {
-			frappe.msgprint(__('No scale items selected.'));
+			frappe.msgprint(__('请选择要取消的物流单！'));
 		}
 	});
 
@@ -490,6 +504,7 @@ function saveSelectedVehiclesToShipPlan(selectedVehicles) {
 					$('.save-btn').hide();
 					//hide the vehicles container and show the scale items container
 					$('.vehicles-container').hide();
+					display_ship_plan_info();
 					fetchAndDisplayScaleItems();
 				}
 			}

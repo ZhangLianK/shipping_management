@@ -263,12 +263,18 @@ function fetchAndDisplayScaleItems() {
 	}).then(function (r) {
 
 		if (r) {
+			//calculate the total target_weight of the scale items
+			let total_target_weight = 0;
+			r.forEach(item => {
+				total_target_weight += parseFloat(item.target_weight);
+			});
 
 			// Clear existing items
 			$('.scale-items-container').empty();
 			// Display each scale item in the container
 			display_scale_items(r);
 			$('.scale-items-container').show();
+			$('#total_target').text(total_target_weight);
 		}
 
 	});
@@ -286,8 +292,8 @@ function display_ship_plan_info() {
 			<p><span id="transporter-name">承运商：${transporterName ? transporterName : '所有'}</span>
 			<span id="ship-plan-name" style="float:right">${doc.name}</span>
 			</p>
-			<p><span>计划量: ${doc.qty}</span>
-			<span style="float:right">已配:${doc.assigned_qty}</span></p>
+			<p><span>计划总量: ${doc.qty} 吨</span>
+			<span style="float:right">总配车量:${doc.assigned_qty} 吨</span></p>
 			<span id="baohao_template" style = "display:none">${doc.baohao_template ? doc.baohao_template : ''}</span>
 		`);
 	});
@@ -349,6 +355,9 @@ function display_scale_items(scale_items) {
                     <div class="item-header">
                         <div>
                             <h5>${groupIndex + 1}.${index + 1}. <span data-item-vehicle="${item.vehicle}">${item.vehicle}</span>
+							<span class="status-label" style="float: right;" data-type="${item.type}">
+								${item.type == 'DIRC' ? '外卖' : item.type == 'IN'? "入库": item.type == 'OUT' ? "出库" : '其他'}
+							</span>
                             </h5>
                         </div>
                     </div>
@@ -606,6 +615,10 @@ function init_page(wrapper, shipPlanName, transporterName) {
 	const shipPlanInfo = $(`
         <div class="ship-plan-info">
         </div>
+		<div class = "total_target">
+		<p style = "font-weight:bold;">当前列表总量: <span  id = "total_target">
+		</span> 吨</p>
+		</div>
     `);
 	//clear ship plan info and regenerate it
 	contentWrapper.append(shipPlanInfo);
@@ -653,7 +666,6 @@ function init_page(wrapper, shipPlanName, transporterName) {
         <div class="footer-buttons">
 			<button class="btn back-btn">返回</button>
             <button class="btn btn-primary save-btn" style="display: none;">保存</button>
-			<button class="btn btn-secondary cancel-btn">取消</button>
 			<button class="btn btn-secondary edit-btn" style="display: none;">更改</button>
 			<button class="btn assign-warehouse-btn">入库</button>
 			<button class="btn assign-sales-order-btn btn-secondary">外卖</button>
