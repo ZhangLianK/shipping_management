@@ -215,7 +215,7 @@ function fetchAndDisplayItems() {
 			parent: ship_plan_name
 		},
 		fields: ['name', 'type', 'sales_order', 'pot', 'v_qty', 'to_addr', 'order_note'],
-		order_by: 'creation',
+		order_by: 'type asc, creation asc',
 		limit: 'all'
 	}).then(function (r) {
 

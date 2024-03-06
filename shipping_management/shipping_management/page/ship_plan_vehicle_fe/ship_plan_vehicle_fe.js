@@ -258,7 +258,7 @@ function fetchAndDisplayScaleItems() {
 			status: ['!=', '9 已取消']
 		},
 		fields: ['vehicle', 'target_weight', 'status', 'name', 'to_addr', 'type', 'bill_type', 'sales_order', 'pot', 'order_note'],
-		order_by: 'creation',
+		order_by: 'type desc, creation asc',
 		limit: 'all'
 	}).then(function (r) {
 
