@@ -210,25 +210,19 @@ function fetchAndDisplayItems() {
 	//clear ship plan info and regenerate it
 
 	// Assuming `fetchScaleItems` is your method to get scale items from the server
-	frappe.db.get_list('Ship Plan Item', {
-		filters: {
-			parent: ship_plan_name
-		},
-		fields: ['name', 'type', 'sales_order', 'pot', 'v_qty', 'to_addr', 'order_note'],
-		order_by: 'creation',
-		limit: 'all'
-	}).then(function (r) {
-
-		if (r) {
+	frappe.db.get_doc('Ship Plan', ship_plan_name).then(doc => {
+		//get the ship plan item info from field plan_items
+		const plan_items = doc.plan_items;
+		if (plan_items) {
 			// Calculate the total v_qty
 			let total_v_qty = 0;
-			r.forEach(item => {
+			plan_items.forEach(item => {
 				total_v_qty += item.v_qty;
 			});
 			// Clear existing items
 			$('.items-container').empty();
 			// Display each scale item in the container
-			display_items(r);
+			display_items(plan_items);
 			$('.items-container').show();
 			$('.assign-warehouse-btn').show();
 			$('.assign-sales-order-btn').show();
@@ -237,8 +231,6 @@ function fetchAndDisplayItems() {
 			//set the total v_qty in ship plan info
 			$('#total_v_qty').text(total_v_qty);
 		}
-
-
 	});
 }
 function display_ship_plan_info() {
