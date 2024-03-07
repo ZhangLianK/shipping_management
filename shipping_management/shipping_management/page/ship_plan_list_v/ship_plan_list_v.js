@@ -1,3 +1,5 @@
+
+var default_transporter = frappe.user_defaults.default_transporter;
 frappe.pages['ship-plan-list-v'].on_page_load = function(wrapper) {
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
@@ -5,11 +7,11 @@ frappe.pages['ship-plan-list-v'].on_page_load = function(wrapper) {
 		single_column: true
 	});
 
-	var default_transporter = frappe.user_defaults.default_transporter;
+
 
 	// Add CSS to the page
 	var css = `
-	 #ship-plan-container {
+	 #ship-plan-container-so {
 		 display: flex;
 		 flex-direction: column;
 	 }
@@ -53,7 +55,21 @@ frappe.pages['ship-plan-list-v'].on_page_load = function(wrapper) {
 	}
 
 	// Create a container for ship plans
-	page.main.html('<div id="ship-plan-container"></div>');
+	page.main.html('<div id="ship-plan-container-so"></div>');
+
+	// Initial call to populate the page
+	refresh_ship_plans();
+
+	// Optionally, you can add a button to refresh the ship plan list
+	page.set_primary_action(__('Refresh'), function () {
+		refresh_ship_plans();
+	}, 'refresh');
+};
+
+frappe.pages['ship-plan-list-v'].on_page_show = function (wrapper) {
+	//const route = frappe.get_route();
+	refresh_ship_plans();
+};
 
 	// Function to fetch and render ship plans
 	function refresh_ship_plans() {
@@ -72,7 +88,7 @@ frappe.pages['ship-plan-list-v'].on_page_load = function(wrapper) {
 			callback: function (r) {
 				if (r.message) {
 					// Clear the container before adding new content
-					var container = $('#ship-plan-container');
+					var container = $('#ship-plan-container-so');
 					container.empty();
 
 					// Iterate over ship plans and create cards
@@ -105,11 +121,3 @@ frappe.pages['ship-plan-list-v'].on_page_load = function(wrapper) {
 		});
 	}
 
-	// Initial call to populate the page
-	refresh_ship_plans();
-
-	// Optionally, you can add a button to refresh the ship plan list
-	page.set_primary_action(__('Refresh'), function () {
-		refresh_ship_plans();
-	}, 'refresh');
-};
