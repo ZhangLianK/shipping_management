@@ -1,5 +1,6 @@
 var default_transporter = frappe.user_defaults.default_transporter;
 frappe.pages['ship-plan-list-fen'].on_page_load = function(wrapper) {
+	$(wrapper).empty();
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
 		title: '物流计划-分量',
@@ -43,6 +44,21 @@ frappe.pages['ship-plan-list-fen'].on_page_load = function(wrapper) {
 		 margin: 0;
 		 color: #555;
 	 }
+	 #bottom-buttons {
+        position: fixed; /* Fix position at the bottom */
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #fff; /* Match your theme */
+        border-top: 1px solid #d1d8dd;
+        padding: 10px;
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* Optional: adds shadow for elevation effect */
+        z-index: 100; /* Ensure it's above other content */
+    }
+	.back-btn {
+		width: 100%
+		text-align: center;
+	}
  `;
 	var head = document.head || document.getElementsByTagName('head')[0];
 	var style = document.createElement('style');
@@ -58,7 +74,8 @@ frappe.pages['ship-plan-list-fen'].on_page_load = function(wrapper) {
 	// Create a container for ship plans
 	page.main.html('<div id="ship-plan-container-ship"></div>');
 
-	
+	//create a container for bottom buttons
+	page.main.append('<div id="bottom-buttons"></div>');
 
 	// Initial call to populate the page
 	refresh_ship_plans();
@@ -71,6 +88,8 @@ frappe.pages['ship-plan-list-fen'].on_page_load = function(wrapper) {
 frappe.pages['ship-plan-list-fen'].on_page_show = function (wrapper) {
 	//const route = frappe.get_route();
 	refresh_ship_plans();
+	//add a button to in the bottom of the page to go back to the previous page
+	$(wrapper).find('#bottom-buttons').html(`<button  style="width:100%"  class="btn btn-default back-btn" onclick="frappe.set_route('fenliang')">返回</button>`);
 };
 
 // Function to fetch and render ship plans

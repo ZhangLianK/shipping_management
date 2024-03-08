@@ -1,4 +1,6 @@
 frappe.pages['ship-plan-fen'].on_page_load = function (wrapper) {
+	//clear all content in the wrapper
+	$(wrapper).empty();
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
 		title: '销售分量',
@@ -160,8 +162,7 @@ frappe.pages['ship-plan-fen'].on_page_load = function (wrapper) {
 
 	.sales-order-assignment-container li span {
 		font-size: medium
-	}
-`;
+	}`;
 	var head = document.head || document.getElementsByTagName('head')[0];
 	var style = document.createElement('style');
 	head.appendChild(style);
@@ -178,7 +179,7 @@ frappe.pages['ship-plan-fen'].on_page_load = function (wrapper) {
 	const transporter = frappe.route_options.transporter;
 
 
-	init_page(wrapper, ship_plan_name, transporter);
+	init_page_so(wrapper, ship_plan_name, transporter);
 
 	if (!ship_plan_name) {
 		//clear all containers
@@ -192,11 +193,15 @@ frappe.pages['ship-plan-fen'].on_page_show = function (wrapper) {
 	//const route = frappe.get_route();
 	const ship_plan_name = frappe.route_options.ship_plan;
 	const transporter = frappe.route_options.transporter;
+
 	// Fetch and display scale items whenever the page is shown
 	if (ship_plan_name) {
 		display_ship_plan_info();
 		fetchAndDisplayItems();
 	}
+	init_buttons_so();
+	init_warehouse_container_so();
+	init_sales_order_container_so();
 };
 
 
@@ -413,10 +418,12 @@ function fetchAndPopulateSalesOrderDropdown() {
 }
 
 
-function addSalesOrderField(selectedSalesOrder) {
+function addSalesOrderFieldSo(selectedSalesOrder) {
 	$('.sales-order-selection').empty()
+	//get the parent wrapper
+	parentwrapper = $('#page-ship-plan-fen').find('.sales-order-selection');
 	let salesOrderField = frappe.ui.form.make_control({
-		parent: $('.sales-order-selection'),
+		parent: $(parentwrapper),
 		df: {
 			label: '销售订单',
 			fieldtype: 'Link',
@@ -444,10 +451,11 @@ function addSalesOrderField(selectedSalesOrder) {
 	}
 	salesOrderField.refresh();
 }
-function addToAddrField(selectedToAddr) {
+function addToAddrFieldSo(selectedToAddr) {
 	$('.to-addr').empty()
+	parentwrapper = $('#page-ship-plan-fen').find('.to-addr');
 	let toAddr = frappe.ui.form.make_control({
-		parent: $('.to-addr'),
+		parent: parentwrapper,
 		df: {
 			label: '送货地',
 			fieldtype: 'Data',
@@ -462,7 +470,7 @@ function addToAddrField(selectedToAddr) {
 
 
 
-function init_page(wrapper, shipPlanName, transporterName) {
+function init_page_so(wrapper, shipPlanName, transporterName) {
 	// Calculate the desired height (you might want to subtract any fixed header/footer heights)
 	const desiredHeight = window.innerHeight - 100; // Example: subtract 100px for header/footer
 
@@ -483,99 +491,32 @@ function init_page(wrapper, shipPlanName, transporterName) {
 	// Container for the scrollable list of items
 	const container = $('<div class="items-container"></div>');
 	contentWrapper.append(container);
-	const warehouseSelectionContainer = $(`
-		<div class="warehouse-selection-container" style="display:none;">
-			<div class="warehouse-tree">
-				<ul class="warehouse-group-selection"></ul>
-			</div>
-			<div class="selected-warehouse">罐（库位）:<span></span></div>
-			<div class="qty-adjust control-label">
-			<span>车数:</span>
-                    <button class="qty-decrease">-</button>
-					<input type="number" class="input-qty" value=0 style="width: 50px; text-align: center;" />
-                    <button class="qty-increase">+</button>
-            </div>
-			<div class="selected-item"></div>
-		</div>
-		`).appendTo('.content-wrapper');
-
-	warehouseSelectionContainer.find('.qty-decrease').click(function (e) {
-		e.stopPropagation(); // Prevent the vehicle-card click event
-		const qtyInput = $(this).closest('.qty-adjust').find('.input-qty');
-		let qty = parseFloat(qtyInput.val());
-		if (qty > 0) { // Optional: prevent qty from going below a certain value (e.g., 0)
-			qtyInput.val(--qty);
-		}
-	});
-
-	warehouseSelectionContainer.find('.qty-increase').click(function (e) {
-		e.stopPropagation(); // Prevent the vehicle-card click event
-		const qtyInput = $(this).closest('.qty-adjust').find('.input-qty');
-		let qty = parseFloat(qtyInput.val());
-		qtyInput.val(++qty);
-	});
-
-	// Append this container to the page
-	contentWrapper.append(warehouseSelectionContainer);
-
-	const salesOrderAssignmentContainer = $(`
-    <div class="sales-order-assignment-container" style="display:none;">
-        <div class="sales-order-selection">
-        </div>
-		<div class ="to-addr">
-		</div>
-		<div class="control-label">订单备注：
-		<span id="order_note"></span>
-		</div>
-		<div class="control-label qty-adjust-so">
-		<span>车数:</span>
-                    <button class="qty-decrease">-</button>
-					<input type="number" class="input-qty-so" value=0 style="width: 50px; text-align: center;" />
-                    <button class="qty-increase">+</button>
-		</div>
-		<div class="selected-item-so"></div>
-    </div>
-`).appendTo(contentWrapper);
-
-	salesOrderAssignmentContainer.find('.qty-decrease').click(function (e) {
-		e.stopPropagation(); // Prevent the vehicle-card click event
-		const qtyInput = $(this).closest('.qty-adjust-so').find('.input-qty-so');
-		let qty = parseFloat(qtyInput.val());
-		if (qty > 0) { // Optional: prevent qty from going below a certain value (e.g., 0)
-			qtyInput.val(--qty);
-		}
-	});
-
-	salesOrderAssignmentContainer.find('.qty-increase').click(function (e) {
-		e.stopPropagation(); // Prevent the vehicle-card click event
-		const qtyInput = $(this).closest('.qty-adjust-so').find('.input-qty-so');
-		let qty = parseFloat(qtyInput.val());
-		qtyInput.val(++qty);
-	});
-
-	// append a container for change selectted item
-	const editItemContainer = $(`
-		<div class="edit-item-container" style="display:none;">
-			<div class="control-label">name:</div>
-			</div>
-			<div class = "change-item">
-			</div>
-		`).appendTo(contentWrapper);
 
 	// Buttons fixed at the bottom
 	const buttonsHtml = `
         <div class="footer-buttons">
-			<button class="btn back-btn">返回</button>
-            <button class="btn btn-primary save-btn" style="display: none;">保存</button>
-			<button class="btn btn-secondary cancel-btn">取消</button>
-			<button class="btn btn-secondary edit-btn" style="display: none;">更改</button>
-			<button class="btn assign-warehouse-btn">入库</button>
-			<button class="btn assign-sales-order-btn btn-secondary">外卖</button>
-			<button class="btn btn-primary save-so-btn" style="display: none;">保存</button>
-			<button class="btn btn-secondary info-btn">概要</button>
         </div>
     `;
 	contentWrapper.append(buttonsHtml);
+
+	
+
+}
+
+function init_buttons_so(){
+
+	const buttons_wrapper = $('.footer-buttons');
+	//remove all buttons
+	buttons_wrapper.empty();
+
+	$('#page-ship-plan-fen').find('.footer-buttons').append(`
+		<button class="btn back-btn">返回</button>
+		<button class="btn btn-primary save-btn" style="display: none;">保存</button>
+		<button class="btn btn-secondary edit-btn" style="display: none;">更改</button>
+		<button class="btn assign-warehouse-btn">入库</button>
+		<button class="btn assign-sales-order-btn btn-secondary">外卖</button>
+		<button class="btn btn-primary save-so-btn" style="display: none;">保存</button>
+	`);
 
 	$('.assign-sales-order-btn').click(function () {
 		//clear selected item
@@ -585,8 +526,8 @@ function init_page(wrapper, shipPlanName, transporterName) {
 		$('.items-container').hide();
 		//displaySelectedScaleItems($('.selected-scale-items-so')); // Update the list of selected scale items for assignment
 		fetchAndPopulateSalesOrderDropdown(); // Populate the sales order dropdown
-		addSalesOrderField();
-		addToAddrField();
+		addSalesOrderFieldSo();
+		addToAddrFieldSo();
 		$('.sales-order-assignment-container').show(); // Show the container
 		$('.assign-sales-order-btn').hide()
 		$('.assign-warehouse-btn').hide()
@@ -684,8 +625,8 @@ function init_page(wrapper, shipPlanName, transporterName) {
 			$('.selected-item-so').append(`<div class="item" data-item-name="${selectedItemName}">${selectedItemName}
 			</div>`);
 			// Populate the sales order dropdown
-			addSalesOrderField(selectedCardSalesOrder);
-			addToAddrField(selectedCardToAddr);
+			addSalesOrderFieldSo(selectedCardSalesOrder);
+			addToAddrFieldSo(selectedCardToAddr);
 			$('.input-qty-so').val(selectedCardVQty);
 			$('#order_note').text(selectedCardOrderNote);
 			$('.sales-order-assignment-container').show();
@@ -748,7 +689,6 @@ function init_page(wrapper, shipPlanName, transporterName) {
 				$('.back-btn').click(function () {
 					frappe.set_route('ship-plan-list-v');
 				});
-
 			});
 		
 		}
@@ -949,5 +889,87 @@ function init_page(wrapper, shipPlanName, transporterName) {
 		//display the info in a dialog
 		frappe.msgprint(info);
 	});
+}
+
+function init_warehouse_container_so() {
+	//remove all existing warehouse selection container
+	$('.warehouse-selection-container').remove();
+	const warehouseSelectionContainer = $(`
+		<div class="warehouse-selection-container" style="display:none;">
+			<div class="warehouse-tree">
+				<ul class="warehouse-group-selection"></ul>
+			</div>
+			<div class="selected-warehouse">罐（库位）:<span></span></div>
+			<div class="qty-adjust control-label">
+			<span>车数:</span>
+                    <button class="qty-decrease">-</button>
+					<input type="number" class="input-qty" value=0 style="width: 50px; text-align: center;" />
+                    <button class="qty-increase">+</button>
+            </div>
+			<div class="selected-item"></div>
+		</div>
+		`);
+
+	warehouseSelectionContainer.find('.qty-decrease').click(function (e) {
+		e.stopPropagation(); // Prevent the vehicle-card click event
+		const qtyInput = $(this).closest('.qty-adjust').find('.input-qty');
+		let qty = parseFloat(qtyInput.val());
+		if (qty > 0) { // Optional: prevent qty from going below a certain value (e.g., 0)
+			qtyInput.val(--qty);
+		}
+	});
+
+	warehouseSelectionContainer.find('.qty-increase').click(function (e) {
+		e.stopPropagation(); // Prevent the vehicle-card click event
+		const qtyInput = $(this).closest('.qty-adjust').find('.input-qty');
+		let qty = parseFloat(qtyInput.val());
+		qtyInput.val(++qty);
+	});
+
+	// Append this container to the page
+	$('#page-ship-plan-fen').find('.content-wrapper').append(warehouseSelectionContainer);
+
+}
+
+function init_sales_order_container_so() {
+	//remove all existing sales order selection container
+	$('.sales-order-assignment-container').remove();
+	const salesOrderAssignmentContainer = $(`
+    <div class="sales-order-assignment-container" style="display:none;">
+        <div class="sales-order-selection">
+        </div>
+		<div class ="to-addr">
+		</div>
+		<div class="control-label">订单备注：
+		<span id="order_note"></span>
+		</div>
+		<div class="control-label qty-adjust-so">
+		<span>车数:</span>
+                    <button class="qty-decrease">-</button>
+					<input type="number" class="input-qty-so" value=0 style="width: 50px; text-align: center;" />
+                    <button class="qty-increase">+</button>
+		</div>
+		<div class="selected-item-so"></div>
+    </div>
+`);
+
+	salesOrderAssignmentContainer.find('.qty-decrease').click(function (e) {
+		e.stopPropagation(); // Prevent the vehicle-card click event
+		const qtyInput = $(this).closest('.qty-adjust-so').find('.input-qty-so');
+		let qty = parseFloat(qtyInput.val());
+		if (qty > 0) { // Optional: prevent qty from going below a certain value (e.g., 0)
+			qtyInput.val(--qty);
+		}
+	});
+
+	salesOrderAssignmentContainer.find('.qty-increase').click(function (e) {
+		e.stopPropagation(); // Prevent the vehicle-card click event
+		const qtyInput = $(this).closest('.qty-adjust-so').find('.input-qty-so');
+		let qty = parseFloat(qtyInput.val());
+		qtyInput.val(++qty);
+	});
+
+	// Append this container to the page
+	$('#page-ship-plan-fen').find('.content-wrapper').append(salesOrderAssignmentContainer);
 
 }

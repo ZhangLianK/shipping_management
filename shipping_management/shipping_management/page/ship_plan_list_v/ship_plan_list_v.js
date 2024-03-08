@@ -11,38 +11,56 @@ frappe.pages['ship-plan-list-v'].on_page_load = function(wrapper) {
 
 	// Add CSS to the page
 	var css = `
-	 #ship-plan-container-so {
-		 display: flex;
-		 flex-direction: column;
-	 }
-	 .ship-plan-card {
-		 border: 1px solid #d1d8dd;
-		 border-radius: 4px;
-		 padding: 15px;
-		 margin-bottom: 10px;
-		 background: #ffffff;
-	 }
-	 .ship-plan-header {
-		 display: flex;
-		 justify-content: space-between;
-		 align-items: center;
-	 }
-	 .ship-plan-title {
-		 margin: 0;
-		 font-size: 1.2em;
-	 }
-	 .status-label {
-		 margin-left: auto;
-		 background: #f0f0f0;
-		 padding: 2px 5px;
-		 border-radius: 4px;
-		 font-size: 0.9em;
-	 }
-	 .ship-plan-body p {
-		 margin: 0;
-		 color: #555;
-	 }
- `;
+    #ship-plan-container-so {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto; /* Enable vertical scrolling */
+        max-height: calc(100vh - 150px); /* Adjust the max height as needed */
+        margin-bottom: 20px; /* Space for the bottom button */
+    }
+    .ship-plan-card {
+        border: 1px solid #d1d8dd;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 10px;
+        background: #ffffff;
+    }
+    .ship-plan-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .ship-plan-title {
+        margin: 0;
+        font-size: 1.2em;
+    }
+    .status-label {
+        margin-left: auto;
+        background: #f0f0f0;
+        padding: 2px 5px;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+    .ship-plan-body p {
+        margin: 0;
+        color: #555;
+    }
+    #bottom-buttons {
+        position: fixed; /* Fix position at the bottom */
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #fff; /* Match your theme */
+        border-top: 1px solid #d1d8dd;
+        padding: 10px;
+        box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* Optional: adds shadow for elevation effect */
+        z-index: 100; /* Ensure it's above other content */
+    }
+	.back-btn {
+		width: 100%
+		text-align: center;
+	}
+`;
 	var head = document.head || document.getElementsByTagName('head')[0];
 	var style = document.createElement('style');
 	head.appendChild(style);
@@ -57,6 +75,8 @@ frappe.pages['ship-plan-list-v'].on_page_load = function(wrapper) {
 	// Create a container for ship plans
 	page.main.html('<div id="ship-plan-container-so"></div>');
 
+	//create a container for bottom buttons
+	page.main.append('<div id="bottom-buttons"></div>');
 	// Initial call to populate the page
 	refresh_ship_plans();
 
@@ -64,11 +84,20 @@ frappe.pages['ship-plan-list-v'].on_page_load = function(wrapper) {
 	page.set_primary_action(__('Refresh'), function () {
 		refresh_ship_plans();
 	}, 'refresh');
+
+	//add a button to in the bottom of the page
+	page.add_menu_item('返回', function () {
+		frappe.set_route('fenliang');
+	});
+
 };
 
 frappe.pages['ship-plan-list-v'].on_page_show = function (wrapper) {
 	//const route = frappe.get_route();
+	
 	refresh_ship_plans();
+	//add a button to in the bottom of the page to go back to the previous page
+	$(wrapper).find('#bottom-buttons').html(`<button style="width:100%"  class="btn btn-default back-btn" onclick="frappe.set_route('fenliang')">返回</button>`);
 };
 
 	// Function to fetch and render ship plans

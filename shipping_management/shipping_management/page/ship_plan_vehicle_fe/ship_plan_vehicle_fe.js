@@ -1,7 +1,8 @@
 frappe.pages['ship-plan-vehicle-fe'].on_page_load = function (wrapper) {
+	$(wrapper).empty();
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
-		title: '分量',
+		title: '物流分量',
 		single_column: true
 	});
 	var css = `.content-wrapper {
@@ -238,6 +239,9 @@ frappe.pages['ship-plan-vehicle-fe'].on_page_show = function (wrapper) {
 		display_ship_plan_info();
 		fetchAndDisplayScaleItems();
 	}
+	init_buttons();
+	init_warehouse_container();
+	init_sales_order_container();
 };
 
 
@@ -530,9 +534,9 @@ function fetchAndPopulateSalesOrderDropdown() {
 
 function addSalesOrderField(){
 	$('.sales-order-selection').empty()
-
+	parentwrapper = $('#page-ship-plan-vehicle-fe').find('.sales-order-selection');
 	let salesOrderField = frappe.ui.form.make_control({
-        parent: $('.sales-order-selection'),
+        parent: parentwrapper,
         df: {
             label: '销售订单',
             fieldtype: 'Link',
@@ -591,8 +595,9 @@ function addSalesOrderField(){
 }
 function addToAddrField(){
 	$('.to-addr').empty()
+	parentwrapper = $('#page-ship-plan-vehicle-fe').find('.sales-order-selection');
 	let toAddr = frappe.ui.form.make_control({
-        parent: $('.to-addr'),
+        parent: parentwrapper,
         df: {
             label: '送货地',
             fieldtype: 'Data',
@@ -627,268 +632,12 @@ function init_page(wrapper, shipPlanName, transporterName) {
 	const container = $('<div class="scale-items-container"></div>');
 	contentWrapper.append(container);
 
-	// Inside your init_page function or appropriate setup function
-	const warehouseSelectionContainer = $(`
-		<div class="warehouse-selection-container" style="display:none;">
-			<div class="warehouse-tree">
-				<ul class="warehouse-group-selection"></ul>
-			</div>
-			<div class="selected-warehouse">罐（库位）:<span></span></div>
-			<div class="selected-scale-items"></div>
-		</div>
-		`).appendTo('.content-wrapper');
-
-	// Append this container to the page
-	contentWrapper.append(warehouseSelectionContainer);
-
-	const salesOrderAssignmentContainer = $(`
-    <div class="sales-order-assignment-container" style="display:none;">
-        <div class="sales-order-selection">
-        </div>
-		<div class ="to-addr">
-		</div>
-		<div class="control-label">订单备注：
-		<span id="order_note"></span>
-		</div>
-		<div class="control-label">本次分配量：
-		<span id="total_target"></span>
-		</div>
-		<div class="selected-scale-items-so"></div>
-    </div>
-`).appendTo(contentWrapper);
-
-
-
-
-
 	// Buttons fixed at the bottom
 	const buttonsHtml = `
         <div class="footer-buttons">
-			<button class="btn back-btn">返回</button>
-            <button class="btn btn-primary save-btn" style="display: none;">保存</button>
-			<button class="btn btn-secondary edit-btn" style="display: none;">更改</button>
-			<button class="btn assign-warehouse-btn">入库</button>
-			<button class="btn assign-sales-order-btn btn-secondary">外卖</button>
-			<button class="btn btn-primary save-so-btn" style="display: none;">保存</button>
         </div>
     `;
 	contentWrapper.append(buttonsHtml);
-
-	$('.assign-sales-order-btn').click(function () {
-		//chekc if any scale item is selected
-		if (!checkScaleItemsSelected()) {
-			return;
-		}
-		$('#order_note').text('');
-		$('.scale-items-container').hide();
-		displaySelectedScaleItems($('.selected-scale-items-so')); // Update the list of selected scale items for assignment
-		//fetchAndPopulateSalesOrderDropdown(); // Populate the sales order dropdown
-		addSalesOrderField();
-		addToAddrField();
-		$('.sales-order-assignment-container').show(); // Show the container
-		$('.assign-sales-order-btn').hide()
-		$('.assign-warehouse-btn').hide()
-		$('.edit-btn').hide();
-		$('.cancel-btn').hide();
-		$('.save-so-btn').show();
-		$('.back-btn').off('click');
-		$('.back-btn').click(function () {
-			$('.save-so-btn').hide();
-			$('.cancel-btn').show();
-			$('.assign-warehouse-btn').show();
-			$('.assign-sales-order-btn').show();
-			$('.warehouse-selection-container').hide();
-			$('.sales-order-assignment-container').hide()
-			$('.scale-items-container').show();
-
-			fetchAndDisplayScaleItems();
-			//reset back-btn so that it can go back to the ship-plan-list,clear all other click events
-			$('.back-btn').off('click');
-			//hide save button
-			$('.save-btn').hide();
-			$('.back-btn').click(function () {
-				frappe.set_route('ship-plan-list-fen');
-			});
-
-		});
-	});
-
-
-
-
-
-	$('.assign-warehouse-btn').click(function () {
-		if (!checkScaleItemsSelected()) {
-			return;
-		}
-		//hide scale items list container
-		$('.scale-items-container').hide();
-		loadWarehouseGroups();
-		displaySelectedScaleItems($('.selected-scale-items')); // Update the list of selected scale items for assignment
-		// Show the warehouse selection container
-		$('.warehouse-selection-container').show();
-		$('.assign-warehouse-btn').hide()
-		$('.assign-sales-order-btn').hide()
-		$('.save-btn').show()
-		$('.edit-btn').hide();
-		$('.cancel-btn').hide();
-
-		//reset back-btn so that it can go back to the scale items,clear all other click events
-		$('.back-btn').off('click');
-		$('.back-btn').click(function () {
-			$('.cancel-btn').show();
-			$('.assign-sales-order-btn').show();
-			$('.assign-warehouse-btn').show();
-			$('.warehouse-selection-container').hide();
-			$('.scale-items-container').show();
-
-			fetchAndDisplayScaleItems();
-			//reset back-btn so that it can go back to the ship-plan-list,clear all other click events
-			$('.back-btn').off('click');
-			//hide save button
-			$('.save-btn').hide();
-			$('.back-btn').click(function () {
-				frappe.set_route('ship-plan-list-fen');
-			});
-
-		});
-	});
-
-
-	$('.edit-btn').click(function () {
-		//get the selected scale item
-		const selectedScaleItem = $('.scale-item.selected').data('item-name');
-		console.log('Edit button clicked', selectedScaleItem);
-		//get the selected scale item and open the edit form
-		frappe.route_options['tab'] = "scale-item-details";
-		frappe.set_route(['Form', 'Scale Item', selectedScaleItem]);
-	});
-
-	$('.back-btn').click(function () {
-		frappe.set_route('ship-plan-list-fen');
-	});
-
-	$('.save-so-btn').click(function () {
-		//collect all scale items in selected-scale-items div
-		const selectedScaleItems = $('.selected-scale-items-so .scale-item-card').map(function () {
-			return $(this).data('item-name');
-		}
-		).get();
-		//get the name of the selected sales order
-		const selectedSalesOrder = $('.sales-order-selection input').val();
-		if (!selectedSalesOrder) {
-			frappe.msgprint(__('请选择销售订单'));
-			return;
-		}
-		const toAddr = $('.to-addr input').val();
-		if (!toAddr) {
-			frappe.msgprint(__('请输入送货地'));
-			return;
-		}
-		if (selectedScaleItems.length > 0 && selectedSalesOrder) {
-			// Call the server-side method to assign these scale items to the selected sales order
-			frappe.call({
-				method: 'shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.assign_sales_order_to_scale_items', // Adjust this to your server-side method's actual path
-				args: {
-					scale_items: selectedScaleItems,
-					sales_order: selectedSalesOrder,
-					to_addr: toAddr
-				},
-				callback: function (r) {
-					if (r.message) {
-						for (let result of r.message) {
-							// Handle each result as needed
-							if (result.status === 'success') {
-								// Optionally, remove the cancelled items from the UI
-								//add success mark to the scale item card
-								$('.selected-scale-items-so .scale-item-card[data-item-name="' + result.scale_item + '"]').addClass('success');
-							}
-							else {
-								frappe.msgprint(__('外卖配单失败，单号：' + result.scale_item + '车号：' + result.vehicle));
-								//add fail mark to the scale item card
-								$('.selected-scale-items-so .scale-item-card[data-item-name="' + result.scale_item + '"]').addClass('fail');
-							}
-						}
-					}
-				}
-			});
-		}
-	});
-
-
-	$('.save-btn').click(function () {
-		//collect all scale items in selected-scale-items div
-		const selectedScaleItems = $('.selected-scale-items .scale-item-card').map(function () {
-			return $(this).data('item-name');
-		}
-		).get();
-		//get the name of the selected warehouse
-		const selectedWarehouse = $('.selected-warehouse').data('warehouse');
-
-		if (selectedScaleItems.length > 0 && selectedWarehouse) {
-			// Call the server-side method to assign these scale items to the selected warehouse
-			frappe.call({
-				method: 'shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.assign_warehouse_to_scale_items', // Adjust this to your server-side method's actual path
-				args: {
-					scale_items: selectedScaleItems,
-					warehouse: selectedWarehouse
-				},
-				callback: function (r) {
-					if (r.message) {
-						for (let result of r.message) {
-							// Handle each result as needed
-							if (result.status === 'success') {
-								// Optionally, remove the cancelled items from the UI
-								//add success mark to the scale item card
-								$('.selected-scale-items .scale-item-card[data-item-name="' + result.scale_item + '"]').addClass('success');
-							}
-							else {
-								frappe.msgprint(__('入库配罐失败，单号：' + result.scale_item + '车号：' + result.vehicle));
-								//add fail mark to the scale item card
-								$('.selected-scale-items .scale-item-card[data-item-name="' + result.scale_item + '"]').addClass('fail');
-							}
-						}
-					}
-				}
-			});
-		}
-	});
-	$('.cancel-btn').click(function () {
-		// Collect the names of all selected scale items
-		const selectedScaleItemNames = $('.scale-item.selected').map(function () {
-			return $(this).data('item-name'); // Assuming each .scale-item has a data attribute like data-item-name with the item's name
-		}).get();
-
-		if (selectedScaleItemNames.length > 0) {
-			// Call the server-side method to cancel these scale items
-			frappe.call({
-				method: 'shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.cancel_scale_items', // Adjust this to your server-side method's actual path
-				args: {
-					scale_items: selectedScaleItemNames
-				},
-				callback: function (r) {
-					if (r.message) {
-						for (let result of r.message) {
-							// Handle each result as needed
-							if (result.status === 'success') {
-								// Optionally, remove the cancelled items from the UI
-								frappe.msgprint(__('Selected scale items have been cancelled.' + result.scale_item + result.vehicle));
-							}
-							else {
-								frappe.msgprint(__('There was an issue cancelling the selected scale items.' + result.scale_item + result.vehicle));
-							}
-						}
-					} else {
-						// Handle error
-						frappe.msgprint(__('There was an issue cancelling the selected scale items.'));
-					}
-					fetchAndDisplayScaleItems();
-				}
-			});
-		} else {
-			frappe.msgprint(__('No scale items selected.'));
-		}
-	});
 
 }
 
@@ -982,5 +731,283 @@ function saveSelectedVehiclesToShipPlan(selectedVehicles) {
 			}
 		});
 	}
+}
+
+//init the buttons in the bottom
+function init_buttons() {
+	const buttons_wrapper = $('.footer-buttons');
+	//remove all buttons
+	buttons_wrapper.empty();
+
+	$('#page-ship-plan-vehicle-fe').find('.footer-buttons').append(`
+		<button class="btn back-btn">返回</button>
+		<button class="btn btn-primary save-btn" style="display: none;">保存</button>
+		<button class="btn btn-secondary edit-btn" style="display: none;">更改</button>
+		<button class="btn assign-warehouse-btn">入库</button>
+		<button class="btn assign-sales-order-btn btn-secondary">外卖</button>
+		<button class="btn btn-primary save-so-btn" style="display: none;">保存</button>
+	`);
+
+	$('.assign-sales-order-btn').click(function () {
+		//chekc if any scale item is selected
+		if (!checkScaleItemsSelected()) {
+			return;
+		}
+		else {
+			$('#order_note').text('');
+			$('.scale-items-container').hide();
+			displaySelectedScaleItems($('.selected-scale-items-so')); // Update the list of selected scale items for assignment
+			//fetchAndPopulateSalesOrderDropdown(); // Populate the sales order dropdown
+			addSalesOrderField();
+			addToAddrField();
+			$('.sales-order-assignment-container').show(); // Show the container
+			$('.assign-sales-order-btn').hide()
+			$('.assign-warehouse-btn').hide()
+			$('.edit-btn').hide();
+			$('.cancel-btn').hide();
+			$('.save-so-btn').show();
+			$('.back-btn').off('click');
+			$('.back-btn').click(function () {
+				$('.save-so-btn').hide();
+				$('.cancel-btn').show();
+				$('.assign-warehouse-btn').show();
+				$('.assign-sales-order-btn').show();
+				$('.warehouse-selection-container').hide();
+				$('.sales-order-assignment-container').hide()
+				$('.scale-items-container').show();
+
+				fetchAndDisplayScaleItems();
+				//reset back-btn so that it can go back to the ship-plan-list,clear all other click events
+				$('.back-btn').off('click');
+				//hide save button
+				$('.save-btn').hide();
+				$('.back-btn').click(function () {
+					frappe.set_route('ship-plan-list-fen');
+				});
+
+			});
+		}
+	});
+
+
+
+
+
+	$('.assign-warehouse-btn').click(function () {
+		if (!checkScaleItemsSelected()) {
+			return;
+		}
+		else {
+			//hide scale items list container
+		$('.scale-items-container').hide();
+		loadWarehouseGroups();
+		displaySelectedScaleItems($('.selected-scale-items')); // Update the list of selected scale items for assignment
+		// Show the warehouse selection container
+		$('.warehouse-selection-container').show();
+		$('.assign-warehouse-btn').hide()
+		$('.assign-sales-order-btn').hide()
+		$('.save-btn').show()
+		$('.edit-btn').hide();
+		$('.cancel-btn').hide();
+
+		//reset back-btn so that it can go back to the scale items,clear all other click events
+		$('.back-btn').off('click');
+		$('.back-btn').click(function () {
+			$('.cancel-btn').show();
+			$('.assign-sales-order-btn').show();
+			$('.assign-warehouse-btn').show();
+			$('.warehouse-selection-container').hide();
+			$('.scale-items-container').show();
+
+			fetchAndDisplayScaleItems();
+			//reset back-btn so that it can go back to the ship-plan-list,clear all other click events
+			$('.back-btn').off('click');
+			//hide save button
+			$('.save-btn').hide();
+			$('.back-btn').click(function () {
+				frappe.set_route('ship-plan-list-fen');
+			});
+
+		});
+
+		}
+	});
+
+
+	$('.edit-btn').click(function () {
+		//get the selected scale item
+		const selectedScaleItem = $('.scale-item.selected').data('item-name');
+		console.log('Edit button clicked', selectedScaleItem);
+		//get the selected scale item and open the edit form
+		frappe.route_options['tab'] = "scale-item-details";
+		frappe.set_route(['Form', 'Scale Item', selectedScaleItem]);
+	});
+
+	$('.back-btn').click(function () {
+		frappe.set_route('ship-plan-list-fen');
+	});
+
+	$('.save-so-btn').click(function () {
+		//collect all scale items in selected-scale-items div
+		const selectedScaleItems = $('.selected-scale-items-so .scale-item-card').map(function () {
+			return $(this).data('item-name');
+		}
+		).get();
+		//get the name of the selected sales order
+		const selectedSalesOrder = $('.sales-order-selection input').val();
+		if (!selectedSalesOrder) {
+			frappe.msgprint(__('请选择销售订单'));
+			return;
+		}
+		const toAddr = $('.to-addr input').val();
+		if (!toAddr) {
+			frappe.msgprint(__('请输入送货地'));
+			return;
+		}
+		if (selectedScaleItems.length > 0 && selectedSalesOrder) {
+			// Call the server-side method to assign these scale items to the selected sales order
+			frappe.call({
+				method: 'shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.assign_sales_order_to_scale_items', // Adjust this to your server-side method's actual path
+				args: {
+					scale_items: selectedScaleItems,
+					sales_order: selectedSalesOrder,
+					to_addr: toAddr
+				},
+				callback: function (r) {
+					if (r.message) {
+						for (let result of r.message) {
+							// Handle each result as needed
+							if (result.status === 'success') {
+								// Optionally, remove the cancelled items from the UI
+								//add success mark to the scale item card
+								$('.selected-scale-items-so .scale-item-card[data-item-name="' + result.scale_item + '"]').addClass('success');
+							}
+							else {
+								frappe.msgprint(__('外卖配单失败，单号：' + result.scale_item + '车号：' + result.vehicle));
+								//add fail mark to the scale item card
+								$('.selected-scale-items-so .scale-item-card[data-item-name="' + result.scale_item + '"]').addClass('fail');
+							}
+						}
+					}
+				}
+			});
+		}
+	});
+
+	$('.save-btn').click(function () {
+		//collect all scale items in selected-scale-items div
+		const selectedScaleItems = $('.selected-scale-items .scale-item-card').map(function () {
+			return $(this).data('item-name');
+		}
+		).get();
+		//get the name of the selected warehouse
+		const selectedWarehouse = $('.selected-warehouse').data('warehouse');
+
+		if (selectedScaleItems.length > 0 && selectedWarehouse) {
+			// Call the server-side method to assign these scale items to the selected warehouse
+			frappe.call({
+				method: 'shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.assign_warehouse_to_scale_items', // Adjust this to your server-side method's actual path
+				args: {
+					scale_items: selectedScaleItems,
+					warehouse: selectedWarehouse
+				},
+				callback: function (r) {
+					if (r.message) {
+						for (let result of r.message) {
+							// Handle each result as needed
+							if (result.status === 'success') {
+								// Optionally, remove the cancelled items from the UI
+								//add success mark to the scale item card
+								$('.selected-scale-items .scale-item-card[data-item-name="' + result.scale_item + '"]').addClass('success');
+							}
+							else {
+								frappe.msgprint(__('入库配罐失败，单号：' + result.scale_item + '车号：' + result.vehicle));
+								//add fail mark to the scale item card
+								$('.selected-scale-items .scale-item-card[data-item-name="' + result.scale_item + '"]').addClass('fail');
+							}
+						}
+					}
+				}
+			});
+		}
+	});
+	$('.cancel-btn').click(function () {
+		// Collect the names of all selected scale items
+		const selectedScaleItemNames = $('.scale-item.selected').map(function () {
+			return $(this).data('item-name'); // Assuming each .scale-item has a data attribute like data-item-name with the item's name
+		}).get();
+
+		if (selectedScaleItemNames.length > 0) {
+			// Call the server-side method to cancel these scale items
+			frappe.call({
+				method: 'shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.cancel_scale_items', // Adjust this to your server-side method's actual path
+				args: {
+					scale_items: selectedScaleItemNames
+				},
+				callback: function (r) {
+					if (r.message) {
+						for (let result of r.message) {
+							// Handle each result as needed
+							if (result.status === 'success') {
+								// Optionally, remove the cancelled items from the UI
+								frappe.msgprint(__('Selected scale items have been cancelled.' + result.scale_item + result.vehicle));
+							}
+							else {
+								frappe.msgprint(__('There was an issue cancelling the selected scale items.' + result.scale_item + result.vehicle));
+							}
+						}
+					} else {
+						// Handle error
+						frappe.msgprint(__('There was an issue cancelling the selected scale items.'));
+					}
+					fetchAndDisplayScaleItems();
+				}
+			});
+		} else {
+			frappe.msgprint(__('No scale items selected.'));
+		}
+	});
+}
+
+function init_warehouse_container() {
+	//remove all existing warehouse selection container
+	$('.warehouse-selection-container').remove();
+	// Inside your init_page function or appropriate setup function
+	const warehouseSelectionContainer = $(`
+		<div class="warehouse-selection-container" style="display:none;">
+			<div class="warehouse-tree">
+				<ul class="warehouse-group-selection"></ul>
+			</div>
+			<div class="selected-warehouse">罐（库位）:<span></span></div>
+			<div class="selected-scale-items"></div>
+		</div>
+		`);
+
+	// Append this container to the page
+	$('#page-ship-plan-vehicle-fe').find('.content-wrapper').append(warehouseSelectionContainer);
+}
+
+function init_sales_order_container() {
+	//remove all existing warehouse selection container
+	$('.sales-order-assignment-container').remove();
+	// Inside your init_page function or appropriate setup function
+	const salesOrderAssignmentContainer = $(`
+    <div class="sales-order-assignment-container" style="display:none;">
+        <div class="sales-order-selection">
+        </div>
+		<div class ="to-addr">
+		</div>
+		<div class="control-label">订单备注：
+		<span id="order_note"></span>
+		</div>
+		<div class="control-label">本次分配量：
+		<span id="total_target"></span>
+		</div>
+		<div class="selected-scale-items-so"></div>
+    </div>
+`);
+
+	// Append this container to the page
+	$('#page-ship-plan-vehicle-fe').find('.content-wrapper').append(salesOrderAssignmentContainer);
 }
 
