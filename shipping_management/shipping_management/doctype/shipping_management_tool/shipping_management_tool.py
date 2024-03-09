@@ -517,14 +517,10 @@ def get_filtered_sales_orders(doctype, txt, searchfield, start, page_len, filter
         AND (%s IS NULL OR `tabShip Plan Item`.`parent` = %s)
         {company_conditions}
         ORDER BY
-            CASE WHEN `tabSales Order`.`name` LIKE %s THEN 0 ELSE 1 END,
-            CASE WHEN `tabSales Order`.`order_note` LIKE %s THEN 0 ELSE 1 END,
             `tabSales Order`.`modified` DESC
-        LIMIT %s, %s
     """, [
-        f"%{txt}%", f"%{txt}%", ship_plan, ship_plan,
-        f"%{txt}%", f"%{txt}%"
-    ] + permitted_companies + [start, page_len])
+        f"%{txt}%", f"%{txt}%", ship_plan, ship_plan
+    ] + permitted_companies)
 
     return results
 
@@ -533,11 +529,7 @@ def get_filtered_sales_orders(doctype, txt, searchfield, start, page_len, filter
 def get_user_permitted_companies():
     """Fetch a list of companies the user has permission to access."""
     user = frappe.session.user
-    companies = frappe.get_list('User Permission',
-                                fields=['for_value'],
-                                filters={
-                                    'user': user,
-                                    'allow': 'Company',
-                                    'apply_to_all_doctypes': 0
-                                })
-    return [company.for_value for company in companies]
+    # Fetch the companies the user has permission to access
+    companies = frappe.db.get_all('User Permission', filters={'user': user, 'allow': 'Company'}, pluck='for_value')
+    #if companies is none return [], else return the companies
+    return companies if companies else []

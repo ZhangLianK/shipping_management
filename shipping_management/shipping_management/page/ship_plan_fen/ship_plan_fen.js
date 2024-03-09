@@ -559,7 +559,8 @@ function init_buttons_so(){
 	});
 
 	$('.assign-warehouse-btn').click(function () {
-
+		//clear selected item
+		$('.selected-item .item').data('item-name', '');
 		$('.input-qty').val(0);
 		$('.selected-warehouse span').text('');
 		//hide scale items list container
@@ -778,13 +779,13 @@ function init_buttons_so(){
 
 	$('.save-btn').click(function () {
 		//get the name of selected warehouse
-		const selectedWarehouse = $('.selected-warehouse').data('warehouse');
+		const selectedWarehouse = $('#page-ship-plan-fen .selected-warehouse').data('warehouse');
 		//get the qty of selected warehouse
-		const selectedWarehouseQty = $('.input-qty').val();
+		const selectedWarehouseQty = $('#page-ship-plan-fen .input-qty').val();
 		//get the ship plan name
-		const shipPlanName = $('.ship-plan-info #ship-plan-name').text();
+		const shipPlanName = $('#page-ship-plan-fen .ship-plan-info #ship-plan-name').text();
 		//get the selected item name
-		const selectedItemName = $('.selected-item .item').data('item-name');
+		const selectedItemName = $('#page-ship-plan-fen .selected-item-so .item').data('item-name');
 		//check if all value exists
 		if (!selectedWarehouse) {
 			frappe.msgprint(__('请选择罐（库位）'));
@@ -906,7 +907,7 @@ function init_warehouse_container_so() {
 					<input type="number" class="input-qty" value=0 style="width: 50px; text-align: center;" />
                     <button class="qty-increase">+</button>
             </div>
-			<div class="selected-item"></div>
+			<div class="selected-item-so"></div>
 		</div>
 		`);
 

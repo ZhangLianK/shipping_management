@@ -896,12 +896,12 @@ function init_buttons() {
 
 	$('.save-btn').click(function () {
 		//collect all scale items in selected-scale-items div
-		const selectedScaleItems = $('.selected-scale-items .scale-item-card').map(function () {
+		const selectedScaleItems = $('#page-ship-plan-vehicle-fe .selected-scale-items .scale-item-card').map(function () {
 			return $(this).data('item-name');
 		}
 		).get();
 		//get the name of the selected warehouse
-		const selectedWarehouse = $('.selected-warehouse').data('warehouse');
+		const selectedWarehouse = $('#page-ship-plan-vehicle-fe .selected-warehouse').data('warehouse');
 
 		if (selectedScaleItems.length > 0 && selectedWarehouse) {
 			// Call the server-side method to assign these scale items to the selected warehouse
@@ -929,6 +929,10 @@ function init_buttons() {
 					}
 				}
 			});
+		}
+		else {
+			frappe.msgprint(__('未选择物流单或者罐（库位）'));
+		
 		}
 	});
 	$('.cancel-btn').click(function () {

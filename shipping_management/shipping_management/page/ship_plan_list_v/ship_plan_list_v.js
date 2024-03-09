@@ -4,7 +4,7 @@ frappe.pages['ship-plan-list-v'].on_page_load = function(wrapper) {
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
 		title: '物流计划-销售分量',
-		single_column: true
+		sidebartoggle: true,
 	});
 
 
