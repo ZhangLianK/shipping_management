@@ -734,18 +734,54 @@ async function openClose(frm) {
                         if (isMessageStarted) {
                             currentMessage += char;
                         }
-                    }
+                    }}
+                    else if (frm.doc.market_segment == '弘亨-燃料油') {
+                        for (let i = 0; i < value.length; i++) {
+                            const char = value[i];
+                
+                            if (char === '\x02') { // STX
+                                isMessageStarted = true;
+                                currentMessage = ''; // Reset message buffer
+                                continue; // Skip adding STX to message
+                            }
+                            
+                            if (char === '\x03' && isMessageStarted) { // ETX
+                                //get the first 7 characters of the message
+                                let currentMessage_end = currentMessage.substring(0, 7);
+                                displayInScreen(frm, currentMessage_end);
+                                isMessageStarted = false; // Reset for next message
+                                currentMessage = ''; // Clear current message
+                                continue;
+                            }
+                            
+                            if (isMessageStarted) {
+                                currentMessage += char;
+                            }
+                        }
                     }
                     else {
-                        //log 
-                        receivedData = value;
-                        //check the received data if it has + charactor
-                        if (receivedData.includes("+")) {
-                            console.log("Full Message Received:", receivedData);
-                            displayInScreen(frm, receivedData);
-                            receivedData = "";
+                        for (let i = 0; i < value.length; i++) {
+                            const char = value[i];
+                
+                            if (char === '\x02') { // STX
+                                isMessageStarted = true;
+                                currentMessage = ''; // Reset message buffer
+                                continue; // Skip adding STX to message
+                            }
+                            
+                            if (char === '\x03' && isMessageStarted) { // ETX
+                                //get the first 7 characters of the message
+                                let currentMessage_end = currentMessage.substring(0, 7);
+                                displayInScreen(frm, currentMessage_end);
+                                isMessageStarted = false; // Reset for next message
+                                currentMessage = ''; // Clear current message
+                                continue;
+                            }
+                            
+                            if (isMessageStarted) {
+                                currentMessage += char;
+                            }
                         }
-
                     }
                 }
 
