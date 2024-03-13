@@ -109,7 +109,7 @@ def ocr_image(load_image_upload_value,scale_item):
 				info.Tare = eval(re.search(pattern, str(ent["Value"])).group())
 			case "毛重" | "二次重量" | "毛重(Kg)":
 				info.ToughWeight = eval(re.search(pattern, str(ent["Value"])).group())
-			case "净重" | "净重重量" | "净重(Kg)":
+			case "净重" | "净重重量" | "净重(Kg)"|"实装量(千克" |"实装量(千克)":
 				info.NetWeight = eval(re.search(pattern, str(ent["Value"])).group())
 			case "车号":
 				info.VehicleNo = str(ent["Value"])
