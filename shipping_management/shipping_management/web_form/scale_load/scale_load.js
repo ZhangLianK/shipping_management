@@ -209,7 +209,7 @@ frappe.ready(function () {
 					if (r.message) {
 						console.log("r.message: " + r.message);
 						//set the value of the field
-						if (r.message._Tare > 1000) {
+						if (r.message._NetWeight > 1000 || r.message._Tare > 1000 || r.message._ToughWeight > 1000) {
 							frappe.web_form.set_value("load_blank_weight", r.message._Tare / 1000);
 							frappe.web_form.set_value("load_gross_weight", r.message._ToughWeight / 1000);
 							frappe.web_form.set_value("load_net_weight", r.message._NetWeight / 1000);

@@ -106,11 +106,11 @@ def ocr_image(load_image_upload_value,scale_item):
 		pattern = r"\d+\.\d+|\d+"
 		match str(ent['Name']):
 			case "皮重" | "空重" | "一次重量" | "皮重(Kg)":
-				info.Tare = eval(re.search(pattern, str(ent["Value"])).group())
+				info.Tare = eval(re.search(pattern, str(ent["Value"]).replace(",", "")).group())
 			case "毛重" | "二次重量" | "毛重(Kg)":
-				info.ToughWeight = eval(re.search(pattern, str(ent["Value"])).group())
+				info.ToughWeight = eval(re.search(pattern, str(ent["Value"]).replace(",", "")).group())
 			case "净重" | "净重重量" | "净重(Kg)"|"实装量(千克" |"实装量(千克)":
-				info.NetWeight = eval(re.search(pattern, str(ent["Value"])).group())
+				info.NetWeight = eval(re.search(pattern, str(ent["Value"]).replace(",", "")).group())
 			case "车号":
 				info.VehicleNo = str(ent["Value"])
 			case "皮重时间" | "空重时间" | "进车时间":
