@@ -34,8 +34,9 @@
   },
   {
    "fieldname": "vehicle",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "\u8f66\u53f7",
+   "options": "Vehicle",
    "width": 0
   },
   {
@@ -64,8 +65,9 @@
   },
   {
    "fieldname": "item",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "\u7269\u6599",
+   "options": "Item",
    "width": 0
   },
   {
@@ -298,11 +300,19 @@
    "mandatory": 0,
    "options": "Ship Type",
    "wildcard_filter": 0
+  },
+  {
+   "fieldname": "vehicle_plan",
+   "fieldtype": "Link",
+   "label": "\u914d\u8f66\u8ba1\u5212",
+   "mandatory": 0,
+   "options": "Vehicle Plan Item",
+   "wildcard_filter": 0
   }
  ],
  "idx": 0,
  "is_standard": "Yes",
- "modified": "2024-03-06 10:03:02.341481",
+ "modified": "2024-03-15 15:16:57.114892",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

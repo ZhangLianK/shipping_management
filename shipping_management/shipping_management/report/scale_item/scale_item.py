@@ -161,8 +161,9 @@ def get_columns():
   },
   {
    "fieldname": "vehicle",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "\u8f66\u53f7",
+   "options": "Vehicle",
    "width": 0
   },
   {
@@ -191,8 +192,9 @@ def get_columns():
   },
   {
    "fieldname": "item",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "label": "\u7269\u6599",
+   "options": "Item",
    "width": 0
   },
   {

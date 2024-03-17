@@ -155,8 +155,14 @@ frappe.ui.form.on('Shipping Management Tool', {
 					"is_transporter": 1
 				}
 			};
-		}
-		);
+		});
+		frm.set_query("vehicle_plan", function () {
+			return {
+				filters: {
+					'status': ['not in', ["完成"]]
+				}
+			};
+		});
 		frm.set_query("sales_order", function () {
 			return {
 				filters: {
@@ -203,13 +209,15 @@ frappe.ui.form.on('Shipping Management Tool', {
 		refresh_scale_item(frm, exp);
 	},
 	ship_plan: function (frm) {
-		if (frm.doc.ship_plan) {
 			refresh_scale_item(frm);
-		}
-		else {
-			frm.clear_table('scale_child');
-			frm.refresh_field('scale_child');
-		}
+	},
+	vehicle_plan: function (frm) {
+
+			refresh_scale_item(frm);
+
+	},
+	date: function (frm) {
+		refresh_scale_item(frm);
 	},
 	transporter: function (frm) {
 		refresh_scale_item(frm);
@@ -237,6 +245,8 @@ frappe.ui.form.on('Shipping Management Tool', {
 	},
 
 	refresh: function (frm) {
+		//set a default value for the date field
+		frm.set_value('date', frappe.datetime.get_today());
 
 		frm.fields_dict['scale_child'].grid.get_field('transporter').get_query = function (doc, cdt, cdn) {
 			// Here, you return an object with the filters you want to apply.
@@ -268,10 +278,10 @@ frappe.ui.form.on('Shipping Management Tool', {
 		frm.clear_table
 		//add a refresh button to refresh the scale child
 		frm.add_custom_button(__('刷新物流单'), function () {
-			if (!frm.doc.ship_plan && !frm.doc.sales_invoice && !frm.doc.sales_order) {
-				frappe.throw(__('请先选择【物流计划】，或者【销售费用清单】，或者【销售订单】'));
-				return;
-			}
+			//if (!frm.doc.ship_plan && !frm.doc.sales_invoice && !frm.doc.sales_order) {
+			//	frappe.throw(__('请先选择【物流计划】，或者【销售费用清单】，或者【销售订单】'));
+			//	return;
+			//}
 			refresh_scale_item(frm);
 		});
 
@@ -485,55 +495,97 @@ frappe.ui.form.on('Shipping Management Tool', {
 						'fieldname': 'to_addr',
 						'fieldtype': 'Data',
 						'reqd': 1,
-						'get_query': function () {
-							return {
-								filters: [
-									['Sales Invoice Item', 'sales_order', '=', d.fields_dict.sales_order.get_value()]
-								]
-							}
-						}
-					}
+					},
+					{
+						'label': '订单备注',
+						'fieldname': 'order_note',
+						'fieldtype': 'Data',
+						'reqd': 1,
+					},
+
 				],
 				primary_action: function () {
 					//get the sales order's order note
-					
-					frappe.db.get_value('Sales Order', d.fields_dict.sales_order.get_value(), 'order_note').then(r => {
+					if (d.fields_dict.sales_order.get_value()) {
+						frappe.db.get_value('Sales Order', d.fields_dict.sales_order.get_value(), 'order_note').then(r => {
+							let bill_type = '';
+							if (r) {
+								if (r.message.order_note.includes('送到') || r.message.order_note.includes('送')) {
+									bill_type = 'SD';
+								}
+								else if (r.message.order_note.includes('自提')) {
+									bill_type = 'ZT';
+								}
+								else {
+									bill_type = '';
+								}
+							}
+							//get all scale child related that checked in the frm.doc.scale_child table
+						let scale_childs = frm.doc.scale_child;
+						//find all scale child that was checked by user
+						let checked_scale_childs = scale_childs.filter(function (row) {
+							return row.__checked == 1;
+						}
+						);
+						if (checked_scale_childs.length == 0) {
+							frappe.msgprint("请先选择要分配的行");
+							return;
+						}
+						// set the sales order and sales invoice to the checked scale child
+						for (let row of checked_scale_childs) {
+							row.sales_order = d.fields_dict.sales_order.get_value();
+							row.to_addr = d.fields_dict.to_addr.get_value();
+							row.bill_type = bill_type;
+							row.order_note = d.fields_dict.order_note.get_value();
+							if (row.type == 'OTH'){
+								row.type = 'DIRC';
+							}
+						}
+						d.hide();
+						frm.refresh_field('scale_child');
+						});
+
+					} else {
+						let order_note = d.fields_dict.order_note.get_value();
 						let bill_type = '';
-						if (r) {
-							if (r.message.order_note.includes('送到') || r.message.order_note.includes('送')) {
-								bill_type = 'SD';
+							if (order_note) {
+								if (order_note.includes('送到') || order_note.includes('送')) {
+									bill_type = 'SD';
+								}
+								else if (order_note.includes('自提')) {
+									bill_type = 'ZT';
+								}
+								else {
+									bill_type = '';
+								}
 							}
-							else if (r.message.order_note.includes('自提')) {
-								bill_type = 'ZT';
+							//get all scale child related that checked in the frm.doc.scale_child table
+						let scale_childs = frm.doc.scale_child;
+						//find all scale child that was checked by user
+						let checked_scale_childs = scale_childs.filter(function (row) {
+							return row.__checked == 1;
+						}
+						);
+						if (checked_scale_childs.length == 0) {
+							frappe.msgprint("请先选择要分配的行");
+							return;
+						}
+						// set the sales order and sales invoice to the checked scale child
+						for (let row of checked_scale_childs) {
+							row.sales_order = d.fields_dict.sales_order.get_value();
+							row.to_addr = d.fields_dict.to_addr.get_value();
+							if (!row.bill_type){
+								row.bill_type = bill_type;
 							}
-							else {
-								bill_type = '';
+							row.order_note = order_note
+							if (row.type == 'OTH'){
+								row.type = 'DIRC';
 							}
 						}
-						//get all scale child related that checked in the frm.doc.scale_child table
-					let scale_childs = frm.doc.scale_child;
-					//find all scale child that was checked by user
-					let checked_scale_childs = scale_childs.filter(function (row) {
-						return row.__checked == 1;
+						d.hide();
+						frm.refresh_field('scale_child');
+						
 					}
-					);
-					if (checked_scale_childs.length == 0) {
-						frappe.msgprint("请先选择要分配的行");
-						return;
-					}
-					// set the sales order and sales invoice to the checked scale child
-					for (let row of checked_scale_childs) {
-						row.sales_order = d.fields_dict.sales_order.get_value();
-						row.to_addr = d.fields_dict.to_addr.get_value();
-						row.bill_type = bill_type;
-						if (row.type == 'OTH'){
-							row.type = 'DIRC';
-						}
-					}
-					d.hide();
-					frm.refresh_field('scale_child');
-					});
-					
 				}
 			});
 			d.show();
@@ -594,10 +646,10 @@ function calculate_totals(frm) {
 
 function refresh_scale_item(frm, exp) {
 	//get all scale item related to this ship_plan
-	if (!frm.doc.ship_plan && !frm.doc.sales_invoice && !frm.doc.sales_order) {
-		frappe.msgprint("请选择【物流计划】,或者【销售费用清单】，或者【销售订单】");
-		return;
-	}
+	//if (!frm.doc.ship_plan && !frm.doc.sales_invoice && !frm.doc.sales_order) {
+	//	frappe.msgprint("请选择【物流计划】,或者【销售费用清单】，或者【销售订单】");
+	//	return;
+	//}
 	frappe.call({
 		method: "shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.get_scale_childs", // Replace with your app and module names
 		args: {
@@ -607,7 +659,9 @@ function refresh_scale_item(frm, exp) {
 			"sales_order": frm.doc.sales_order,
 			"sales_invoice": frm.doc.sales_invoice,
 			"export": exp,
-			"bill_type": frm.doc.bill_type
+			"bill_type": frm.doc.bill_type,
+			"date": frm.doc.date,
+			"vehicle_plan": frm.doc.vehicle_plan
 		},
 		callback: function (r) {
 			if (r.message) {

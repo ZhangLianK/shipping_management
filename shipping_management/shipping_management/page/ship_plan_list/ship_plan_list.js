@@ -3,7 +3,7 @@ frappe.pages['ship-plan-list'].on_page_load = function (wrapper) {
 
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
-		title: '物流计划',
+		title: '配车计划',
 		sidebartoggle: true,
 
 	});
@@ -75,54 +75,53 @@ frappe.pages['ship-plan-list'].on_page_load = function (wrapper) {
 	page.main.append('<div id="bottom-buttons"></div>');
 
 	// Initial call to populate the page
-	refresh_ship_plans();
+	refresh_vehicle_plans();
 
 	// Optionally, you can add a button to refresh the ship plan list
 	page.set_primary_action(__('Refresh'), function () {
-		refresh_ship_plans();
+		refresh_vehicle_plans();
 	}, 'refresh');
 };
 frappe.pages['ship-plan-list'].on_page_show = function (wrapper) {
 	//const route = frappe.get_route();
-	refresh_ship_plans();
-	$(wrapper).find('#bottom-buttons').html(`<button style="width:100%" class="btn btn-default back-btn" onclick="frappe.set_route('dispatch');window.location.reload();">返回</button>`);
+	refresh_vehicle_plans();
+	$(wrapper).find('#bottom-buttons').html(`<button style="width:100%" class="btn btn-default back-btn" onclick="frappe.set_route('dispatch');">返回</button>`);
 };
 
 // Function to fetch and render ship plans
-function refresh_ship_plans() {
-	frappe.call({
-		method: 'frappe.client.get_list',
-		args: {
-			doctype: 'Ship Plan',
-			filters: {
-				'status': ['!=', '完成'],
-			},
-			fields: ['name', 'date', 'qty', 'status','assigned_qty','plan_desc'],
-			limit: 'all',
-			order_by: 'creation desc',
+function refresh_vehicle_plans() {
+	frappe.db.get_list('Vehicle Plan Item', {
+		fields: ['date', 'req_qty', 'status', 'req_qty', 'assigned_qty', 'plan_desc', 'from_addr', 'name','ship_plan'],
+		filters: {
+			'status': ['!=', '完成'],
 		},
-
-		callback: function (r) {
-			if (r.message) {
+		order_by: 'date desc',
+		limit: 'all'
+	}).then(records => {
+			if (records.length > 0) {
 				// Clear the container before adding new content
 				var container = $('#ship-plan-container');
 				container.empty();
 
 				// Iterate over ship plans and create cards
-				$.each(r.message, function (index, ship_plan) {
+				$.each(records, function (index, vehicle_plan) {
 					var card_html = `<div class="ship-plan-card">
 						<div class="ship-plan-header">
-							<h4 class="ship-plan-desc">${ship_plan.plan_desc}</h4>
-							<span class="status-label">${ship_plan.status}</span>
+							<h4 class="ship-plan-desc">${vehicle_plan.plan_desc}</h4>
+							<span class="status-label">${vehicle_plan.status}</span>
 						</div>
 						<div class="ship-plan-body">
 
-							<p>计划量: ${ship_plan.qty} 
-							<span style='float:right'>${ship_plan.name}</span>
+							<p>需求量: ${vehicle_plan.req_qty}
+							<span style="float:right;">计划日期: ${vehicle_plan.date}</span> 
 							</p>
 
-							<p> 计划日期: ${ship_plan.date}
-							<span style='float:right'>已配运量: ${ship_plan.assigned_qty}</span>
+							<p> 
+							已配运量: ${vehicle_plan.assigned_qty}
+							<span style="float:right;">提货地: ${vehicle_plan.from_addr}</span> 
+							</p>
+							<p>
+							<span>${vehicle_plan.ship_plan}</span>:<span>${vehicle_plan.name}</span>
 							</p>
 
 						</div>
@@ -130,13 +129,10 @@ function refresh_ship_plans() {
 					
 					// Convert the HTML string to a jQuery object and add click event
 					var $card_html = $(card_html).click(function() {
-						frappe.set_route('ship-plan-vehicle',{ship_plan: ship_plan.name, transporter: default_transporter});
+						frappe.set_route('ship-plan-vehicle',{ship_plan: vehicle_plan.ship_plan, transporter: default_transporter,vehicle_plan: vehicle_plan.name});
 					});
 					container.append($card_html)
-					
 				});
-
 			}
-		}
-	});
+		});
 }

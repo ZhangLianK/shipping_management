@@ -1,0 +1,156 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "hash",
+ "creation": "2024-03-09 23:35:10.794889",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "type",
+  "bill_type",
+  "status",
+  "sales_order",
+  "order_note",
+  "pot",
+  "v_qty",
+  "qty",
+  "to_addr",
+  "ship_plan",
+  "vehicle_plan",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u65e5\u671f",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u7c7b\u578b",
+   "options": "Ship Type",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u9500\u552e\u8ba2\u5355",
+   "options": "Sales Order"
+  },
+  {
+   "columns": 1,
+   "fieldname": "pot",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u5e93\u4f4d",
+   "options": "Warehouse"
+  },
+  {
+   "columns": 1,
+   "fieldname": "v_qty",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u9700\u6c42\u8f66\u6570"
+  },
+  {
+   "columns": 1,
+   "fieldname": "to_addr",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u9001\u8d27\u5730"
+  },
+  {
+   "columns": 1,
+   "fieldname": "order_note",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u8ba2\u5355\u5907\u6ce8"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Plan Item",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u72b6\u6001",
+   "options": "\u6392\u961f\u4e2d\n\u8ba1\u5212\u4e2d\n\u6267\u884c\u4e2d\n\u5df2\u6267\u884c"
+  },
+  {
+   "fieldname": "bill_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u7ed3\u7b97\u7c7b\u578b",
+   "options": "Scale Type"
+  },
+  {
+   "columns": 1,
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "\u9700\u6c42\u5428\u6570"
+  },
+  {
+   "fieldname": "ship_plan",
+   "fieldtype": "Data",
+   "label": "\u7269\u6d41\u8ba1\u5212"
+  },
+  {
+   "fieldname": "vehicle_plan",
+   "fieldtype": "Data",
+   "label": "\u914d\u8f66\u8ba1\u5212"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-03-11 23:57:06.940550",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Plan Item",
+ "naming_rule": "Random",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "date,to_addr,order_note,sales_order",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

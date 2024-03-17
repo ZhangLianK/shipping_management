@@ -1,0 +1,128 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2024-03-11 19:49:06.188941",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "date",
+  "status",
+  "transporter",
+  "req_qty",
+  "assigned_qty",
+  "plan_desc",
+  "from_addr",
+  "ship_plan",
+  "baohao_template",
+  "naming_series"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "\u8ba1\u5212\u65e5\u671f"
+  },
+  {
+   "columns": 2,
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "\u72b6\u6001",
+   "options": "\u672a\u5904\u7406\n\u8f66\u53f7\u6536\u96c6\u4e2d\n\u8f66\u53f7\u6536\u96c6\u5b8c\u6bd5\n\u62a5\u53f7\u5df2\u5b8c\u6210\n\u8fdb\u884c\u4e2d\n\u5b8c\u6210"
+  },
+  {
+   "columns": 2,
+   "fieldname": "transporter",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "\u627f\u8fd0\u5546",
+   "options": "Supplier"
+  },
+  {
+   "columns": 1,
+   "fieldname": "req_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "\u9700\u6c42\u5428\u6570"
+  },
+  {
+   "columns": 1,
+   "fieldname": "assigned_qty",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "\u5df2\u914d\u5428\u6570"
+  },
+  {
+   "columns": 1,
+   "fieldname": "plan_desc",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u63cf\u8ff0"
+  },
+  {
+   "fieldname": "from_addr",
+   "fieldtype": "Data",
+   "label": "\u88c5\u8f66\u5730"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "VP.YY.MM.DD.###"
+  },
+  {
+   "fieldname": "ship_plan",
+   "fieldtype": "Data",
+   "label": "\u7269\u6d41\u8ba1\u5212"
+  },
+  {
+   "fieldname": "baohao_template",
+   "fieldtype": "Link",
+   "label": "\u62a5\u53f7\u6a21\u7248",
+   "options": "Baohao Template"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "\u516c\u53f8",
+   "options": "Company",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-03-17 09:48:32.086907",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Vehicle Plan Item",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "transporter, status, date, from_addr",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "plan_desc",
+ "track_changes": 1
+}

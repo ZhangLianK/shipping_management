@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"B_D0GQyNiS\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px;\\\">\u8c03\u5ea6</span>\",\"col\":12}},{\"id\":\"JKKgndTgfw\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u8f66\u961f\u8c03\u5ea6\u5de5\u5177\",\"col\":3}}]",
+ "content": "[{\"id\":\"B_D0GQyNiS\",\"type\":\"header\",\"data\":{\"text\":\"<span style=\\\"font-size: 18px;\\\">\u8c03\u5ea6</span>\",\"col\":12}},{\"id\":\"JKKgndTgfw\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u8f66\u961f\u8c03\u5ea6\u5de5\u5177\",\"col\":3}},{\"id\":\"ABHHyOG2jh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u8f66\u8f86\u4fe1\u606f\u7ef4\u62a4\",\"col\":3}},{\"id\":\"hnS9oZStAl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u53f8\u673a\u4fe1\u606f\u7ef4\u62a4\",\"col\":3}},{\"id\":\"GoRxgcbkbU\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"\u62bc\u8fd0\u5458\u4fe1\u606f\u7ef4\u62a4\",\"col\":3}}]",
  "creation": "2024-03-05 08:20:20.202149",
  "custom_blocks": [],
  "docstatus": 0,
@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "Dispatch",
  "links": [],
- "modified": "2024-03-05 08:33:44.317106",
+ "modified": "2024-03-17 10:43:42.363137",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Dispatch",
@@ -34,9 +34,30 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "\u8f66\u8f86\u4fe1\u606f\u7ef4\u62a4",
+   "link_to": "Vehicle",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "\u8f66\u961f\u8c03\u5ea6\u5de5\u5177",
    "link_to": "ship-plan-list",
    "type": "Page"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "\u62bc\u8fd0\u5458\u4fe1\u606f\u7ef4\u62a4",
+   "link_to": "Yayun",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "\u53f8\u673a\u4fe1\u606f\u7ef4\u62a4",
+   "link_to": "Driver",
+   "type": "DocType"
   }
  ],
  "title": "Dispatch"

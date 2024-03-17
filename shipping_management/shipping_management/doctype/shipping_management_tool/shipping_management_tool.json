@@ -9,6 +9,7 @@
   "company",
   "column_break_xudq5",
   "ship_plan",
+  "vehicle_plan",
   "column_break_u3cuz",
   "date",
   "column_break_wkj8y",
@@ -72,7 +73,7 @@
    "fieldtype": "Section Break"
   },
   {
-   "fetch_from": "ship_plan.qty",
+   "fetch_from": "vehicle_plan.req_qty",
    "fieldname": "qty",
    "fieldtype": "Float",
    "label": "\u8ba1\u5212\u603b\u8fd0\u91cf"
@@ -101,7 +102,7 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "ship_plan.date",
+   "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "\u8ba1\u5212\u65e5\u671f",
@@ -245,12 +246,18 @@
    "fieldtype": "Link",
    "label": "\u7ed3\u7b97\u7c7b\u578b",
    "options": "Scale Type"
+  },
+  {
+   "fieldname": "vehicle_plan",
+   "fieldtype": "Link",
+   "label": "\u914d\u8f66\u8ba1\u5212",
+   "options": "Vehicle Plan Item"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-02-26 23:13:12.276302",
+ "modified": "2024-03-17 10:09:02.074002",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping Management Tool",

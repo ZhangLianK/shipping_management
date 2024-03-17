@@ -251,6 +251,7 @@ class ScaleItem(Document):
 			sales_order = frappe.get_doc("Sales Order", self.sales_order, ignore_permissions=True)
 			sales_order.qty_vehicle  = sales_order.qty_vehicle + self.target_weight - old_target_weight
 			sales_order.save(ignore_permissions=True)
+   
 		elif self.sales_order and old_doc.sales_order and self.sales_order != old_doc.sales_order:
 			sales_order = frappe.get_doc("Sales Order", self.sales_order,ignore_permissions=True)
 			sales_order.qty_vehicle  = sales_order.qty_vehicle + self.target_weight
@@ -258,6 +259,7 @@ class ScaleItem(Document):
 			old_sales_order = frappe.get_doc("Sales Order", old_doc.sales_order,ignore_permissions=True)
 			old_sales_order.qty_vehicle  = old_sales_order.qty_vehicle - old_target_weight
 			old_sales_order.save(ignore_permissions=True)
+   
 		elif self.sales_order and not old_doc.sales_order:
 			sales_order = frappe.get_doc("Sales Order", self.sales_order,ignore_permissions=True)
 			sales_order.qty_vehicle  = sales_order.qty_vehicle + self.target_weight
@@ -267,6 +269,7 @@ class ScaleItem(Document):
 			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
 			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight - old_target_weight
 			sales_invoice.save(ignore_permissions=True)
+   
 		elif self.sales_invoice and old_doc.sales_invoice and self.sales_invoice != old_doc.sales_invoice:
 			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
 			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight
@@ -274,6 +277,7 @@ class ScaleItem(Document):
 			old_sales_invoice = frappe.get_doc("Sales Invoice", old_doc.sales_invoice,ignore_permissions=True)
 			old_sales_invoice.qty_vehicle  = old_sales_invoice.qty_vehicle - old_target_weight
 			old_sales_invoice.save(ignore_permissions=True)
+   
 		elif self.sales_invoice and not old_doc.sales_invoice:
 			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
 			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight
@@ -283,6 +287,11 @@ class ScaleItem(Document):
 			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan,ignore_permissions=True)
 			ship_plan.assigned_qty = ship_plan.assigned_qty + self.target_weight - old_target_weight
 			ship_plan.save(ignore_permissions=True)
+
+		if self.vehicle_plan and not self.target_weight == old_target_weight:
+			vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", self.vehicle_plan,ignore_permissions=True)
+			vehicle_plan_item.assigned_qty = vehicle_plan_item.assigned_qty + self.target_weight - old_target_weight
+			vehicle_plan_item.save(ignore_permissions=True)
 
 	def before_validate(self):
 		#check if ship plan is exist, if yes then get the company and purchase order from ship plan
@@ -294,6 +303,11 @@ class ScaleItem(Document):
 				self.purchase_order = ship_plan_doc.purchase_order
 			if not self.date:
 				self.date = ship_plan_doc.date
+		if self.pot and self.type == 'IN':
+			self.to_addr = self.pot.split(' - ')[0]
+		if self.pot and self.type == 'OUT':
+			self.from_addr = self.pot.split(' - ')[0]
+		self.desc = f"{self.vehicle if self.vehicle else ''}-{self.from_addr if self.from_addr else ''}-{self.to_addr if self.to_addr else ''}-{self.order_note if self.order_note else ''}-{self.pot if self.pot else ''}"
    
 	def before_save(self):
 		
@@ -364,7 +378,14 @@ class ScaleItem(Document):
 		self.validate_status()
 		if self.to_dt:
 			self.cancel_vehicle_in_process()
-   
+
+		if self.pot and self.type == 'IN':
+			self.to_addr = self.pot.split(' - ')[0]
+		if self.pot and self.type == 'OUT':
+			self.from_addr = self.pot.split(' - ')[0]
+
+		self.desc = f"{self.vehicle if self.vehicle else ''}-{self.from_addr if self.from_addr else ''}-{self.to_addr if self.to_addr else ''}-{self.order_note if self.order_note else ''}"
+
 		if self.sales_order:
 			self.order_note = frappe.get_value("Sales Order", self.sales_order, "order_note")
    
@@ -454,6 +475,11 @@ class ScaleItem(Document):
 			ship_plan.assigned_qty = ship_plan.assigned_qty + self.target_weight
 			ship_plan.save(ignore_permissions=True)
 
+		if self.vehicle_plan:
+			vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", self.vehicle_plan,ignore_permissions=True)
+			vehicle_plan_item.assigned_qty = vehicle_plan_item.assigned_qty + self.target_weight
+			vehicle_plan_item.save(ignore_permissions=True)
+
 		if self.vehicle:
 			#check if the vehicle is exist in the vehicle master
 			if not frappe.db.exists("Vehicle", self.vehicle):
@@ -502,6 +528,10 @@ class ScaleItem(Document):
 			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan,ignore_permissions=True)
 			ship_plan.assigned_qty = ship_plan.assigned_qty - self.target_weight
 			ship_plan.save(ignore_permissions=True)
+		if self.vehicle_plan:
+			vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", self.vehicle_plan,ignore_permissions=True)
+			vehicle_plan_item.assigned_qty = vehicle_plan_item.assigned_qty - self.target_weight
+			vehicle_plan_item.save(ignore_permissions=True)
 	
 		self.status = "9 已取消"
    
@@ -1023,4 +1053,42 @@ def convert_to_pure_html(html_content):
 	print(html_content)
 	return html_content
 
+
+@frappe.whitelist()
+def update_to_addr(scale_items,to_addr,order_notes):
+	try:
+		for scale_item in json.loads(scale_items):
+			scale_item_doc = frappe.get_doc("Scale Item", scale_item.get('name'),ignore_permissions=True)
+			scale_item_doc.to_addr = to_addr
+			scale_item_doc.order_note = order_notes
+			scale_item_doc.type = 'DIRC'
+			scale_item_doc.bill_type = 'SD'
+			scale_item_doc.save(ignore_permissions=True)
+		
+		frappe.response["message"] = {
+			"status": "success"
+		}
+	except Exception as e:
+		frappe.response["message"] = {
+			"status": "error",
+			"message": str(e)
+		}
+  
+@frappe.whitelist()
+def update_warehouse(scale_items,warehouse,type):
+	try:
+		for scale_item in json.loads(scale_items):
+			scale_item_doc = frappe.get_doc("Scale Item", scale_item.get('name'),ignore_permissions=True)
+			scale_item_doc.pot = warehouse
+			scale_item_doc.type = type
+			scale_item_doc.save(ignore_permissions=True)
+		
+		frappe.response["message"] = {
+			"status": "success"
+		}
+	except Exception as e:
+		frappe.response["message"] = {
+			"status": "error",
+			"message": str(e)
+		}
 	

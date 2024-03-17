@@ -72,6 +72,7 @@
   "baohao_text",
   "column_break_n3j8m",
   "ship_plan",
+  "vehicle_plan",
   "purchase_order",
   "purchase_receipt",
   "stock_dt",
@@ -122,6 +123,7 @@
    "label": "\u57fa\u672c\u4fe1\u606f"
   },
   {
+   "allow_on_submit": 1,
    "columns": 1,
    "fieldname": "desc",
    "fieldtype": "Data",
@@ -191,6 +193,7 @@
   {
    "allow_on_submit": 1,
    "columns": 1,
+   "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
    "in_list_view": 1,
@@ -276,7 +279,7 @@
    "fieldname": "target_weight",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "\u8ba1\u5212\u8fd0\u91cf",
+   "label": "\u9884\u88c5\u91cf",
    "mandatory_depends_on": "eval: doc.market_segment == '\u6210\u54c1\u6cb9'"
   },
   {
@@ -288,6 +291,7 @@
    "fieldname": "from_addr",
    "fieldtype": "Small Text",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "\u63d0\u8d27\u5730"
   },
   {
@@ -308,6 +312,7 @@
    "fieldname": "to_addr",
    "fieldtype": "Small Text",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "\u9001\u8d27\u5730"
   },
   {
@@ -764,16 +769,22 @@
   },
   {
    "allow_on_submit": 1,
-   "fetch_from": "sales_order.order_note",
    "fieldname": "order_note",
    "fieldtype": "Data",
+   "in_standard_filter": 1,
    "label": "\u8ba2\u5355\u5907\u6ce8"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "vehicle_plan",
+   "fieldtype": "Data",
+   "label": "\u6d3e\u8f66\u8ba1\u5212"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-03-05 10:42:26.843140",
+ "modified": "2024-03-17 21:00:30.100847",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

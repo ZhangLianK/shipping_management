@@ -1,7 +1,7 @@
 frappe.pages['ship-plan-vehicle'].on_page_load = function (wrapper) {
 	let page = frappe.ui.make_app_page({
 		parent: wrapper,
-		title: '车辆详单',
+		title: '配车详单',
 		single_column: true
 	});
 	var css = `.content-wrapper {
@@ -127,10 +127,12 @@ frappe.pages['ship-plan-vehicle'].on_page_show = function (wrapper) {
 	//const route = frappe.get_route();
 	const ship_plan_name = frappe.route_options.ship_plan;
 	const transporter = frappe.route_options.transporter;
+	const vehicle_plan = frappe.route_options.vehicle_plan;
 	// Fetch and display scale items whenever the page is shown
-	if (ship_plan_name) {
+	if (vehicle_plan) {
 		display_ship_plan_info();
 		fetchAndDisplayScaleItems();
+		init_buttons_dispatch();
 	}
 };
 
@@ -138,6 +140,7 @@ frappe.pages['ship-plan-vehicle'].on_page_show = function (wrapper) {
 function fetchAndDisplayScaleItems() {
 	//const route = frappe.get_route();
 	const ship_plan_name = frappe.route_options.ship_plan;
+	const vehicle_plan = frappe.route_options.vehicle_plan;
 	let transporter = frappe.route_options.transporter;
 	if (transporter==''){
 		transporter = undefined;
@@ -148,6 +151,7 @@ function fetchAndDisplayScaleItems() {
 	frappe.db.get_list('Scale Item', {
 			filters: {
 				ship_plan: ship_plan_name,
+				vehicle_plan: vehicle_plan,
 				transporter: transporter,
 				status: ['!=', '9 已取消']
 			},
@@ -175,21 +179,25 @@ function fetchAndDisplayScaleItems() {
 function display_ship_plan_info() {
 	const shipPlanName = frappe.route_options.ship_plan;
 	const transporterName = frappe.route_options.transporter;
+	const vehicle_plan = frappe.route_options.vehicle_plan;
 	$('.ship-plan-info').empty();
-	frappe.db.get_doc('Ship Plan', shipPlanName).then(doc => {
-		$('.ship-plan-info').append(`
-			<h3>
-			<span>${doc.date}</span>
-			<span style="float:right">${doc.plan_desc}</span>
-			</h3>
-			<p><span id="transporter-name">承运商：${transporterName?transporterName:'所有'}</span>
-			<span id="ship-plan-name" style="float:right">${doc.name}</span>
-			</p>
-			<p><span>计划总量: ${doc.qty} 吨</span>
-			<span style="float:right">已配车量:${doc.assigned_qty} 吨</span></p>
-			<span id="baohao_template" style = "display:none">${doc.baohao_template?doc.baohao_template:''}</span>
-		`);
-		});
+	//fetch the vehicle plan and display it
+	frappe.db.get_doc('Vehicle Plan Item', vehicle_plan).then(doc => {
+			if (doc) {
+				$('.ship-plan-info').append(`
+				<h3>
+				<span>${doc.date}</span>
+				<span style="float:right">${doc.plan_desc}</span>
+				</h3>
+				<p><span id="transporter-name">承运商：${transporterName?transporterName:'所有'}</span>
+				<span id="vehicle-plan" style="float:right">配车计划：${doc.name}</span>
+				</p>
+				<p><span>需求量: ${doc.req_qty} 吨</span>
+				<span style="float:right">已配车量:${doc.assigned_qty} 吨</span></p>
+				<span id="baohao_template" style = "display:none">${doc.baohao_template?doc.baohao_template:''}</span>
+				`);
+			}
+	});
 }
 
 function display_scale_items(scale_items) {
@@ -269,16 +277,130 @@ function init_page(wrapper, shipPlanName, transporterName) {
 
 	// Buttons fixed at the bottom
 	const buttonsHtml = `
+    <div class="footer-buttons">
+    </div>
+    `;
+	contentWrapper.append(buttonsHtml);
+
+}
+
+function fetchAndDisplayVehicles() {
+	let transporter = frappe.user_defaults.default_transporter;
+	if (!transporter) {
+		transporter = undefined;
+	}
+	frappe.db.get_list('Vehicle', {
+			filters: {
+				transporter: transporter
+			},
+			fields: ['name', 'standard_qty','id','wheels'],
+			limit: 'all'
+		}).then(function (r) {
+			if (r) {
+				displayVehicles(r);
+			}
+		
+	});
+}
+
+function displayVehicles(vehicles) {
+	//check if the vehicles container is already present
+	if ($('.vehicles-container').length) {
+		$('.vehicles-container').remove();
+	}
+	const vehiclesContainer = $('<div class="vehicles-container"></div>').appendTo('.content-wrapper');
+	vehicles.forEach(vehicle => {
+		const vehicleCard = $(`
+            <div class="vehicle-card" data-vehicle-id="${vehicle.name}" style="${vehicle.wheels==0?'color: green;':'color: black;'}">
+                <div class="vehicle-info">
+                    <span class= "vehicleid">${vehicle.id} </span>--<span class= "vehicle-id">${vehicle.name}</span>--<span class="vehicle-qty">${vehicle.standard_qty}</span>
+					--<span class="vehicle-processing">${vehicle.wheels}</span>
+                </div>
+                <div class="qty-adjust">
+                    <button class="qty-decrease">-</button>
+					<input type="text" class="input-qty" value=${vehicle.standard_qty} style="width: 50px; text-align: center;" />
+                    <button class="qty-increase">+</button>
+                </div>
+            </div>
+        `).appendTo(vehiclesContainer);
+
+		// Decrease Qty
+		vehicleCard.find('.qty-decrease').click(function (e) {
+			e.stopPropagation(); // Prevent the vehicle-card click event
+			const qtyInput = $(this).closest('.vehicle-card').find('.input-qty');
+			let qty = parseFloat(qtyInput.val());
+			if (qty > 0) { // Optional: prevent qty from going below a certain value (e.g., 0)
+				qtyInput.val(--qty);
+			}
+		});
+
+		// Increase Qty
+		vehicleCard.find('.qty-increase').click(function (e) {
+			e.stopPropagation(); // Prevent the vehicle-card click event
+			const qtyInput = $(this).closest('.vehicle-card').find('.input-qty');
+			let qty = parseFloat(qtyInput.val());
+			qtyInput.val(++qty);
+		});
+
+		// Handle vehicle selection
+		vehicleCard.click(function () {
+			$(this).toggleClass('selected'); // Highlight selected vehicle
+		});
+
+		vehicleCard.on('click', '.input-qty', function(event) {
+			event.stopPropagation();
+			// You can also place focus logic here if needed
+		});
+
+	});
+
+	// Modify the assign button for saving selected vehicles with their quantities
+	// Update your saveSelectedVehiclesToShipPlan function as needed to include quantities
+}
+
+function saveSelectedVehiclesToShipPlan(selectedVehicles) {
+	//get shipPlanName from the ship-plan-info
+	const vehicle_plan = frappe.route_options.vehicle_plan;
+	const shipPlanName = frappe.route_options.ship_plan;
+	if(vehicle_plan){
+		frappe.call({
+			method: 'shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.save_scale_item_m', // Adjust with your actual method path
+			args: {
+				ship_plan_name: shipPlanName,
+				vehicle_plan: vehicle_plan, // Ensure you have this variable available
+				vehicles: selectedVehicles
+			},
+			callback: function (r) {
+				if (r.message == 'success') {
+					// Handle success (e.g., show a success message, refresh the page)
+					console.log("Success", r.message);
+					$('.save-btn').hide();
+					//hide the vehicles container and show the scale items container
+					$('.vehicles-container').hide();
+					display_ship_plan_info();
+					fetchAndDisplayScaleItems();
+				}
+			}
+		});
+	}
+}
+
+function init_buttons_dispatch() {
+	const buttons_wrapper = $('.footer-buttons');
+	//remove all buttons
+	buttons_wrapper.empty();
+
+	// Buttons fixed at the bottom
+	$('#page-ship-plan-vehicle').find('.footer-buttons').append(`
         <div class="footer-buttons">
 			<button class="btn back-btn">返回</button>
             <button class="btn btn-primary save-btn" style="display: none;">保存</button>
-			<button class="btn btn-secondary cancel-btn">取消</button>
-			<button class="btn btn-secondary edit-btn" style="display: none;">更改</button>
+			<button class="btn cancel-btn">取消</button>
+			<button class="btn edit-btn" style="display: none;">更改</button>
             <button class="btn assign-btn">配车</button>
-			<button class="btn btn-secondary baohao-btn">报号</button>
+			<button class="btn baohao-btn">报号</button>
         </div>
-    `;
-	contentWrapper.append(buttonsHtml);
+    `);
 	$('.baohao-btn').click(function () {
 		//get all scale items'name listed in the page
 		const scaleItems = $('.scale-item').map(function () {
@@ -359,9 +481,9 @@ function init_page(wrapper, shipPlanName, transporterName) {
 
 	});
 	$('.save-btn').click(function () {
-		
 		$('.assign-btn').show();
 		$('.cancel-btn').show();
+		$('baoahao-btn').show();
 		const selectedVehicles = $('.vehicle-card.selected').map(function () {
 			const vehicleId = $(this).data('vehicle-id');
 			const qty = parseFloat($(this).find('.input-qty').val());
@@ -372,8 +494,29 @@ function init_page(wrapper, shipPlanName, transporterName) {
 		}).get(); 
 
 		saveSelectedVehiclesToShipPlan(selectedVehicles);
+		$('.back-btn').off('click');
+		$('.back-btn').click(function () {
+			frappe.set_route('ship-plan-list');
+		});
+		$('.back-btn').show();
 	});
 	$('.cancel-btn').click(function() {
+		//count 5 seconds before enable the button again, during the counting the button text display count down numbers
+		$('.cancel-btn').prop('disabled', true);
+		$('.cancel-btn').text('5');
+		var count = 5;
+		var counter = setInterval(timer, 1000);
+		function timer() {
+			count = count - 1;
+			if (count <= 0) {
+				clearInterval(counter);
+				$('.cancel-btn').prop('disabled', false);
+				$('.cancel-btn').text('取消');
+			}
+			else {
+				$('.cancel-btn').text(count);
+			}
+		}
 		// Collect the names of all selected scale items
 		const selectedScaleItemNames = $('.scale-item.selected').map(function() {
 			return $(this).data('item-name'); // Assuming each .scale-item has a data attribute like data-item-name with the item's name
@@ -397,6 +540,7 @@ function init_page(wrapper, shipPlanName, transporterName) {
 							else{
 								frappe.msgprint(__('取消失败：'+result.scale_item + ' - ' + result.vehicle));
 							}
+							
 						}
 					} else {
 						// Handle error
@@ -410,105 +554,4 @@ function init_page(wrapper, shipPlanName, transporterName) {
 			frappe.msgprint(__('请选择要取消的物流单！'));
 		}
 	});
-
 }
-
-function fetchAndDisplayVehicles() {
-	let transporter = frappe.route_options.transporter;
-	if (!transporter) {
-		transporter = frappe.user_defaults.default_transporter;
-	}
-	frappe.db.get_list('Vehicle', {
-			filters: {
-				transporter: transporter
-			},
-			fields: ['name', 'standard_qty','id','wheels'],
-			limit: 'all'
-		}).then(function (r) {
-			if (r) {
-				displayVehicles(r);
-			}
-		
-	});
-}
-
-function displayVehicles(vehicles) {
-	//check if the vehicles container is already present
-	if ($('.vehicles-container').length) {
-		$('.vehicles-container').remove();
-	}
-	const vehiclesContainer = $('<div class="vehicles-container"></div>').appendTo('.content-wrapper');
-	vehicles.forEach(vehicle => {
-		const vehicleCard = $(`
-            <div class="vehicle-card" data-vehicle-id="${vehicle.name}" style="${vehicle.wheels==0?'color: green;':'color: black;'}">
-                <div class="vehicle-info">
-                    <span class= "vehicleid">${vehicle.id} </span>--<span class= "vehicle-id">${vehicle.name}</span>--<span class="vehicle-qty">${vehicle.standard_qty}</span>
-					--<span class="vehicle-processing">${vehicle.wheels}</span>
-                </div>
-                <div class="qty-adjust">
-                    <button class="qty-decrease">-</button>
-					<input type="text" class="input-qty" value=${vehicle.standard_qty} style="width: 50px; text-align: center;" />
-                    <button class="qty-increase">+</button>
-                </div>
-            </div>
-        `).appendTo(vehiclesContainer);
-
-		// Decrease Qty
-		vehicleCard.find('.qty-decrease').click(function (e) {
-			e.stopPropagation(); // Prevent the vehicle-card click event
-			const qtyInput = $(this).closest('.vehicle-card').find('.input-qty');
-			let qty = parseFloat(qtyInput.val());
-			if (qty > 0) { // Optional: prevent qty from going below a certain value (e.g., 0)
-				qtyInput.val(--qty);
-			}
-		});
-
-		// Increase Qty
-		vehicleCard.find('.qty-increase').click(function (e) {
-			e.stopPropagation(); // Prevent the vehicle-card click event
-			const qtyInput = $(this).closest('.vehicle-card').find('.input-qty');
-			let qty = parseFloat(qtyInput.val());
-			qtyInput.val(++qty);
-		});
-
-		// Handle vehicle selection
-		vehicleCard.click(function () {
-			$(this).toggleClass('selected'); // Highlight selected vehicle
-		});
-
-		vehicleCard.on('click', '.input-qty', function(event) {
-			event.stopPropagation();
-			// You can also place focus logic here if needed
-		});
-
-	});
-
-	// Modify the assign button for saving selected vehicles with their quantities
-	// Update your saveSelectedVehiclesToShipPlan function as needed to include quantities
-}
-
-function saveSelectedVehiclesToShipPlan(selectedVehicles) {
-	//get shipPlanName from the ship-plan-info
-	const shipPlanName = $('#ship-plan-name').text();
-	if(shipPlanName){
-		frappe.call({
-			method: 'shipping_management.shipping_management.doctype.shipping_management_tool.shipping_management_tool.save_scale_item_m', // Adjust with your actual method path
-			args: {
-				ship_plan_name: shipPlanName, // Ensure you have this variable available
-				vehicles: selectedVehicles
-			},
-			callback: function (r) {
-				if (r.message == 'success') {
-					// Handle success (e.g., show a success message, refresh the page)
-					console.log("Success", r.message);
-					$('.save-btn').hide();
-					//hide the vehicles container and show the scale items container
-					$('.vehicles-container').hide();
-					display_ship_plan_info();
-					fetchAndDisplayScaleItems();
-				}
-			}
-		});
-	}
-}
-

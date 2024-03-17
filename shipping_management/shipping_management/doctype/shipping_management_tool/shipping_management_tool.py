@@ -123,12 +123,14 @@ def save_doc(doc_data):
                     scale_item.date = frappe.utils.nowdate()
                 
                 if doc.ship_plan:
-                    ship_plan = frappe.get_doc('Ship Plan', doc.ship_plan)
-                    scale_item.desc= ship_plan.plan_desc
-                    scale_item.item = ship_plan.item
-                    scale_item.ship_plan = ship_plan.name
-                    
+                    #ship_plan = frappe.get_doc('Ship Plan', doc.ship_plan)
+                    #scale_item.desc= ship_plan.plan_desc
+                    #scale_item.item = ship_plan.item
+                    scale_item.ship_plan = doc.ship_plan
                 
+                if doc.vehicle_plan:
+                    scale_item.vehicle_plan = doc.vehicle_plan
+                    
                 scale_item.save(ignore_permissions=True)
                 scale_child.scale_item = scale_item.name
 
@@ -143,12 +145,14 @@ def save_doc(doc_data):
 
 
 @frappe.whitelist()
-def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order=None, sales_order=None, sales_invoice=None,export=None,bill_type=None):
+def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order=None, sales_order=None, sales_invoice=None,export=None,bill_type=None,date = None,vehicle_plan=None):
     # Initialize the filters dictionary with a condition that's always true
     filters = {'status': ['!=', '9 已取消']}
     
     if ship_plan is not None and not ship_plan == '':
         filters['ship_plan'] = ship_plan
+    if vehicle_plan is not None and not vehicle_plan == '':
+        filters['vehicle_plan'] = vehicle_plan
     # Conditionally add filters if parameters are provided
     if type is not None and not type == '':
         filters['type'] = type
@@ -162,6 +166,9 @@ def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order
         filters['sales_invoice'] = sales_invoice
     if bill_type is not None and not bill_type == '':
         filters['bill_type'] = bill_type
+    
+    if date is not None and not date == '':
+        filters['date'] = date
 
     # Fetch all scale item docs according to ship_plan and any other provided filters
     scale_items = frappe.get_all('Scale Item', 
@@ -236,6 +243,7 @@ def update_scale_item_from_child(scale_item, scale_child):
         'sales_invoice',
         'sales_order',
         'bill_type',
+        'order_note',
     ]
     
     # Track if any field value has changed
@@ -285,16 +293,15 @@ def get_vehicles(transporter=None):
 
 
 @frappe.whitelist()
-def save_scale_item_m(ship_plan_name, vehicles):
+def save_scale_item_m(vehicle_plan ,vehicles,ship_plan_name=None, ):
     try:
-        # Create a new Ship Plan doc
-        ship_plan = frappe.get_doc('Ship Plan', ship_plan_name)
+        vehicle_plan_item = frappe.get_doc('Vehicle Plan Item', vehicle_plan)
         # Loop through the vehicles and create a new Scale Item for each
         data = frappe.form_dict['vehicles']  # 'vehicles' is the key for your JSON string
         vehicles = json.loads(data) 
         for vehicle in vehicles:
             scale_item = frappe.new_doc('Scale Item')
-            scale_item.company = ship_plan.company
+            scale_item.company = vehicle_plan_item.company
             scale_item.vehicle = vehicle['vehicle_id']
             vehicle_doc = frappe.get_doc('Vehicle', vehicle['vehicle_id'])
             if vehicle_doc.transporter:
@@ -307,9 +314,10 @@ def save_scale_item_m(ship_plan_name, vehicles):
             
             scale_item.target_weight = vehicle['quantity']
             scale_item.type = 'OTH'
-            scale_item.date = ship_plan.date
+            scale_item.date = vehicle_plan_item.date
             scale_item.ship_plan = ship_plan_name
-            scale_item.from_addr = ship_plan.from_addr
+            scale_item.vehicle_plan = vehicle_plan
+            scale_item.from_addr = vehicle_plan_item.from_addr
             scale_item.save(ignore_permissions=True)
         return 'success'
     except Exception as e:
@@ -369,13 +377,17 @@ def assign_warehouse_to_scale_items(scale_items, warehouse):
     return results
 
 @frappe.whitelist()
-def assign_sales_order_to_scale_items(scale_items, sales_order, to_addr):
+def assign_sales_order_to_scale_items(scale_items, plan_item, to_addr):
+    #get the sales order from the plan item
+    plan_item_doc = frappe.get_doc('Plan Item', plan_item)
+    sales_order = plan_item_doc.sales_order
     #parse the json to a python object
     scale_items = frappe.parse_json(scale_items)
     results = []
     for scale_item in scale_items:
         try:
             scale_item_doc = frappe.get_doc('Scale Item', scale_item)
+            
             scale_item_doc.sales_order = sales_order
             scale_item_doc.type = 'DIRC'
             scale_item_doc.to_addr = to_addr
@@ -397,139 +409,100 @@ def assign_sales_order_to_scale_items(scale_items, sales_order, to_addr):
 
 
 @frappe.whitelist()
-def assign_warehouse_to_ship_plan(ship_plan, warehouse, v_qty):
+def assign_warehouse_to_ship_plan(ship_plan, warehouse, v_qty, qty,date):
     try:
-        ship_plan_doc = frappe.get_doc('Ship Plan', ship_plan)
+        plan_item_doc = frappe.new_doc('Plan Item')
         #add a child to child table plan_items,the doctype is Ship Plan Item
-        ship_plan_item = ship_plan_doc.append('plan_items', {})
-        ship_plan_item.type = 'IN'
-        ship_plan_item.to_addr = warehouse.split(' - ')[0]
-        ship_plan_item.v_qty = v_qty
-        ship_plan_item.pot = warehouse
-        ship_plan_doc.save(ignore_permissions=True)
+        plan_item_doc.type = 'IN'
+        plan_item_doc.to_addr = warehouse.split(' - ')[0]
+        plan_item_doc.v_qty = v_qty
+        plan_item_doc.pot = warehouse
+        plan_item_doc.qty = qty
+        plan_item_doc.ship_plan = ship_plan
+        plan_item_doc.date = date
+        plan_item_doc.save(ignore_permissions=True)
         return 'success'
     except Exception as e:
         return e
 
 @frappe.whitelist()
-def update_warehouse_to_ship_plan(ship_plan, warehouse, v_qty, item_name):
+def update_warehouse_to_ship_plan(ship_plan, warehouse, v_qty, item_name,qty,date):
     try:
-        ship_plan_doc = frappe.get_doc('Ship Plan', ship_plan)
-        #get the ship plan item using item_name
-        for item in ship_plan_doc.plan_items:
-            if item.name == item_name:
-                item.type = 'IN'
-                item.to_addr = warehouse.split(' - ')[0]
-                item.v_qty = v_qty
-                item.pot = warehouse
-                ship_plan_doc.save(ignore_permissions=True)
-                return 'success'
+        plan_item_doc = frappe.get_doc('Plan Item', item_name)
+        
+        plan_item_doc.db_update
+        plan_item_doc.to_addr = warehouse.split(' - ')[0]
+        plan_item_doc.v_qty = v_qty
+        plan_item_doc.pot = warehouse
+        plan_item_doc.qty = qty
+        plan_item_doc.date = date
+        plan_item_doc.save(ignore_permissions=True)
+        return 'success'
     except Exception as e:
         return e
     
     
 @frappe.whitelist()
-def assign_sales_order_to_ship_plan(ship_plan, sales_order, to_addr, v_qty, order_note):
+def assign_sales_order_to_ship_plan(ship_plan, sales_order, to_addr, v_qty, order_note,date,qty,bill_type):
     try:
-        ship_plan_doc = frappe.get_doc('Ship Plan', ship_plan)
+        plan_doc = frappe.new_doc('Plan Item')
+        
         #add a child to child table plan_items,the doctype is Ship Plan Item
-        ship_plan_item = ship_plan_doc.append('plan_items', {})
-        ship_plan_item.type = 'DIRC'
-        ship_plan_item.to_addr = to_addr
-        ship_plan_item.v_qty = v_qty
-        ship_plan_item.sales_order = sales_order
-        ship_plan_item.order_note = order_note
-        ship_plan_doc.save(ignore_permissions=True)
+        plan_doc.date = date
+        plan_doc.status = '计划中'
+        plan_doc.type = 'DIRC'
+        plan_doc.to_addr = to_addr
+        plan_doc.v_qty = v_qty
+        plan_doc.qty = qty
+        plan_doc.sales_order = sales_order
+        plan_doc.order_note = order_note
+        plan_doc.bill_type = bill_type
+        plan_doc.ship_plan = ship_plan
+        plan_doc.save(ignore_permissions=True)
         return 'success'
     except Exception as e:
         return e
     
 @frappe.whitelist()
-def update_sales_order_to_ship_plan(ship_plan, sales_order, to_addr, v_qty, order_note, item_name):
+def update_sales_order_to_ship_plan(ship_plan, sales_order, to_addr, v_qty, order_note, item_name, bill_type,date,qty):
     try:
-        ship_plan_doc = frappe.get_doc('Ship Plan', ship_plan)
-        for item in ship_plan_doc.plan_items:
-            if item.name == item_name:
-                item.type = 'DIRC'
-                item.to_addr = to_addr
-                item.v_qty = v_qty
-                item.sales_order = sales_order
-                item.order_note = order_note
-                ship_plan_doc.save(ignore_permissions=True)
-                return 'success'
+        plan_item_doc = frappe.get_doc('Plan Item', item_name)
+        plan_item_doc.type = 'DIRC'
+        plan_item_doc.to_addr = to_addr
+        plan_item_doc.v_qty = v_qty
+        plan_item_doc.qty = qty
+        plan_item_doc.sales_order = sales_order
+        plan_item_doc.order_note = order_note
+        plan_item_doc.bill_type = bill_type
+        plan_item_doc.date = date
+        plan_item_doc.save(ignore_permissions=True)
+        return 'success'
         #get the ship plan item using item_name
     except Exception as e:
         return e
 
 @frappe.whitelist()
-def cancel_ship_plan_items(ship_plan,items):
-    ship_plan_doc = frappe.get_doc('Ship Plan', ship_plan)
+def cancel_ship_plan_items(items):
+
     #parse the json to a python object
     items = frappe.parse_json(items)
     success_count = 0
     error_count = 0
-    try:
-        for ship_plan_item in ship_plan_doc.plan_items:
-            if ship_plan_item.name in items:
-
-                    ship_plan_doc.get('plan_items').remove(ship_plan_item)
-                    success_count += 1
-        ship_plan_doc.save(ignore_permissions=True)
+    error_msg = []
+    results = {}
+    if items:
+        for item in items:
+            try:
+                item_doc =  frappe.get_doc('Plan Item', item)
+                item_doc.delete(ignore_permissions=True)
+                success_count += 1
+            except Exception as e:
+                error_count += 1
+                error_msg.append(f"删除 {item}发生错误: {e}")
         return {
-            'status': 'success',
             'success_count': success_count,
+            'error_count': error_count,
+            'error_msg': error_msg
             }
         
-    except Exception as e:
-        return {
-            'status': 'error',
-            'error': e
-            }
-
-@frappe.whitelist()
-def get_filtered_sales_orders(doctype, txt, searchfield, start, page_len, filters):
-    import json
-    if isinstance(filters, str):
-        filters = json.loads(filters)
-
-    ship_plan = filters.get('ship_plan') if filters else None
-    permitted_companies = get_user_permitted_companies()
-
-    # Convert start and page_len to integers
-    start = int(start)
-    page_len = int(page_len)
-
-    # Prepare the SQL query, including a filter for permitted companies
-    sales_order_fields = "`tabSales Order`.`name`, `tabSales Order`.`order_note`, `tabShip Plan Item`.`to_addr`,`tabShip Plan Item`.`v_qty`"
-
-    company_conditions = ""
-    if permitted_companies:
-        company_placeholders = ', '.join(['%s'] * len(permitted_companies))
-        company_conditions = f"AND `tabSales Order`.`company` IN ({company_placeholders})"
-
-    results = frappe.db.sql(f"""
-        SELECT {sales_order_fields}
-        FROM `tabSales Order`
-        INNER JOIN `tabShip Plan Item` ON `tabShip Plan Item`.`sales_order` = `tabSales Order`.`name`
-        WHERE `tabSales Order`.`docstatus` < 2
-        AND `tabSales Order`.`status` NOT IN ('Completed', 'Closed', 'Cancelled')
-        AND (`tabSales Order`.`{searchfield}` LIKE %s OR `tabSales Order`.`order_note` LIKE %s)
-        AND (%s IS NULL OR `tabShip Plan Item`.`parent` = %s)
-        {company_conditions}
-        ORDER BY
-            `tabSales Order`.`modified` DESC
-    """, [
-        f"%{txt}%", f"%{txt}%", ship_plan, ship_plan
-    ] + permitted_companies)
-
-    return results
-
-
-        
-def get_user_permitted_companies():
-    """Fetch a list of companies the user has permission to access."""
-    user = frappe.session.user
-    # Fetch the companies the user has permission to access
-    companies = frappe.db.get_all('User Permission', filters={'user': user, 'allow': 'Company'}, pluck='for_value')
-    #if companies is none return [], else return the companies
-    return companies if companies else []
+    

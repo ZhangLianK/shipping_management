@@ -36,7 +36,15 @@
   "column_break_ov0kr",
   "to_addr",
   "section_break_tgddv",
-  "plan_items"
+  "get_plan_item",
+  "generate_vehicle_plan",
+  "get_vehicle_plan",
+  "section_break_a83ad",
+  "plan_items",
+  "section_break_e0wkj",
+  "vehicle_plans",
+  "section_break_89taz",
+  "plan_items_v"
  ],
  "fields": [
   {
@@ -196,17 +204,61 @@
   {
    "fieldname": "plan_items",
    "fieldtype": "Table",
-   "label": "\u5206\u91cf\u4fe1\u606f",
+   "hidden": 1,
+   "label": "\u672a\u914d\u8f66\u5206\u91cf\u4fe1\u606f",
    "options": "Ship Plan Item"
   },
   {
    "fieldname": "section_break_tgddv",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "get_plan_item",
+   "fieldtype": "Button",
+   "hidden": 1,
+   "label": "\u83b7\u53d6\u6240\u6709\u5206\u91cf\u4fe1\u606f"
+  },
+  {
+   "fieldname": "section_break_e0wkj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "vehicle_plans",
+   "fieldtype": "Table",
+   "label": "\u914d\u8f66\u8ba1\u5212",
+   "options": "Vehicle Plan"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_a83ad",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "generate_vehicle_plan",
+   "fieldtype": "Button",
+   "hidden": 1,
+   "label": "\u751f\u6210\u914d\u8f66\u8ba1\u5212"
+  },
+  {
+   "fieldname": "section_break_89taz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "plan_items_v",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "\u5df2\u914d\u8f66\u5206\u91cf\u4fe1\u606f",
+   "options": "Ship Plan Item"
+  },
+  {
+   "fieldname": "get_vehicle_plan",
+   "fieldtype": "Button",
+   "label": "\u5237\u65b0\u914d\u8f66\u8ba1\u5212"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-05 23:50:32.020795",
+ "modified": "2024-03-15 13:43:47.131251",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Ship Plan",

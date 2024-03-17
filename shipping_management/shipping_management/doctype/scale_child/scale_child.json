@@ -28,6 +28,7 @@
   "purchase_order",
   "column_break_lzg3v",
   "sales_order",
+  "order_note",
   "sales_invoice"
  ],
  "fields": [
@@ -91,7 +92,7 @@
    "fieldname": "type",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "\u7c7b\u578b",
+   "label": "\u7c7b\u522b",
    "options": "Ship Type"
   },
   {
@@ -114,7 +115,7 @@
   {
    "fieldname": "purchase_order",
    "fieldtype": "Link",
-   "label": "\u91c7\u8d2d\u8ba2\u5355",
+   "label": "\u91c7\u8d2d\u5355",
    "options": "Purchase Order"
   },
   {
@@ -122,7 +123,7 @@
    "fieldname": "sales_order",
    "fieldtype": "Link",
    "in_list_view": 1,
-   "label": "\u9500\u552e\u8ba2\u5355",
+   "label": "\u9500\u552e\u5355",
    "options": "Sales Order"
   },
   {
@@ -183,12 +184,18 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "\u9884\u88c5\u91cf"
+  },
+  {
+   "fieldname": "order_note",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "\u8ba2\u5355\u5907\u6ce8"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-02-22 11:53:00.535462",
+ "modified": "2024-03-16 18:19:37.344676",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Child",
