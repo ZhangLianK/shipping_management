@@ -201,16 +201,12 @@ frappe.ui.form.on('Shipping Management Tool', {
 		}
 	},
 	export_xlsx: function (frm) {
-		if (!frm.doc.ship_plan) {
-			frappe.throw(__('请先选择物流计划'));
-			return;
-		}
 		let exp = true;
 		refresh_scale_item(frm, exp);
 	},
 	export_baohao: function (frm) {
 		if (!frm.doc.vehicle_plan) {
-			frappe.throw(__('请先选择物流计划'));
+			frappe.throw(__('请先选择配车计划'));
 			return;
 		}
 		frappe.call({
