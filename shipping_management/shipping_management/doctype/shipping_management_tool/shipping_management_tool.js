@@ -208,6 +208,35 @@ frappe.ui.form.on('Shipping Management Tool', {
 		let exp = true;
 		refresh_scale_item(frm, exp);
 	},
+	export_baohao: function (frm) {
+		if (!frm.doc.vehicle_plan) {
+			frappe.throw(__('请先选择物流计划'));
+			return;
+		}
+		frappe.call({
+			method: 'shipping_management.shipping_management.doctype.vehicle_plan_item.vehicle_plan_item.generate_and_download_vehicle_plan_excel',
+			args: {
+				vehicle_plan: frm.doc.vehicle_plan
+			},
+			callback: function (r) {
+				if (r.message) {
+					var file_url = r.message;
+					// Create a temporary invisible <a> element
+					var tempLink = document.createElement('a');
+					tempLink.href = file_url;
+					// The download attribute specifies that the target will be downloaded when a user clicks on the hyperlink
+					tempLink.setAttribute('download', '');
+					tempLink.style.display = 'none';
+					document.body.appendChild(tempLink);
+					// Programmatically click the link to trigger the download
+					tempLink.click();
+					// Remove the temporary link from the document
+					document.body.removeChild(tempLink);
+				}
+			}
+		});
+
+	},
 	ship_plan: function (frm) {
 			refresh_scale_item(frm);
 	},

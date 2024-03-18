@@ -37,6 +37,7 @@
   "to_addr",
   "section_break_dj6ub",
   "export_xlsx",
+  "export_baohao",
   "column_break_f1yhq",
   "query_qty",
   "column_break_uazgk",
@@ -252,12 +253,17 @@
    "fieldtype": "Link",
    "label": "\u914d\u8f66\u8ba1\u5212",
    "options": "Vehicle Plan Item"
+  },
+  {
+   "fieldname": "export_baohao",
+   "fieldtype": "Button",
+   "label": "\u5bfc\u51fa\u62a5\u53f7\u4fe1\u606f"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-03-17 10:09:02.074002",
+ "modified": "2024-03-18 15:44:17.876258",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping Management Tool",
