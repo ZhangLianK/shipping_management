@@ -121,7 +121,7 @@ function refresh_vehicle_plans() {
 							<span style="float:right;">提货地: ${vehicle_plan.from_addr}</span> 
 							</p>
 							<p>
-							<span>${vehicle_plan.ship_plan}</span>:<span>${vehicle_plan.name}</span>
+							<span>${vehicle_plan.ship_plan?vehicle_plan.ship_plan:''}</span>:<span>${vehicle_plan.name}</span>
 							</p>
 
 						</div>
@@ -129,7 +129,7 @@ function refresh_vehicle_plans() {
 					
 					// Convert the HTML string to a jQuery object and add click event
 					var $card_html = $(card_html).click(function() {
-						frappe.set_route('ship-plan-vehicle',{ship_plan: vehicle_plan.ship_plan, transporter: default_transporter,vehicle_plan: vehicle_plan.name});
+						frappe.set_route('ship-plan-vehicle',{ship_plan: vehicle_plan.ship_plan?vehicle_plan.ship_plan:'', transporter: default_transporter,vehicle_plan: vehicle_plan.name});
 					});
 					container.append($card_html)
 				});
