@@ -10,6 +10,18 @@ frappe.ui.form.on('Vehicle Plan Item', {
 				}
 			};
 		});
+		frm.set_query('ship_plan', function (doc) {
+			return {
+				filters: {
+					'status':  ['not in', ['完成']]
+				}
+			};
+		});
+		//add a button to complete the vehicle plan
+		frm.add_custom_button(__('完成'), function () {
+			frm.set_value('status', '完成');
+			frm.save();
+		});
 		//add a customer button to download all the scale items linked to this vehicle plan
 		frm.add_custom_button(__('下载报号列表'), function () {
 			frappe.call({

@@ -8,7 +8,28 @@ from frappe.utils import cint
 
 
 class VehiclePlanItem(Document):
-	pass
+	#update the ship plan qty when the vehicle plan item is updated or created
+    def after_delete(self):
+        self.update_ship_plan_qty()
+        
+    def on_update(self):
+        self.update_ship_plan_qty()
+        #get old doc
+        old_doc = self.get_doc_before_save()
+        #check if the ship plan has changed
+        if old_doc and not old_doc.ship_plan == self.ship_plan:
+            old_ship_plan = frappe.get_doc("Ship Plan", old_doc.ship_plan)
+            old_ship_plan.update_assigned_qty()
+        
+    def on_save(self):
+        self.update_ship_plan_qty()
+            
+    def update_ship_plan_qty(self):
+        if self.ship_plan:
+            print("Updating ship plan qty")
+            ship_plan = frappe.get_doc("Ship Plan", self.ship_plan)
+            ship_plan.update_assigned_qty()
+        
 
 @frappe.whitelist()
 def generate_and_download_vehicle_plan_excel(vehicle_plan):

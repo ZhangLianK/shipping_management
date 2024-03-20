@@ -79,8 +79,9 @@
   },
   {
    "fieldname": "ship_plan",
-   "fieldtype": "Data",
-   "label": "\u7269\u6d41\u8ba1\u5212"
+   "fieldtype": "Link",
+   "label": "\u7269\u6d41\u8ba1\u5212",
+   "options": "Ship Plan"
   },
   {
    "fieldname": "baohao_template",
@@ -98,7 +99,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-17 09:48:32.086907",
+ "modified": "2024-03-20 10:14:29.192122",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Vehicle Plan Item",

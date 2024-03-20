@@ -6,6 +6,7 @@ frappe.ui.form.on('Ship Plan', {
         
     },
     refresh: function (frm) {
+        refresh_vehicle_plan(frm);
         //add a customer button to create a vehicle plan
         frm.add_custom_button(__('生成配车计划'), function () {
             frappe.route_options = {
@@ -30,13 +31,6 @@ frappe.ui.form.on('Ship Plan', {
                 }
             };
         });
-    },
-    from_addr: function (frm) {
-        if (frm.doc.from_addr) {
-            frm.set_value('plan_desc', frm.doc.from_addr);
-            frm.refresh_field('plan_desc');
-        }
-
     },
     get_plan_item: function (frm) {
         frappe.db.get_list('Plan Item', {

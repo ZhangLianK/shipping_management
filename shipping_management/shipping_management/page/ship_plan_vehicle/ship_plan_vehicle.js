@@ -150,7 +150,6 @@ function fetchAndDisplayScaleItems() {
 	// Assuming `fetchScaleItems` is your method to get scale items from the server
 	frappe.db.get_list('Scale Item', {
 			filters: {
-				ship_plan: ship_plan_name,
 				vehicle_plan: vehicle_plan,
 				transporter: transporter,
 				status: ['!=', '9 已取消']

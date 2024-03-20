@@ -282,27 +282,32 @@ class ScaleItem(Document):
 			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
 			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight
 			sales_invoice.save(ignore_permissions=True)
-		
-		if self.ship_plan and not self.target_weight == old_target_weight:
-			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan,ignore_permissions=True)
-			ship_plan.assigned_qty = ship_plan.assigned_qty + self.target_weight - old_target_weight
-			ship_plan.save(ignore_permissions=True)
 
 		if self.vehicle_plan and not self.target_weight == old_target_weight:
 			vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", self.vehicle_plan,ignore_permissions=True)
 			vehicle_plan_item.assigned_qty = vehicle_plan_item.assigned_qty + self.target_weight - old_target_weight
 			vehicle_plan_item.save(ignore_permissions=True)
 
+		if self.vehicle_plan and old_doc.vehicle_plan and self.vehicle_plan != old_doc.vehicle_plan:
+			vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", self.vehicle_plan,ignore_permissions=True)
+			vehicle_plan_item.assigned_qty = vehicle_plan_item.assigned_qty + self.target_weight
+			vehicle_plan_item.save(ignore_permissions=True)
+			old_vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", old_doc.vehicle_plan,ignore_permissions=True)
+			old_vehicle_plan_item.assigned_qty = old_vehicle_plan_item.assigned_qty - old_target_weight
+			old_vehicle_plan_item.save(ignore_permissions=True)
+
 	def before_validate(self):
+		if self.vehicle_plan:
+			vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", self.vehicle_plan)
+			self.ship_plan = vehicle_plan_item.ship_plan
+			self.company = vehicle_plan_item.company
+			self.date = vehicle_plan_item.date
 		#check if ship plan is exist, if yes then get the company and purchase order from ship plan
 		if self.ship_plan:
 			ship_plan_doc = frappe.get_doc("Ship Plan", self.ship_plan)
-			if not self.company:
-				self.company = ship_plan_doc.company
 			if not self.purchase_order:
 				self.purchase_order = ship_plan_doc.purchase_order
-			if not self.date:
-				self.date = ship_plan_doc.date
+    
 		if self.pot and self.type == 'IN':
 			self.to_addr = self.pot.split(' - ')[0]
 		if self.pot and self.type == 'OUT':
@@ -378,6 +383,14 @@ class ScaleItem(Document):
 		self.validate_status()
 		if self.to_dt:
 			self.cancel_vehicle_in_process()
+   
+		if self.vehicle_plan and not self.ship_plan:
+			self.ship_plan = frappe.get_value("Vehicle Plan Item", self.vehicle_plan, "ship_plan")
+		#check if ship plan is exist, if yes then get the company and purchase order from ship plan
+			if self.ship_plan and not self.purchase_order:
+				ship_plan_doc = frappe.get_doc("Ship Plan", self.ship_plan)
+				if not self.purchase_order:
+					self.purchase_order = ship_plan_doc.purchase_order
 
 		if self.pot and self.type == 'IN':
 			self.to_addr = self.pot.split(' - ')[0]
@@ -470,11 +483,6 @@ class ScaleItem(Document):
 			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle + self.target_weight
 			sales_invoice.save(ignore_permissions=True)
 
-		if self.ship_plan:
-			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan,ignore_permissions=True)
-			ship_plan.assigned_qty = ship_plan.assigned_qty + self.target_weight
-			ship_plan.save(ignore_permissions=True)
-
 		if self.vehicle_plan:
 			vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", self.vehicle_plan,ignore_permissions=True)
 			vehicle_plan_item.assigned_qty = vehicle_plan_item.assigned_qty + self.target_weight
@@ -524,10 +532,6 @@ class ScaleItem(Document):
 			sales_invoice = frappe.get_doc("Sales Invoice", self.sales_invoice,ignore_permissions=True)
 			sales_invoice.qty_vehicle  = sales_invoice.qty_vehicle - self.target_weight
 			sales_invoice.save(ignore_permissions=True)
-		if self.ship_plan:
-			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan,ignore_permissions=True)
-			ship_plan.assigned_qty = ship_plan.assigned_qty - self.target_weight
-			ship_plan.save(ignore_permissions=True)
 		if self.vehicle_plan:
 			vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", self.vehicle_plan,ignore_permissions=True)
 			vehicle_plan_item.assigned_qty = vehicle_plan_item.assigned_qty - self.target_weight
