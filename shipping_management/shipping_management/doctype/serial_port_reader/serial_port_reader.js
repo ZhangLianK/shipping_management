@@ -919,7 +919,8 @@ function refresh_list(frm) {
             'status': ['in', ['2 正在装货', '4 正在卸货']],
             "pot":["descendants of",frm.doc.plant],
             'stock_date': ['is', 'set'],
-        }
+        },
+        order_by: 'modified asc'
     }).then(records => {
         let inProcessData = records.map(record => {
             let grossWeight, blankWeight,time;
