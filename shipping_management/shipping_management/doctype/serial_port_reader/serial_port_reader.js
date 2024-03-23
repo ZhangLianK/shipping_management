@@ -268,7 +268,7 @@ frappe.ui.form.on('Serial Port Reader', {
 
         clearTerminal(frm);
         // Assuming 'Open/Close Port' is a toggle action.
-        openCloseBtn = frm.add_custom_button('Open Port', function () {
+        openCloseBtn = frm.add_custom_button('打开端口', function () {
             if ("serial" in navigator) {
                 openClose(frm);
             }
@@ -684,7 +684,7 @@ async function openClose(frm) {
                 frm.fields_dict.screen.refresh();
                 frm.doc.port_status = "Connected";
                 frm.refresh_field('port_status');
-                $(openCloseBtn).html('Close Port');
+                $(openCloseBtn).html('关闭端口');
                 // Serial read loop. We'll stay here until the serial connection is ended externally or reader.cancel() is called
                 // It's OK to sit in a while(true) loop because this is an async function and it will not block while it's await-ing
                 // When reader.cancel() is called by another function, reader will be forced to return done=true and break the loop
@@ -798,7 +798,7 @@ async function openClose(frm) {
 
                 // Set a bunch of variables and disable the appropriate DOM elements
                 portOpen = false;
-                $(openCloseBtn).html('Open Port');
+                $(openCloseBtn).html('打开端口');
                 frm.doc.port_status = "Disconnected";
                 frm.refresh_field('port_status');
                 console.log("port closed");

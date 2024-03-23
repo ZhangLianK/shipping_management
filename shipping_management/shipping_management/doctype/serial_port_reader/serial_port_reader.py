@@ -44,7 +44,8 @@ def save_weight(scale_item=None, gross_weight=None, gross_dt=None, blank_weight=
 				scale_item_doc.vehicle = vehicle
 				scale_item_doc.date = frappe.utils.today()
 				scale_item_doc.stock_date = frappe.utils.today()
-				scale_item_doc.item = item_code
+				if item_code:
+					scale_item_doc.item = item_code
 				scale_item_doc.purchase_order = purchase_order
 				
 				scale_item_doc.price_ls=flt(price_ls)

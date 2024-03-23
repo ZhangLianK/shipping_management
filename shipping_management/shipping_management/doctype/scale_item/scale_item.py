@@ -110,19 +110,18 @@ class ScaleItem(Document):
 		print("change status")
 		if self.status == '0 新配' and self.pot:
 			self.status = '1 已配罐'
-
 		#if self.status[0] < '2'[0]:
 		if self.offload_net_weight and self.status[0] < '5':
 			self.status = "5 已卸货"
 		elif self.offload_gross_weight and self.status[0] < '4':
 			self.status = "4 正在卸货"
-		elif self.offload_blank_weight and self.status[0] < '5':
+		elif self.offload_blank_weight and self.status[0] < '5' and self.offload_net_weight:
 			self.status = "5 已卸货"
 		elif self.load_net_weight and self.status[0] < '3':
 			self.status = "3 已装货"
 		elif self.load_blank_weight and self.status[0] < '2':
 			self.status = "2 正在装货"
-		elif self.load_gross_weight and self.status[0] < '3':
+		elif self.load_gross_weight and self.status[0] < '3' and self.load_net_weight:
 			self.status = "3 已装货"
 		else:
 			self.status = self.status
