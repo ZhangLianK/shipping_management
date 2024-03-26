@@ -40,7 +40,7 @@ def get_conditions(filters):
         conditions = conditions + f" and sci.sales_order = '{filters.sales_order}'"
     
     if filters.get("ship_plan"):
-        conditions = conditions + f" and sci.ship_plan = '{filters.ship_plan}'"
+        conditions = conditions + f" and vpi.ship_plan = '{filters.ship_plan}'"
         
     if filters.get("stock_dt_from"):
         conditions = conditions + f" and sci.stock_dt >= '{filters.stock_dt_from}'"
@@ -105,12 +105,14 @@ def get_data(conditions, filters):
             sci.sales_order,
             sci.sales_invoice,
             sci.delivery_note,
-            sci.ship_plan,
+            vpi.ship_plan,
             sci.stock_dt,
             sci.from_addr,
             sci.to_addr
 
         from `tabScale Item`  sci
+        left outer join vehicle_plan_item vpi
+            on sci.vehicle_plan = vpi.name
         left outer join `tabDriver` d
             on sci.driver = d.name
         left outer join `tabShip Type` s

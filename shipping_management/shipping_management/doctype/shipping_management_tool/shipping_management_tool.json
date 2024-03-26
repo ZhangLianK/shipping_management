@@ -9,21 +9,27 @@
   "company",
   "column_break_xudq5",
   "ship_plan",
-  "vehicle_plan",
   "column_break_u3cuz",
-  "date",
+  "purchase_order",
   "column_break_wkj8y",
-  "qty",
+  "ship_plan_qty",
   "column_break_yqbv2",
-  "assigned_qty",
+  "ship_plan_assigned_qty",
   "column_break_wlrec",
   "market_segment",
   "section_break_incyt",
+  "date",
+  "column_break_moo6s",
+  "vehicle_plan",
+  "column_break_j0rxx",
+  "qty",
+  "column_break_hxhco",
+  "assigned_qty",
+  "section_break_o5kpi",
   "type",
   "column_break_emxj5",
   "transporter",
   "column_break_decq1",
-  "purchase_order",
   "column_break_g6dcs",
   "sales_order",
   "column_break_lqrjg",
@@ -77,14 +83,15 @@
    "fetch_from": "vehicle_plan.req_qty",
    "fieldname": "qty",
    "fieldtype": "Float",
-   "label": "\u8ba1\u5212\u603b\u8fd0\u91cf"
+   "label": "\u914d\u8f66\u8ba1\u5212\u8fd0\u91cf",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_m1rbr",
    "fieldtype": "Section Break"
   },
   {
-   "fetch_from": "ship_plan.from_addr",
+   "fetch_from": "vehicle_plan.from_addr",
    "fieldname": "from_addr",
    "fieldtype": "Small Text",
    "label": "\u63d0\u8d27\u5730"
@@ -122,10 +129,10 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "ship_plan.assigned_qty",
+   "fetch_from": "vehicle_plan.assigned_qty",
    "fieldname": "assigned_qty",
    "fieldtype": "Float",
-   "label": "\u5df2\u914d\u8f66\u8fd0\u91cf",
+   "label": "\u914d\u8f66\u8ba1\u5212\u5df2\u914d\u8fd0\u91cf",
    "read_only": 1
   },
   {
@@ -258,12 +265,42 @@
    "fieldname": "export_baohao",
    "fieldtype": "Button",
    "label": "\u5bfc\u51fa\u62a5\u53f7\u4fe1\u606f"
+  },
+  {
+   "fieldname": "column_break_moo6s",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_j0rxx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_hxhco",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_o5kpi",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "ship_plan.qty",
+   "fieldname": "ship_plan_qty",
+   "fieldtype": "Float",
+   "label": "\u7269\u6d41\u8ba1\u5212\u8fd0\u91cf",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "ship_plan.assigned_qty",
+   "fieldname": "ship_plan_assigned_qty",
+   "fieldtype": "Float",
+   "label": "\u7269\u6d41\u8ba1\u5212\u5df2\u914d\u8fd0\u91cf",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-03-18 15:44:17.876258",
+ "modified": "2024-03-20 17:44:41.419467",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping Management Tool",

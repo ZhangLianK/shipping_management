@@ -48,10 +48,13 @@ def cancel_scale_child(scale_item):
     scale_item_doc = frappe.get_doc('Scale Item', scale_item)
     scale_item_doc.cancel()
     #scale_item_doc.save(ignore_permissions=True)
-    ship_plan_doc=update_ship_plan(scale_item_doc)
+    if scale_item_doc.vehicle_plan:
+        vehicle_plan_doc = frappe.get_doc('Vehicle Plan Item', scale_item_doc.vehicle_plan, ignore_permissions=True)
+        
     return {
         'status': 'success',
-        'ship_plan': ship_plan_doc.as_dict()
+        'assigned_qty': vehicle_plan_doc.assigned_qty if scale_item_doc.vehicle_plan else 0,
+        
         }
     
 
@@ -135,10 +138,16 @@ def save_doc(doc_data):
                 scale_child.scale_item = scale_item.name
 
         if doc.ship_plan:
-            ship_plan_doc = update_ship_plan(doc)   
-            return ship_plan_doc.as_dict()
-        else:
-            return 'success'
+            ship_plan_doc = frappe.get_doc('Ship Plan', doc.ship_plan, ignore_permissions=True)
+        
+        if doc.vehicle_plan:
+            vehicle_plan_doc = frappe.get_doc('Vehicle Plan Item', doc.vehicle_plan, ignore_permissions=True)
+
+        return {
+            'status': 'success',
+            'ship_plan_assigned_qty':ship_plan_doc.assigned_qty if doc.ship_plan else 0,
+            'assigned_qty':vehicle_plan_doc.assigned_qty if doc.vehicle_plan else 0,
+            }
     except Exception as e:
         frappe.log_error('Shipping Management Tool Save Doc',frappe.get_traceback())
         raise e
@@ -146,36 +155,45 @@ def save_doc(doc_data):
 
 @frappe.whitelist()
 def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order=None, sales_order=None, sales_invoice=None,export=None,bill_type=None,date = None,vehicle_plan=None):
-    # Initialize the filters dictionary with a condition that's always true
-    filters = {'status': ['!=', '9 已取消']}
-    
-    if ship_plan is not None and not ship_plan == '':
-        filters['ship_plan'] = ship_plan
-    if vehicle_plan is not None and not vehicle_plan == '':
-        filters['vehicle_plan'] = vehicle_plan
-    # Conditionally add filters if parameters are provided
-    if type is not None and not type == '':
-        filters['type'] = type
-    if transporter is not None and not transporter == '':
-        filters['transporter'] = transporter
-    #if purchase_order is not None:
-    #    filters['purchase_order'] = purchase_order
-    if sales_order is not None and not sales_order == '':
-        filters['sales_order'] = sales_order
-    if sales_invoice is not None and not sales_invoice == '':
-        filters['sales_invoice'] = sales_invoice
-    if bill_type is not None and not bill_type == '':
-        filters['bill_type'] = bill_type
-    
-    if date is not None and not date == '':
-        filters['date'] = date
+    # Initialize the base SQL query
+    sql_query = """SELECT sci.name, sci.vehicle, sci.type, sci.driver, sci.cell_number, sci.target_weight, sci.status, 
+    sci.from_addr, sci.to_addr, sci.sales_invoice, sci.sales_order, sci.purchase_order, sci.pot, sci.bill_type 
+    FROM `tabScale Item` sci
+    LEFT OUTER JOIN `tabVehicle Plan Item` v_plan
+    ON sci.vehicle_plan = v_plan.name
+    WHERE sci.status != '9 已取消'"""
 
-    # Fetch all scale item docs according to ship_plan and any other provided filters
-    scale_items = frappe.get_all('Scale Item', 
-                                 filters=filters, 
-                                 fields=['name', 'vehicle', 'type', 'driver', 'cell_number',
-                                         'target_weight', 'status', 'from_addr', 'to_addr',
-                                         'sales_invoice', 'sales_order', 'purchase_order','pot','bill_type'])
+    # List to hold the parameters for the query
+    values = []
+
+    # Add conditions based on the provided filters
+    if ship_plan:
+        sql_query += " AND v_plan.ship_plan = %s"
+        values.append(ship_plan)
+    if vehicle_plan:
+        sql_query += " AND sci.vehicle_plan = %s"
+        values.append(vehicle_plan)
+    if type:
+        sql_query += " AND sci.type = %s"
+        values.append(type)
+    if transporter:
+        sql_query += " AND sci.transporter = %s"
+        values.append(transporter)
+    if sales_order:
+        sql_query += " AND sci.sales_order = %s"
+        values.append(sales_order)
+    if sales_invoice:
+        sql_query += " AND sci.sales_invoice = %s"
+        values.append(sales_invoice)
+    if bill_type:
+        sql_query += " AND sci.bill_type = %s"
+        values.append(bill_type)
+    if date:
+        sql_query += " AND sci.date = %s"
+        values.append(date)
+
+    # Execute the SQL query
+    scale_items = frappe.db.sql(sql_query, values, as_dict=1)
 
     # Get id of vehicle of every scale item
     for scale_item in scale_items:

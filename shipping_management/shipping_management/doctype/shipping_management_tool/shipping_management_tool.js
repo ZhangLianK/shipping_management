@@ -85,7 +85,14 @@ frappe.ui.form.on("Scale Child", {
 				callback: function (r) {
 					if (r.message.status == 'success') {
 						// You now have the scale item data returned from the server
-						frm.set_value('assigned_qty', r.message.ship_plan.assigned_qty);
+						frm.set_value('assigned_qty', r.message.assigned_qty);
+						if (frm.doc.ship_plan){
+							frappe.db.get_value('Ship Plan', frm.doc.ship_plan, 'assigned_qty').then(r => {
+								if (r) {
+									frm.set_value('ship_plan_assigned_qty', r.message.assigned_qty);
+								}
+							});
+						}
 						frappe.msgprint("取消成功");
 					}
 				}
@@ -634,12 +641,14 @@ frappe.ui.form.on('Shipping Management Tool', {
 						}
 						else {
 							// You now have the saved doc returned from the server
-							if (r.message == 'success') {
-								frappe.msgprint("保存成功");
-							}
-							else {
-								let ship_plan_doc = r.message;
-								frm.set_value('assigned_qty', ship_plan_doc.assigned_qty);
+							if (r.message.status == 'success') {
+								if (r.message.assigned_qty)
+								{
+									frm.set_value('assigned_qty', r.message.assigned_qty);
+								}
+								if (r.message.ship_plan_assigned_qty){
+									frm.set_value('ship_plan_assigned_qty', r.message.ship_plan_assigned_qty);
+								}
 								frappe.msgprint("保存成功");
 							}
 							frm.doc.__unsaved = false;

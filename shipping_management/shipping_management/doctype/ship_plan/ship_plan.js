@@ -75,7 +75,7 @@ frappe.ui.form.on('Ship Plan', {
 
 function refresh_vehicle_plan(frm) {
     frappe.db.get_list('Vehicle Plan Item', {
-        fields: ['date', 'req_qty', 'status', 'req_qty', 'assigned_qty', 'plan_desc', 'from_addr', 'name'],
+        fields: ['date', 'req_qty', 'status', 'req_qty', 'assigned_qty', 'plan_desc', 'from_addr', 'name','transporter'],
         filters: {
             ship_plan: frm.doc.name
         },
@@ -91,7 +91,8 @@ function refresh_vehicle_plan(frm) {
                 assigned_qty: record.assigned_qty,
                 plan_desc: record.plan_desc,
                 from_addr: record.from_addr,
-                vehicle_plan: record.name
+                vehicle_plan: record.name,
+                transporter: record.transporter
             });
         });
         frm.refresh_field('vehicle_plans');
