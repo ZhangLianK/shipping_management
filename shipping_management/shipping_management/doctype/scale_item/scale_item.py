@@ -315,6 +315,9 @@ class ScaleItem(Document):
    
 	def before_save(self):
 		
+		if self.item == '':
+			self.item = None
+		
 		if self.market_segment == '粮食':
 			if self.type == 'IN' and self.offload_net_weight and self.price_ls and not self.amount_ls:
 				self.amount_ls = self.offload_net_weight * self.price_ls
@@ -378,6 +381,8 @@ class ScaleItem(Document):
 			if self.type == 'OUT' and self.load_net_weight and self.price_ls and not self.amount_ls:
 				self.amount_ls = self.load_net_weight * self.price_ls
 		#frappe.msgprint("before_update_after_submit")
+		if self.item == '':
+			self.item = None
 		self.change_status()
 		self.validate_status()
 		if self.to_dt:
