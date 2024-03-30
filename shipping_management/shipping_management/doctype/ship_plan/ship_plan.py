@@ -10,7 +10,11 @@ class ShipPlan(Document):
 		vehicle_plan_items = frappe.get_all("Vehicle Plan Item", filters={"ship_plan": self.name}, fields=["assigned_qty"])
 		#update the assigned qty of the ship plan
 		self.assigned_qty = sum([item.assigned_qty for item in vehicle_plan_items])
-		#save
+		direct_items = frappe.get_all("Scale Item",filters={"ship_plan": self.name, "vehicle_plan":["is", "not set"],"docstatus": ["!=", "2"]},
+		fields=["target_weight"])
+		direct_assigned_qty = sum(item.target_weight for item in direct_items if item.target_weight is not None)
+		# self.assigned_qty = vehicle_plan_items.assigned_qty + direct_assigned_qty
+		self.assigned_qty += direct_assigned_qty
 		self.save()
 
 	def before_validate(self):
@@ -32,6 +36,7 @@ def get_vehicle_plan_detail(vehicle_plan):
 					  `tabVehicle Plan`.parent,
 					  `tabVehicle Plan`.req_qty, 
 					  `tabVehicle Plan`.assigned_qty, 
+					  `tabVehicle Plan`.qty,
 					  `tabVehicle Plan`.plan_desc,
 					  `tabVehicle Plan`.status,
 					  `tabVehicle Plan`.date,
