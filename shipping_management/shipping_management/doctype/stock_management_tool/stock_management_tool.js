@@ -13,66 +13,13 @@ frappe.ui.form.on("Stock Child", {
 		$('.grid-append-row').remove();
 		var row = locals[cdt][cdn];
 		var row_name = row.scale_item;
-		if ((!row.purchase_receipt && row.type == "IN" && row.status.slice(0,1) >= '5') ||
-			(!row.purchase_receipt && row.type == "DIRC" && row.status.slice(0,1) >= '3' && row.bill_type == "ZT") ||
-			(!row.purchase_receipt && row.type == "DIRC" && row.status.slice(0,1) >= '3' && row.bill_type == "SD")){
-			//add a refresh button to refresh the scale child
-			
+		// Target the row-actions element of the current row and remove existing custom action buttons
+		$(`div[data-idx='${row.idx}']`).find('.row-actions .custom-action-btn').remove();
 
-			// Target the row-actions element of the current row and remove existing custom action buttons
-			$(`div[data-idx='${row.idx}']`).find('.row-actions .custom-action-btn').remove();
-
-			// Append the new custom action button to the row-actions span
-			// Ensure the button is given a class for easy identification (e.g., 'custom-action-btn')
-			var button_html = `<button id="custom-action-${row_name}-pr" class="btn btn-primary btn-sm pull-right hidden-xs custom-action-btn">创建采购入库单</button>`;
-			$(`div[data-idx='${row.idx}']`).find('.row-actions').append(button_html);
-
-			// Bind the click event to the new button
-			$(`#custom-action-${row_name}-pr`).on('click', function () {
-				
-				// Implement your custom action here
-				console.log('create purchase receipt for', row_name);
-				// Example: Log the entire row object to console
-				console.log(row);
-				//send the row doc to the backend to save
-				if (row.purchase_receipt) {
-					frappe.throw(__('已经创建入库单，请勿多次创建！请检查已经创建的关联入库单！'));
-					return;
-				}
-				if (!row.pot){
-					frappe.throw(__('该物流计量单无【罐（库位）】信息！'));
-					return;
-				}
-
-				
-					frappe.call({
-						method: "shipping_management.shipping_management.doctype.stock_management_tool.stock_management_tool.make_purchase_receipt",
-						args: {
-							"source_name": row_name,
-						},
-						callback: function (r) {
-							if (r.message.status == "success") {
-								frappe.msgprint("入库单创建成功！" + r.message.doc_name);
-								// You now have the scale item data returned from the server
-								let purchase_receipt = r.message.doc_name
-								//clear the child table
-								frm.clear_table('stock_childs');
-								refresh_scale_item(frm);
-							}
-							else {
-								frappe.msgprint("入库单创建失败！" + r.message.message);
-							}
-						}
-					})
-				
-			});
-		}
 		if ((!row.delivery_note && (row.type == "OUT" || row.type == "DIRC") && row.status.slice(0,1) >= '3' && row.bill_type == "ZT")
 		||(!row.delivery_note && (row.type == "OUT" || row.type == "DIRC") && row.status.slice(0,1) == '5' && row.bill_type == "SD")){
 			//add a refresh button to refresh the scale child
 			console.log("row_name", row_name);
-			// Target the row-actions element of the current row and remove existing custom action buttons
-			$(`div[data-idx='${row.idx}']`).find('.row-actions .custom-action-btn').remove();
 
 			// Append the new custom action button to the row-actions span
 			// Ensure the button is given a class for easy identification (e.g., 'custom-action-btn')
@@ -96,7 +43,12 @@ frappe.ui.form.on("Stock Child", {
 					return;
 				}
 
-				
+				frappe.realtime.on("create_delivery_note_progress", function(data) {
+					if(data.progress) {
+						frappe.hide_msgprint(true);
+						frappe.show_progress(__("创建发货单"), data.progress[0],data.progress[1]);
+					}
+				});
 					frappe.call({
 						method: "shipping_management.shipping_management.doctype.stock_management_tool.stock_management_tool.make_delivery_note",
 						args: {
@@ -120,6 +72,52 @@ frappe.ui.form.on("Stock Child", {
 			});
 		}
 
+		if ((!row.purchase_receipt && row.type == "IN" && row.status.slice(0,1) >= '5') ||
+			(!row.purchase_receipt && row.type == "DIRC" && row.status.slice(0,1) >= '3' && row.bill_type == "ZT") ||
+			(!row.purchase_receipt && row.type == "DIRC" && row.status.slice(0,1) >= '3' && row.bill_type == "SD")){
+			// Append the new custom action button to the row-actions span
+			// Ensure the button is given a class for easy identification (e.g., 'custom-action-btn')
+			var button_html = `<button id="custom-action-${row_name}-pr" class="btn btn-primary btn-sm pull-right hidden-xs custom-action-btn">创建采购入库单</button>`;
+			$(`div[data-idx='${row.idx}']`).find('.row-actions').append(button_html);
+
+			// Bind the click event to the new button
+			$(`#custom-action-${row_name}-pr`).on('click', function () {
+				
+				// Implement your custom action here
+				console.log('create purchase receipt for', row_name);
+				// Example: Log the entire row object to console
+				console.log(row);
+				//send the row doc to the backend to save
+				if (row.purchase_receipt) {
+					frappe.throw(__('已经创建入库单，请勿多次创建！请检查已经创建的关联入库单！'));
+					return;
+				}
+				if (!row.pot){
+					frappe.throw(__('该物流计量单无【罐（库位）】信息！'));
+					return;
+				}
+					frappe.call({
+						method: "shipping_management.shipping_management.doctype.stock_management_tool.stock_management_tool.make_purchase_receipt",
+						args: {
+							"source_name": row_name,
+						},
+						callback: function (r) {
+							if (r.message.status == "success") {
+								frappe.msgprint("入库单创建成功！" + r.message.doc_name);
+								// You now have the scale item data returned from the server
+								let purchase_receipt = r.message.doc_name
+								//clear the child table
+								frm.clear_table('stock_childs');
+								refresh_scale_item(frm);
+							}
+							else {
+								frappe.msgprint("入库单创建失败！" + r.message.message);
+							}
+						}
+					})
+				
+			});
+		}
 	},
 });
 
