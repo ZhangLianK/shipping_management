@@ -68,6 +68,7 @@ frappe.ui.form.on("Scale Child", {
 		row.market_segment = frm.doc.market_segment
 		row.from_addr = frm.doc.from_addr
 		row.to_addr = frm.doc.to_addr
+		row.order_note = frm.doc.order_note
 		//if doc.order_note contains '送到' then set the bill_type to 'SD'
 		row.bill_type = frm.doc.bill_type
 		row.scale_item = 'N'
@@ -726,7 +727,8 @@ function refresh_scale_item(frm, exp) {
 							purchase_order: row.purchase_order,
 							transporter: row.transporter,
 							pot: row.pot,
-							bill_type: row.bill_type
+							bill_type: row.bill_type,
+							order_note: row.order_note
 						});
 						total_qty += row.target_weight
 					}
