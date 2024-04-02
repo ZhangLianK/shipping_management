@@ -111,7 +111,7 @@ def get_data(conditions, filters):
             sci.to_addr
 
         from `tabScale Item`  sci
-        left outer join vehicle_plan_item vpi
+        left outer join `tabVehicle Plan Item` vpi
             on sci.vehicle_plan = vpi.name
         left outer join `tabDriver` d
             on sci.driver = d.name

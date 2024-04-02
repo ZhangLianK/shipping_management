@@ -214,7 +214,9 @@ def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 		"Sales Taxes and Charges": {"doctype": "Sales Taxes and Charges", "add_if_empty": True},
 		"Sales Team": {"doctype": "Sales Team", "add_if_empty": True},
 	}
-
+	frappe.publish_realtime(
+		"create_delivery_note_progress", {"progress": [1, 4]}, user=frappe.session.user
+	)
 	if not skip_item_mapping:
 
 		def condition(doc):
@@ -234,11 +236,18 @@ def make_delivery_note(source_name, target_doc=None, skip_item_mapping=False):
 			"postprocess": update_item,
 			"condition": condition,
 		}
-
+	frappe.publish_realtime(
+		"create_delivery_note_progress", {"progress": [2, 4]}, user=frappe.session.user
+	)
 	target_doc = get_mapped_doc("Sales Order", source, mapper, target_doc, set_missing_values)
 
 	target_doc.set_onload("ignore_price_list", True)
-
+	frappe.publish_realtime(
+		"create_delivery_note_progress", {"progress": [3, 4]}, user=frappe.session.user
+	)
 	target_doc.save()
 	target_doc.submit()
+	frappe.publish_realtime(
+		"create_delivery_note_progress", {"progress": [4, 4]}, user=frappe.session.user
+	)
 	return {'status': 'success', 'doc_name': target_doc.name}

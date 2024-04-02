@@ -23,6 +23,9 @@ import json
 import re
 
 
+
+
+
 class ScaleItem(Document):
 	def update_vehicle_in_process(self):
 		if self.vehicle and frappe.db.exists("Vehicle", self.vehicle):
@@ -315,6 +318,9 @@ class ScaleItem(Document):
    
 	def before_save(self):
 		
+		if self.item == '':
+			self.item = None
+		
 		if self.market_segment == '粮食':
 			if self.type == 'IN' and self.offload_net_weight and self.price_ls and not self.amount_ls:
 				self.amount_ls = self.offload_net_weight * self.price_ls
@@ -368,8 +374,21 @@ class ScaleItem(Document):
 		if self.docstatus == 0:
 			self.submit()
 	
+	def update_ship_plan_qty(self):
+		if self.ship_plan:
+			print("Updating ship plan qty")
+			ship_plan = frappe.get_doc("Ship Plan", self.ship_plan)
+			ship_plan.update_assigned_qty()
+
+
 	def on_update_after_submit(self):
-		pass
+		old_doc = self.get_doc_before_save()
+		old_target_weight = old_doc.target_weight
+		if self.target_weight != old_target_weight or self.sales_invoice != old_doc.sales_invoice or self.sales_order != old_doc.sales_order:
+			self.update_order_scale_weight()
+			
+		if self.target_weight != old_target_weight or self.ship_plan != old_doc.ship_plan:
+			self.update_ship_plan_qty()
 
 	def before_update_after_submit(self):
 		if self.market_segment == '粮食':
@@ -378,6 +397,8 @@ class ScaleItem(Document):
 			if self.type == 'OUT' and self.load_net_weight and self.price_ls and not self.amount_ls:
 				self.amount_ls = self.load_net_weight * self.price_ls
 		#frappe.msgprint("before_update_after_submit")
+		if self.item == '':
+			self.item = None
 		self.change_status()
 		self.validate_status()
 		if self.to_dt:
@@ -453,13 +474,13 @@ class ScaleItem(Document):
 			pass
 
 				#get original target weight of the scale item
-		old_doc = self.get_doc_before_save()
-		old_target_weight = old_doc.target_weight
-		if self.target_weight != old_target_weight or self.sales_invoice != old_doc.sales_invoice or self.sales_order != old_doc.sales_order:
-			self.update_order_scale_weight()
+
+
 	
 	def on_submit(self):
 		self.update_vehicle_in_process()
+		self.update_ship_plan_qty()
+
 		#create notification sms
 		#first get driver phone number
 		if self.driver:
@@ -511,7 +532,8 @@ class ScaleItem(Document):
 	
 	def on_cancel(self):
 		self.cancel_vehicle_in_process()
-		
+		self.update_ship_plan_qty()
+
 		#get all users that have role of "Scale Manager"
 		scale_manager = frappe.get_all("Has Role", filters={'role': 'Scale Manager Dummy'}, fields=['parent'])
 		scale_manager_list = [item.parent for item in scale_manager]
