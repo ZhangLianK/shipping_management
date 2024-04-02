@@ -169,7 +169,8 @@ def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order
 
     # Add conditions based on the provided filters
     if ship_plan:
-        sql_query += " AND v_plan.ship_plan = %s"
+        sql_query += " AND (v_plan.ship_plan = %s or sci.ship_plan = %s)"
+        values.append(ship_plan)
         values.append(ship_plan)
     if vehicle_plan:
         sql_query += " AND sci.vehicle_plan = %s"
