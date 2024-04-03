@@ -114,9 +114,7 @@
   "rongzhong",
   "column_break_2dsoz",
   "meibian",
-  "amended_from",
-  "mileage_true",
-  "update_assigned_qty"
+  "amended_from"
  ],
  "fields": [
   {
@@ -781,15 +779,16 @@
   {
    "allow_on_submit": 1,
    "fieldname": "vehicle_plan",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "\u6d3e\u8f66\u8ba1\u5212"
+   "label": "\u6d3e\u8f66\u8ba1\u5212",
+   "options": "Vehicle Plan Item"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-02 14:55:12.678505",
+ "modified": "2024-04-03 10:48:07.596520",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
