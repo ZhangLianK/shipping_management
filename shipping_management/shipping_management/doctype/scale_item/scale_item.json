@@ -789,6 +789,15 @@
   {
    "fieldname": "mileage_true",
    "fieldtype": "Data",
+<<<<<<< HEAD
+=======
+   "in_standard_filter": 1,
+   "label": "\u6d3e\u8f66\u8ba1\u5212"
+  },
+  {
+   "fieldname": "mileage_true",
+   "fieldtype": "Data",
+>>>>>>> b123b762141ce41988db8a970cb05b69bfb64e7c
    "label": "\u5b9e\u9645\u516c\u91cc\u6570"
   },
   {
@@ -800,7 +809,11 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2024-04-02 17:17:02.511936",
+=======
+ "modified": "2024-04-02 14:55:12.678505",
+>>>>>>> b123b762141ce41988db8a970cb05b69bfb64e7c
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
