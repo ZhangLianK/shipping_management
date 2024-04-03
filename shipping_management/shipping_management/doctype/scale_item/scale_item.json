@@ -781,9 +781,10 @@
   {
    "allow_on_submit": 1,
    "fieldname": "vehicle_plan",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_standard_filter": 1,
-   "label": "\u6d3e\u8f66\u8ba1\u5212"
+   "label": "\u6d3e\u8f66\u8ba1\u5212",
+   "options": "Vehicle Plan Item"
   },
   {
    "fieldname": "mileage_true",
@@ -799,7 +800,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-02 14:55:12.678505",
+ "modified": "2024-04-02 17:17:02.511936",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
