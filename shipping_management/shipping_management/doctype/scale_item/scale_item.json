@@ -784,16 +784,6 @@
    "fieldtype": "Data",
    "in_standard_filter": 1,
    "label": "\u6d3e\u8f66\u8ba1\u5212"
-  },
-  {
-   "fieldname": "mileage_true",
-   "fieldtype": "Data",
-   "label": "\u5b9e\u9645\u516c\u91cc\u6570"
-  },
-  {
-   "fieldname": "update_assigned_qty",
-   "fieldtype": "Float",
-   "label": "Update assigned qty"
   }
  ],
  "index_web_pages_for_search": 1,
