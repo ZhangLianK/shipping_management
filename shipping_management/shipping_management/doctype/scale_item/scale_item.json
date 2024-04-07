@@ -374,6 +374,7 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "\u5378\u8f66\u51c0\u91cd",
+   "read_only": 1,
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
   {
@@ -498,7 +499,7 @@
    "allow_on_submit": 1,
    "fieldname": "offload_blank_dt",
    "fieldtype": "Datetime",
-   "label": "\u7a7a\u91cd\u65f6\u95f4",
+   "label": "\u5378\u8f66\u65f6\u95f4",
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
   {
@@ -515,6 +516,7 @@
    "allow_on_submit": 1,
    "fieldname": "ship_plan",
    "fieldtype": "Link",
+   "in_standard_filter": 1,
    "label": "\u7269\u6d41\u8ba1\u5212",
    "options": "Ship Plan"
   },
@@ -777,14 +779,16 @@
   {
    "allow_on_submit": 1,
    "fieldname": "vehicle_plan",
-   "fieldtype": "Data",
-   "label": "\u6d3e\u8f66\u8ba1\u5212"
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "\u6d3e\u8f66\u8ba1\u5212",
+   "options": "Vehicle Plan Item"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-03-17 21:00:30.100847",
+ "modified": "2024-04-03 10:48:07.596520",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

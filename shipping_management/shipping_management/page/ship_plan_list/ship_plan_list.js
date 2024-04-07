@@ -94,6 +94,7 @@ function refresh_vehicle_plans() {
 		fields: ['date', 'req_qty', 'status', 'req_qty', 'assigned_qty', 'plan_desc', 'from_addr', 'name','ship_plan'],
 		filters: {
 			'status': ['!=', '完成'],
+			'transporter': default_transporter
 		},
 		order_by: 'date desc',
 		limit: 'all'

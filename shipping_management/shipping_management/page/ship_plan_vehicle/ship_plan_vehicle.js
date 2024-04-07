@@ -188,7 +188,7 @@ function display_ship_plan_info() {
 				<span>${doc.date}</span>
 				<span style="float:right">${doc.plan_desc}</span>
 				</h3>
-				<p><span id="transporter-name">承运商：${transporterName?transporterName:'所有'}</span>
+				<p><span id="transporter-name">承运商：${doc.transporter?doc.transporter:'所有'}</span>
 				<span id="vehicle-plan" style="float:right">配车计划：${doc.name}</span>
 				</p>
 				<p><span>需求量: ${doc.req_qty} 吨</span>

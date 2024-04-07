@@ -36,6 +36,7 @@ def save_scale_item(doc_data):
         scale_doc.sales_order = doc.sales_order
         scale_doc.sales_invoice = doc.sales_invoice
         scale_doc.transporter = doc.transporter
+        scale_doc.order_note = doc.order_note
         
         scale_doc.save(ignore_permissions=True)
         return 'success'
@@ -110,7 +111,7 @@ def save_doc(doc_data):
                 scale_item.transporter = scale_child.transporter
                 scale_item.driver = scale_child.driver
                 scale_item.vehicle = scale_child.vehicle
-                
+                scale_item.order_note = scale_child.order_note
                 scale_item.target_weight = scale_child.target_weight
                 scale_item.bill_type = scale_child.bill_type
                 scale_item.purchase_order = scale_child.purchase_order
@@ -157,7 +158,7 @@ def save_doc(doc_data):
 def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order=None, sales_order=None, sales_invoice=None,export=None,bill_type=None,date = None,vehicle_plan=None):
     # Initialize the base SQL query
     sql_query = """SELECT sci.name, sci.vehicle, sci.type, sci.driver, sci.cell_number, sci.target_weight, sci.status, 
-    sci.from_addr, sci.to_addr, sci.sales_invoice, sci.sales_order, sci.purchase_order, sci.pot, sci.bill_type 
+    sci.from_addr, sci.to_addr, sci.sales_invoice, sci.sales_order, sci.purchase_order, sci.pot, sci.bill_type ,sci.order_note
     FROM `tabScale Item` sci
     LEFT OUTER JOIN `tabVehicle Plan Item` v_plan
     ON sci.vehicle_plan = v_plan.name
@@ -168,7 +169,8 @@ def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order
 
     # Add conditions based on the provided filters
     if ship_plan:
-        sql_query += " AND v_plan.ship_plan = %s"
+        sql_query += " AND (v_plan.ship_plan = %s or sci.ship_plan = %s)"
+        values.append(ship_plan)
         values.append(ship_plan)
     if vehicle_plan:
         sql_query += " AND sci.vehicle_plan = %s"

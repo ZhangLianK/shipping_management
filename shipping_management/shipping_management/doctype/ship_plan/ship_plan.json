@@ -78,8 +78,7 @@
    "fieldtype": "Link",
    "in_standard_filter": 1,
    "label": "\u91c7\u8d2d\u5355",
-   "options": "Purchase Order",
-   "reqd": 1
+   "options": "Purchase Order"
   },
   {
    "fieldname": "column_break_farmo",
@@ -258,7 +257,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-03-15 13:43:47.131251",
+ "modified": "2024-04-01 15:03:48.468916",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Ship Plan",
