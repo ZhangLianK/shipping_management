@@ -157,6 +157,10 @@ frappe.ui.form.on('Stock Management Tool', {
 		//refresh the stock_childs table
 		refresh_scale_item(frm);
 	},
+	company: function (frm) {
+		//refresh the stock_childs table
+		refresh_scale_item(frm);
+	},
 	onload: function (frm) {
 		// Hide the save button
 		frm.disable_save();
@@ -196,6 +200,7 @@ function refresh_scale_item(frm, exp) {
 			"ship_plan": frm.doc.ship_plan, // Pass the ship_plan from the current form
 			"type": frm.doc.type,
 			"sales_order": frm.doc.sales_order,
+			"company": frm.doc.company
 		},
 		callback: function (r) {
 			if (r.message) {
