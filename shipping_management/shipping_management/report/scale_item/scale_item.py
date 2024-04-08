@@ -58,7 +58,9 @@ def get_conditions(filters):
         conditions = conditions + f" and sci.market_segment = '{filters.market_segment}'"
     
     if filters.get("vehicle_plan"):
-        conditions = conditions + f" and vpi.name = '{filters.vehicle_plan}'"
+
+        conditions = conditions + f" and sci.vehicle_plan = '{filters.vehicle_plan}'"
+
         
     #check user permissions set for this user againest parent warehouse and get all child warehouses
     parent_warehouses = frappe.get_all("User Permission", filters={"user": frappe.session.user, "allow": "Warehouse"}, pluck="for_value")

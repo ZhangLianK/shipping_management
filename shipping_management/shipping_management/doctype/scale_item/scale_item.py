@@ -1105,6 +1105,7 @@ def update_warehouse(scale_items,warehouse,type):
 		for scale_item in json.loads(scale_items):
 			scale_item_doc = frappe.get_doc("Scale Item", scale_item.get('name'),ignore_permissions=True)
 			scale_item_doc.pot = warehouse
+			scale_item_doc.type = type
 			if type == 'IN':
 				scale_item_doc.bill_type = ""
 			else:
