@@ -14,6 +14,7 @@ frappe.pages['ship-plan-vehicle'].on_page_load = function (wrapper) {
 		overflow-y: auto;
 		flex-grow: 1; /* Allows the container to expand and fill available space */
 		padding-bottom: 60px; /* Provide space for the fixed-position buttons */
+		padding-bottom:20%;
 	}
 	
 	.scale-item {
@@ -55,6 +56,7 @@ frappe.pages['ship-plan-vehicle'].on_page_load = function (wrapper) {
 		display: flex;
 		flex-direction: column;
 		margin-top: 10px;
+		padding-bottom:20%;
 	}
 	
 	.vehicle-card {
@@ -293,7 +295,8 @@ function fetchAndDisplayVehicles() {
 				transporter: transporter
 			},
 			fields: ['name', 'standard_qty','id','wheels'],
-			limit: 'all'
+			limit: 'all',
+			order_by: 'CAST(id AS UNSIGNED) ASC'
 		}).then(function (r) {
 			if (r) {
 				displayVehicles(r);
