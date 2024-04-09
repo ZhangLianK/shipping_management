@@ -27,7 +27,7 @@ class StockManagementTool(Document):
 
 
 @frappe.whitelist()
-def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order=None, sales_order=None, sales_invoice=None,export=None):
+def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order=None, sales_order=None, sales_invoice=None,export=None,company=None):
 	# Initialize the filters dictionary with a condition that's always true
 	filters = {
 					'status': ['not in', ["6 已完成", "9 已取消"]],
@@ -42,6 +42,11 @@ def get_scale_childs(ship_plan=None, type=None, transporter=None, purchase_order
 
 	if type is not None and not type == '':
 		filters['type'] = type
+
+	if company is not None and not company == '':
+		filters['company'] = company
+	
+
 
 	# Fetch all scale item docs according to ship_plan and any other provided filters
 	scale_items = frappe.get_all('Scale Item', 
