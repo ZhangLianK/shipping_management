@@ -314,7 +314,7 @@ class ScaleItem(Document):
 			self.to_addr = self.pot.split(' - ')[0]
 		if self.pot and self.type == 'OUT':
 			self.from_addr = self.pot.split(' - ')[0]
-		self.desc = f"{self.vehicle if self.vehicle else ''}-{self.from_addr if self.from_addr else ''}-{self.to_addr if self.to_addr else ''}-{self.order_note if self.order_note else ''}"
+		self.desc = f"{self.vehicle if self.vehicle else ''}-{self.from_addr if self.from_addr else ''}-{self.to_addr if self.to_addr else ''}-{self.order_note if self.order_note else ''}-{self.pot if self.pot else ''}"
    
 	def before_save(self):
 		
@@ -459,8 +459,7 @@ class ScaleItem(Document):
 				self.validate_pot()
 			print("validate pot")
 			
-		if self.type == 'IN':
-			self.order_note = None
+
 		
 		if self.type == 'OUT' and self.market_segment == 'XXX':
 			#self.calculate_weight()
