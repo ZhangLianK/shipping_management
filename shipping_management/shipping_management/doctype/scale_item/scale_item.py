@@ -412,12 +412,7 @@ class ScaleItem(Document):
 				if not self.purchase_order:
 					self.purchase_order = ship_plan_doc.purchase_order
 
-		if self.pot and self.type == 'IN':
-			self.to_addr = self.pot.split(' - ')[0]
-		if self.pot and self.type == 'OUT':
-			self.from_addr = self.pot.split(' - ')[0]
 
-		self.desc = f"{self.vehicle if self.vehicle else ''}-{self.from_addr if self.from_addr else ''}-{self.to_addr if self.to_addr else ''}-{self.order_note if self.order_note else ''}"
 
 		if self.sales_order:
 			self.order_note = frappe.get_value("Sales Order", self.sales_order, "order_note")
@@ -475,6 +470,13 @@ class ScaleItem(Document):
 			pass
 
 				#get original target weight of the scale item
+
+		if self.pot and self.type == 'IN':
+			self.to_addr = self.pot.split(' - ')[0]
+		if self.pot and self.type == 'OUT':
+			self.from_addr = self.pot.split(' - ')[0]
+
+		self.desc = f"{self.vehicle if self.vehicle else ''}-{self.from_addr if self.from_addr else ''}-{self.to_addr if self.to_addr else ''}-{self.order_note if self.order_note else ''}"
 
 
 	
