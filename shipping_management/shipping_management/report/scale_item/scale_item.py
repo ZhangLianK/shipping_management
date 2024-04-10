@@ -173,6 +173,13 @@ def get_columns():
    "options": "Vehicle",
    "width": 0
   },
+ {
+   "fieldname": "ship_plan",
+   "fieldtype": "Link",
+   "label": "\u7269\u6d41\u8ba1\u5212",
+   "options": "Ship Plan",
+   "width": 0
+  },
   {
    "fieldname": "transporter",
    "fieldtype": "Data",
@@ -293,13 +300,7 @@ def get_columns():
    "options": "Delivery Note",
    "width": 0
   },
-  {
-   "fieldname": "ship_plan",
-   "fieldtype": "Link",
-   "label": "\u7269\u6d41\u8ba1\u5212",
-   "options": "Ship Plan",
-   "width": 0
-  },
+
   {
    "fieldname": "from_addr",
    "fieldtype": "Data",
