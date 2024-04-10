@@ -389,6 +389,9 @@ class ScaleItem(Document):
 			
 		if self.target_weight != old_target_weight or self.ship_plan != old_doc.ship_plan:
 			self.update_ship_plan_qty()
+			if old_doc.ship_plan:
+				old_ship_plan = frappe.get_doc("Ship Plan", old_doc.ship_plan)
+				old_ship_plan.update_assigned_qty()
 
 	def before_update_after_submit(self):
 		if self.market_segment == '粮食':
