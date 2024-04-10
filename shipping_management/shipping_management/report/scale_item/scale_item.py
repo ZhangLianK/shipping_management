@@ -110,7 +110,7 @@ def get_data(conditions, filters):
             sci.sales_order,
             sci.sales_invoice,
             sci.delivery_note,
-            vpi.ship_plan,
+            if(vpi.ship_plan='' OR vpi.ship_plan IS NULL,sci.ship_plan,vpi.ship_plan) as ship_plan,
             sci.stock_dt,
             sci.from_addr,
             sci.to_addr
