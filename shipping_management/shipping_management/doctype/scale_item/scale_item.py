@@ -1123,4 +1123,20 @@ def update_warehouse(scale_items,warehouse,type):
 			"status": "error",
 			"message": str(e)
 		}
-	
+
+@frappe.whitelist()
+def update_ship_plan(scale_items,ship_plan):
+	try:
+		for scale_item in json.loads(scale_items):
+			scale_item_doc = frappe.get_doc("Scale Item", scale_item.get('name'),ignore_permissions=True)
+			scale_item_doc.ship_plan = ship_plan
+			scale_item_doc.save(ignore_permissions=True)
+		
+		frappe.response["message"] = {
+			"status": "success"
+		}
+	except Exception as e:
+		frappe.response["message"] = {
+			"status": "error",
+			"message": str(e)
+		}
