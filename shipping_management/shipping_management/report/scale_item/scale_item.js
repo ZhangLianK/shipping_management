@@ -111,7 +111,8 @@ frappe.query_reports["Scale Item"] = {
 			"fieldtype": "Link",
 			"label": "\u8f66\u53f7",
 			"mandatory": 0,
-			"wildcard_filter": 0
+			"wildcard_filter": 0,
+			"options": "Vehicle"
 		},
 		{
 			"fieldname": "status",
