@@ -14,23 +14,23 @@ frappe.listview_settings['Scale Item'] = {
 	get_indicator: function (doc) {
 	    
 	    if (doc.docstatus === 'Cancelled'){
-            return [__("9 已取消"), "red", "status,=,9 已取消"];
+            return [__("9 已取消"), "grey", "status,=,9 已取消"];
         } else if (doc.status === "0 新配") {
-            return [__("0 新配"), "light blue", "status,=,0 新配"];
+            return [__("0 新配"), "red", "status,=,0 新配"];
         } else if (doc.status === "1 已配罐") {
-            return [__("1 已配罐"), "blue", "status,=,1 已配罐"];
+            return [__("1 已配罐"), "light blue", "status,=,1 已配罐"];
         } else if (doc.status === "2 正在装货") {
-            return [__("2 正在装货"), "orange", "status,=,2 正在装货"];
+            return [__("2 正在装货"), "yellow", "status,=,2 正在装货"];
         } else if (doc.status === "3 已装货") {
             return [__("3 已装货"), "yellow", "status,=,3 已装货"];
         } else if (doc.status === "4 正在卸货") {
-            return [__("4 正在卸货"), "cyan", "status,=,4 正在卸货"];
+            return [__("4 正在卸货"), "yellow", "status,=,4 正在卸货"];
         } else if (doc.status === "5 已卸货") {
             return [__("5 已卸货"), "green", "status,=,5 已卸货"];
         } else if (doc.status === "6 已完成") {
             return [__("6 已完成"), "grey", "status,=,6 已完成"];
         } else if (doc.status === "9 已取消" || doc.docstatus=== 2) {
-            return [__("9 已取消"), "red", "status,=,9 已取消"];
+            return [__("9 已取消"), "grey", "status,=,9 已取消"];
         } 
     },
     //add a button to the list view
@@ -39,7 +39,7 @@ frappe.listview_settings['Scale Item'] = {
         frappe.route_options = {
             "company": default_company,
             "status": ["not in", ["9 已取消", "6 已完成"]],
-            "date": frappe.datetime.get_today(),
+            // "date": frappe.datetime.get_today(),
         };
         listview.page.add_actions_menu_item(__("批量更新送货信息"), function () {
             //get all selected scale items
