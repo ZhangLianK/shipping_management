@@ -15,6 +15,13 @@ class ShipPlan(Document):
 		direct_assigned_qty = sum(item.target_weight for item in direct_items if item.target_weight is not None)
 		# self.assigned_qty = vehicle_plan_items.assigned_qty + direct_assigned_qty
 		self.assigned_qty += direct_assigned_qty
+		#get the scale items which linked to this ship plan and vehicle plan is set
+		indirect_items = frappe.get_all("Scale Item", filters={"ship_plan": self.name, "docstatus": ["!=", "2"],"vehicle_plan":["is", "set"]}, fields=["vehicle_plan","target_weight"])
+		#loop through the indirect_items and check if the vehicle plan's ship plan is the same as self.name
+		for item in indirect_items:
+			ship_plan = frappe.get_value("Vehicle Plan Item", item.vehicle_plan, "ship_plan")
+			if not ship_plan == self.name and ship_plan is not None:
+				self.assigned_qty += item.target_weight
 		self.save()
 
 	def before_validate(self):

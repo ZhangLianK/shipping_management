@@ -18,8 +18,9 @@ class VehiclePlanItem(Document):
         old_doc = self.get_doc_before_save()
         #check if the ship plan has changed
         if old_doc and not old_doc.ship_plan == self.ship_plan:
-            old_ship_plan = frappe.get_doc("Ship Plan", old_doc.ship_plan)
-            old_ship_plan.update_assigned_qty()
+            if old_doc.ship_plan:
+                old_ship_plan = frappe.get_doc("Ship Plan", old_doc.ship_plan)
+                old_ship_plan.update_assigned_qty()
         
     def on_save(self):
         self.update_ship_plan_qty()

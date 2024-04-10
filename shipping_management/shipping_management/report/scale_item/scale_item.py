@@ -110,7 +110,7 @@ def get_data(conditions, filters):
             sci.sales_order,
             sci.sales_invoice,
             sci.delivery_note,
-            vpi.ship_plan,
+            if(vpi.ship_plan='' OR vpi.ship_plan IS NULL,sci.ship_plan,vpi.ship_plan) as ship_plan,
             sci.stock_dt,
             sci.from_addr,
             sci.to_addr
@@ -171,6 +171,13 @@ def get_columns():
    "fieldtype": "Link",
    "label": "\u8f66\u53f7",
    "options": "Vehicle",
+   "width": 0
+  },
+ {
+   "fieldname": "ship_plan",
+   "fieldtype": "Link",
+   "label": "\u7269\u6d41\u8ba1\u5212",
+   "options": "Ship Plan",
    "width": 0
   },
   {
@@ -293,13 +300,7 @@ def get_columns():
    "options": "Delivery Note",
    "width": 0
   },
-  {
-   "fieldname": "ship_plan",
-   "fieldtype": "Link",
-   "label": "\u7269\u6d41\u8ba1\u5212",
-   "options": "Ship Plan",
-   "width": 0
-  },
+
   {
    "fieldname": "from_addr",
    "fieldtype": "Data",

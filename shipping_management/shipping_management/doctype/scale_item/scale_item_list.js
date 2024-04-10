@@ -180,6 +180,64 @@ frappe.listview_settings['Scale Item'] = {
             
             dialog.show();
         });
+
+
+        listview.page.add_actions_menu_item(__("批量更新物流计划"), function () {
+            //get all selected scale items
+            let selected_items = listview.get_checked_items();
+            if (selected_items.length === 0) {
+                frappe.msgprint(__("请选择至少一条记录"));
+                return;
+            }
+            //create a dialo to update the to_addr and order_notes
+            let dialog = new frappe.ui.Dialog({
+                title: __("批量更新物流计划"),
+                fields: [
+                    {
+                        fieldname: "ship_plan",
+                        label: __("物流计划"),
+                        fieldtype: "Link",
+                        options: "Ship Plan",
+                        reqd:true,
+                    },
+                ],
+                primary_action_label: __("更新"),
+                primary_action(values) {
+                    frappe.call({
+                        method: "shipping_management.shipping_management.doctype.scale_item.scale_item.update_ship_plan",
+                        args: {
+                            scale_items: selected_items,
+                            ship_plan: values.ship_plan
+                        },
+                        callback: function (r) {
+                            if (r.message) {
+                                if(r.message.status === 'error'){
+                                    frappe.msgprint(r.message.message);
+                                    return;
+                                }
+                                frappe.msgprint(__("更新成功"));
+                                dialog.hide();
+                                listview.refresh();
+                                //clear the selected items to uncheck
+                                listview.clear_checked_items();
+                            }
+                        },
+                    });
+                }
+            });
+            //add .btn class to checkbox
+            dialog.$wrapper.find('.checkbox').addClass('btn');
+            dialog.$wrapper.find('.checkbox').addClass('btn-secondary');
+            dialog.$wrapper.find('.checkbox.btn').click(function(){
+                $('.form-column .input-area :checkbox').prop('checked', false)
+                $('.form-column .btn').css('background-color', 'white');
+                $(this).find('.input-area :checkbox')[0].checked = !$(this).find('.input-area :checkbox')[0].checked
+                $(this).css('background-color', $(this).find('.input-area :checkbox')[0].checked ? 'lightblue' : 'white');
+            }
+            );
+            
+            dialog.show();
+        });
     },
 };
 
