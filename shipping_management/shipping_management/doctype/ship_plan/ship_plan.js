@@ -18,6 +18,17 @@ frappe.ui.form.on('Ship Plan', {
             frappe.new_doc('Vehicle Plan Item');
 
         });
+
+        frm.add_custom_button(__('物流计量单'), function () {
+            frappe.route_options = {
+                    ship_plan: frm.doc.name,
+            };
+
+            frappe.set_route('/scale-item/view/report/明细报告');
+
+        });
+
+
         // Setting a query for the Sales Order field within the Ship Plan Item child table
         frm.set_query('sales_order', 'plan_items', function (doc, cdt, cdn) {
             // You can access the child document if needed
