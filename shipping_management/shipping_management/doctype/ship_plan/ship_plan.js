@@ -33,7 +33,6 @@ frappe.ui.form.on('Ship Plan', {
             frappe.route_options = {
                     ship_plan: frm.doc.name,
             };
-
             frappe.set_route('/query-report/物流明细报告');
 
         });
