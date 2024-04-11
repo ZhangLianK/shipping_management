@@ -10,7 +10,6 @@ frappe.ui.form.on('Scale List', {
 				method: 'shipping_management.shipping_management.doctype.scale_list.scale_list.generate_and_download',
 				args: {
 					scale_list: frm.doc.name,
-					date: frm.doc.date,
 				},
 				callback: function (r) {
 					if (r.message) {
@@ -38,6 +37,7 @@ frappe.ui.form.on('Scale List', {
 			method: "shipping_management.shipping_management.doctype.scale_list.scale_list.get_scale_list_items",
 			args: {
 				"ship_plan": frm.doc.ship_plan,
+				"date": frm.doc.date,
 			},
 			callback: function (r) {
 				if (r.message.length > 0) {
