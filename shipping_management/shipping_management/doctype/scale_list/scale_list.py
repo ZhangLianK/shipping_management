@@ -73,7 +73,7 @@ def get_scale_list_items():
 	       where a.ship_plan = %s 
 	       and a.docstatus = 1 
 	       and (a.name not in 
-				(select scale_item from `tabScale Lsave_xlsx_and_get_urlist Items`
+				(select scale_item from `tabScale List Items`
 					inner join `tabScale List` on `tabScale List Items`.parent = `tabScale List`.name
 								  where `tabScale List`.docstatus = 1
 					)
