@@ -1,5 +1,6 @@
-# Copyright (c) 2023, Alvin and contributors
+# Copyright (c) 2024, Alvin and contributors
 # For license information, please see license.txt
+
 import frappe
 
 
@@ -58,10 +59,9 @@ def get_conditions(filters):
         conditions = conditions + f" and sci.market_segment = '{filters.market_segment}'"
     
     if filters.get("vehicle_plan"):
+
         conditions = conditions + f" and sci.vehicle_plan = '{filters.vehicle_plan}'"
-    
-    if filters.get("bill_type"):
-        conditions = conditions + f" and sci.bill_type = '{filters.bill_type}'"
+
         
     #check user permissions set for this user againest parent warehouse and get all child warehouses
     parent_warehouses = frappe.get_all("User Permission", filters={"user": frappe.session.user, "allow": "Warehouse"}, pluck="for_value")
@@ -161,12 +161,12 @@ def get_columns():
    "label": "\u65e5\u671f",
    "width": 0
   },
-  {
-   "fieldname": "stock_dt",
-   "fieldtype": "Datetime",
-   "label": "\u5165\u51fa\u5e93\u65f6\u95f4",
-   "width": 0
-  },
+#   {
+#    "fieldname": "stock_dt",
+#    "fieldtype": "Datetime",
+#    "label": "\u5165\u51fa\u5e93\u65f6\u95f4",
+#    "width": 0
+#   },
   {
    "fieldname": "vehicle",
    "fieldtype": "Link",
@@ -236,84 +236,84 @@ def get_columns():
    "label": "\u5378\u8f66\u51c0\u91cd",
    "width": 0
   },
-  {
-   "fieldname": "net_variance",
-   "fieldtype": "Float",
-   "label": "\u51c0\u91cd\u76c8\u4e8f",
-   "width": 0
-  },
-    {
-   "fieldname": "load_gross_weight",
-   "fieldtype": "Float",
-   "label": "\u88c5\u8f66\u6bdb\u91cd",
-   "width": 0
-  },
-  {
-   "fieldname": "load_blank_weight",
-   "fieldtype": "Float",
-   "label": "\u88c5\u8f66\u76ae\u91cd",
-   "width": 0
-  },
-  {
-   "fieldname": "offload_gross_weight",
-   "fieldtype": "Float",
-   "label": "\u5378\u8f66\u6bdb\u91cd",
-   "width": 0
-  },
-  {
-   "fieldname": "offload_blank_weight",
-   "fieldtype": "Float",
-   "label": "\u5378\u8f66\u76ae\u91cd",
-   "width": 0
-  },
-  {
-   "fieldname": "purchase_order",
-   "fieldtype": "Link",
-   "label": "\u91c7\u8d2d\u8ba2\u5355",
-   "options": "Purchase Order",
-   "width": 0
-  },
-  {
-   "fieldname": "purchase_receipt",
-   "fieldtype": "Link",
-   "label": "\u91c7\u8d2d\u6536\u8d27\u5355",
-   "options": "Purchase Receipt",
-   "width": 0
-  },
-  {
-   "fieldname": "sales_order",
-   "fieldtype": "Link",
-   "label": "\u9500\u552e\u8ba2\u5355",
-   "options": "Sales Order",
-   "width": 0
-  },
-  {
-   "fieldname": "sales_invoice",
-   "fieldtype": "Link",
-   "label": "\u9500\u552e\u8d39\u7528\u6e05\u5355",
-   "options": "Sales Invoice",
-   "width": 0
-  },
-  {
-   "fieldname": "delivery_note",
-   "fieldtype": "Link",
-   "label": "\u9500\u552e\u51fa\u8d27\u5355",
-   "options": "Delivery Note",
-   "width": 0
-  },
+#   {
+#    "fieldname": "net_variance",
+#    "fieldtype": "Float",
+#    "label": "\u51c0\u91cd\u76c8\u4e8f",
+#    "width": 0
+#   },
+#     {
+#    "fieldname": "load_gross_weight",
+#    "fieldtype": "Float",
+#    "label": "\u88c5\u8f66\u6bdb\u91cd",
+#    "width": 0
+#   },
+#   {
+#    "fieldname": "load_blank_weight",
+#    "fieldtype": "Float",
+#    "label": "\u88c5\u8f66\u76ae\u91cd",
+#    "width": 0
+#   },
+#   {
+#    "fieldname": "offload_gross_weight",
+#    "fieldtype": "Float",
+#    "label": "\u5378\u8f66\u6bdb\u91cd",
+#    "width": 0
+#   },
+#   {
+#    "fieldname": "offload_blank_weight",
+#    "fieldtype": "Float",
+#    "label": "\u5378\u8f66\u76ae\u91cd",
+#    "width": 0
+#   },
+#   {
+#    "fieldname": "purchase_order",
+#    "fieldtype": "Link",
+#    "label": "\u91c7\u8d2d\u8ba2\u5355",
+#    "options": "Purchase Order",
+#    "width": 0
+#   },
+#   {
+#    "fieldname": "purchase_receipt",
+#    "fieldtype": "Link",
+#    "label": "\u91c7\u8d2d\u6536\u8d27\u5355",
+#    "options": "Purchase Receipt",
+#    "width": 0
+#   },
+#   {
+#    "fieldname": "sales_order",
+#    "fieldtype": "Link",
+#    "label": "\u9500\u552e\u8ba2\u5355",
+#    "options": "Sales Order",
+#    "width": 0
+#   },
+#   {
+#    "fieldname": "sales_invoice",
+#    "fieldtype": "Link",
+#    "label": "\u9500\u552e\u8d39\u7528\u6e05\u5355",
+#    "options": "Sales Invoice",
+#    "width": 0
+#   },
+#   {
+#    "fieldname": "delivery_note",
+#    "fieldtype": "Link",
+#    "label": "\u9500\u552e\u51fa\u8d27\u5355",
+#    "options": "Delivery Note",
+#    "width": 0
+#   },
 
-  {
-   "fieldname": "from_addr",
-   "fieldtype": "Data",
-   "label": "\u63d0\u8d27\u5730",
-   "width": 0
-  },
-  {
-   "fieldname": "to_addr",
-   "fieldtype": "Data",
-   "label": "\u9001\u8d27\u5730",
-   "width": 0
-  }
+#   {
+#    "fieldname": "from_addr",
+#    "fieldtype": "Data",
+#    "label": "\u63d0\u8d27\u5730",
+#    "width": 0
+#   },
+#   {
+#    "fieldname": "to_addr",
+#    "fieldtype": "Data",
+#    "label": "\u9001\u8d27\u5730",
+#    "width": 0
+#   }
   
  ]
         

@@ -124,6 +124,20 @@ frappe.ui.form.on("Scale Child", {
 			});
 		}
 	},
+	vehicle: function (frm, cdt, cdn) {
+		let row = locals[cdt][cdn];
+		//set read only
+		frappe.db.get_value('Vehicle', row.vehicle, 'driver').then(r => {
+				if (r) {
+					if (r.message.driver) {
+						frappe.db.get_value('Driver', r.message.driver, 'cell_number').then(r => {
+							row.cell_number = r.message.cell_number;
+							frm.refresh_field('scale_child');
+						});
+					}
+				}
+			});	
+	},
 	type: function (frm, cdt, cdn) {
 		let row = locals[cdt][cdn];
 		if (row.type == 'IN' || row.type == 'OUT') {

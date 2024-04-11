@@ -264,6 +264,7 @@
   {
    "fieldname": "export_baohao",
    "fieldtype": "Button",
+   "hidden": 1,
    "label": "\u5bfc\u51fa\u62a5\u53f7\u4fe1\u606f"
   },
   {
@@ -300,7 +301,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-03-20 17:44:41.419467",
+ "modified": "2024-04-11 21:35:52.124383",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Shipping Management Tool",

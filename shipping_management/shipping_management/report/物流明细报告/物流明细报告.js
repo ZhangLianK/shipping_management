@@ -1,13 +1,15 @@
-// Copyright (c) 2023, Alvin and contributors
+// Copyright (c) 2024, Alvin and contributors
 // For license information, please see license.txt
 /* eslint-disable */
+
 let now = new Date();
 now.setDate(now.getDate() - 1);
 yesterday_dt = frappe.datetime.get_datetime_as_string(now);
 one_month_ago = frappe.datetime.add_months(now, -1);
 $('.container').css("max-width", "100%")
 
-frappe.query_reports["Scale Item"] = {
+
+frappe.query_reports["物流明细报告"] = {
 	"filters": [
 		{
 			"fieldname": "company",
@@ -27,30 +29,6 @@ frappe.query_reports["Scale Item"] = {
 			"options": "Market Segment",
 			"wildcard_filter": 0,
 			"default": frappe.defaults.get_user_default("market_segment")
-		},
-		{
-			"fieldname": "date_from",
-			"fieldtype": "Date",
-			"label": "\u8ba1\u5212\u65e5\u671f\u5f00\u59cb",
-			"mandatory": 0,
-			"wildcard_filter": 0,
-			"default": one_month_ago
-		},
-		{
-			"fieldname": "date_to",
-			"fieldtype": "Date",
-			"label": "\u8ba1\u5212\u65e5\u671f\u7ed3\u675f",
-			"mandatory": 0,
-			"wildcard_filter": 0,
-			"default": frappe.datetime.now_date()
-		},
-		{
-			"fieldname": "purchase_order",
-			"fieldtype": "Link",
-			"label": "\u91c7\u8d2d\u8ba2\u5355",
-			"mandatory": 0,
-			"options": "Purchase Order",
-			"wildcard_filter": 0
 		},
 		{
 			"fieldname": "ship_plan",
@@ -77,36 +55,6 @@ frappe.query_reports["Scale Item"] = {
 			"wildcard_filter": 0
 		},
 		{
-			"fieldname": "pot",
-			"fieldtype": "Link",
-			"label": "\u7f50\uff08\u5e93\u4f4d\uff09",
-			"mandatory": 0,
-			"options": "Warehouse",
-			"wildcard_filter": 0
-		},
-		{
-			"fieldname": "stock_dt_from",
-			"fieldtype": "Datetime",
-			"label": "\u5165\u51fa\u5e93\u65f6\u95f4\u5f00\u59cb",
-			"mandatory": 0,
-			"wildcard_filter": 0
-		},
-		{
-			"fieldname": "stock_dt_to",
-			"fieldtype": "Datetime",
-			"label": "\u5165\u51fa\u5e93\u65f6\u95f4\u7ed3\u675f",
-			"mandatory": 0,
-			"wildcard_filter": 0,
-		},
-		{
-			"fieldname": "transporter",
-			"fieldtype": "Link",
-			"label": "\u627f\u8fd0\u5546",
-			"mandatory": 0,
-			"options": "Supplier",
-			"wildcard_filter": 0
-		},
-		{
 			"fieldname": "vehicle",
 			"fieldtype": "Link",
 			"label": "\u8f66\u53f7",
@@ -123,29 +71,11 @@ frappe.query_reports["Scale Item"] = {
 			"wildcard_filter": 0
 		},
 		{
-			"fieldname": "sales_order",
-			"fieldtype": "Link",
-			"label": "\u9500\u552e\u8ba2\u5355",
-			"mandatory": 0,
-			"options": "Sales Order",
-			"wildcard_filter": 0
-		},
-		{
-			"fieldname": "sales_invoice",
-			"fieldtype": "Link",
-			"label": "\u9500\u552e\u8d39\u7528\u6e05\u5355",
-			"mandatory": 0,
-			"options": "Sales Invoice",
-			"wildcard_filter": 0
-		},
-		{
 			"fieldname": "bill_type",
-			"fieldtype": "Link",
+			"fieldtype": "Data",
 			"label": "\u81ea\u63d0/\u9001\u5230",
 			"width": 0,
-			"wildcard_filter": 0,
-			"options": "Scale Type"
-		},
-		   
+			"wildcard_filter": 0
+		}
 	]
 };
