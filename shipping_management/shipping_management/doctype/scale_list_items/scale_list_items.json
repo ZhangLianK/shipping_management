@@ -1,6 +1,6 @@
 {
  "actions": [],
- "autoname": "field:scale_item",
+ "autoname": "hash",
  "creation": "2023-08-19 23:28:25.391757",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -8,20 +8,29 @@
  "field_order": [
   "scale_item",
   "vehicle",
+  "guahao",
   "driver",
   "driver_id",
   "phone",
-  "qty"
+  "qty",
+  "repeat",
+  "transport_license_number",
+  "license_number",
+  "zhoushu",
+  "yayun",
+  "yayun_pid",
+  "yayun_cell_phone"
  ],
  "fields": [
   {
-   "columns": 1,
+   "columns": 2,
    "fieldname": "scale_item",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "\u8ba1\u91cf\u5355\u53f7",
    "options": "Scale Item",
-   "unique": 1
+   "read_only": 1,
+   "reqd": 1
   },
   {
    "columns": 2,
@@ -38,14 +47,14 @@
    "label": "\u53f8\u673a"
   },
   {
-   "columns": 2,
+   "columns": 1,
    "fieldname": "driver_id",
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "\u8eab\u4efd\u8bc1"
   },
   {
-   "columns": 1,
+   "columns": 2,
    "fieldname": "phone",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -56,17 +65,61 @@
    "fieldname": "qty",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "\u6570\u91cf"
+   "label": "\u9884\u88c5\u91cf"
+  },
+  {
+   "fieldname": "guahao",
+   "fieldtype": "Data",
+   "label": "\u6302\u53f7"
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "repeat",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "\u91cd\u62a5",
+   "read_only": 1
+  },
+  {
+   "fieldname": "transport_license_number",
+   "fieldtype": "Data",
+   "label": "\u9053\u8def\u8fd0\u8f93\u8bb8\u53ef\u8bc1"
+  },
+  {
+   "fieldname": "license_number",
+   "fieldtype": "Data",
+   "label": "\u4ece\u4e1a\u8d44\u683c\u8bc1\u53f7"
+  },
+  {
+   "fieldname": "zhoushu",
+   "fieldtype": "Data",
+   "label": "\u8f74\u6570"
+  },
+  {
+   "fieldname": "yayun",
+   "fieldtype": "Data",
+   "label": "\u62bc\u8fd0\u5458"
+  },
+  {
+   "fieldname": "yayun_pid",
+   "fieldtype": "Data",
+   "label": "\u62bc\u8fd0\u8eab\u4efd\u8bc1"
+  },
+  {
+   "fieldname": "yayun_cell_phone",
+   "fieldtype": "Data",
+   "label": "\u62bc\u8fd0\u5458\u7535\u8bdd"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-08-19 23:43:32.153632",
+ "modified": "2024-04-11 20:00:44.453324",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale List Items",
- "naming_rule": "By fieldname",
+ "naming_rule": "Random",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",

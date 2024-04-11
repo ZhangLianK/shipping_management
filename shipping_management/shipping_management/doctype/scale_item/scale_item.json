@@ -32,6 +32,7 @@
   "company",
   "bill_type",
   "send_to_supplier",
+  "repeat",
   "section_break_73rpu",
   "item",
   "column_break_oelmk",
@@ -783,12 +784,19 @@
    "in_standard_filter": 1,
    "label": "\u6d3e\u8f66\u8ba1\u5212",
    "options": "Vehicle Plan Item"
+  },
+  {
+   "allow_on_submit": 1,
+   "default": "0",
+   "fieldname": "repeat",
+   "fieldtype": "Check",
+   "label": "\u91cd\u65b0\u62a5\u53f7"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-10 13:04:02.721090",
+ "modified": "2024-04-11 18:21:39.339498",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

@@ -5,11 +5,29 @@ frappe.ui.form.on('Scale List', {
 	refresh: function (frm) {
 		//add custom button to open the report scale_list_report with filter doc.name
 		frm.add_custom_button(__('Scale List Export'), function () {
-			//the report is a report builder report,not query report
-			frappe.route_options = {
-				"name": frm.doc.name
-			};
-			frappe.set_route("Report", "Scale List");
+			//download all the child table info of this doc into excel
+			frappe.call({
+				method: 'shipping_management.shipping_management.doctype.scale_list.scale_list.generate_and_download',
+				args: {
+					scale_list: frm.doc.name
+				},
+				callback: function (r) {
+					if (r.message) {
+						var file_url = r.message;
+						// Create a temporary invisible <a> element
+						var tempLink = document.createElement('a');
+						tempLink.href = file_url;
+						// The download attribute specifies that the target will be downloaded when a user clicks on the hyperlink
+						tempLink.setAttribute('download', '');
+						tempLink.style.display = 'none';
+						document.body.appendChild(tempLink);
+						// Programmatically click the link to trigger the download
+						tempLink.click();
+						// Remove the temporary link from the document
+						document.body.removeChild(tempLink);
+					}
+				}
+			});
 		}
 		);
 
@@ -18,7 +36,7 @@ frappe.ui.form.on('Scale List', {
 		frappe.call({
 			method: "shipping_management.shipping_management.doctype.scale_list.scale_list.get_scale_list_items",
 			args: {
-				"purchase_order": frm.doc.purchase_order,
+				"ship_plan": frm.doc.ship_plan,
 			},
 			callback: function (r) {
 				if (r.message.length > 0) {
@@ -32,6 +50,14 @@ frappe.ui.form.on('Scale List', {
 						row.driver_id = d.driver_id;
 						row.phone = d.phone;
 						row.qty = d.qty;
+						row.repeat = d.repeat;
+						row.license_number = d.license_number;
+		    			row.yayun = d.yayun;
+						row.yayun_cell_phone = d.yayun_cell_number;
+						row.yayun_pid = d.yayun_pid;
+						row.guahao = d.guahao;
+						row.transport_license_number = d.transport_license_number;
+						row.zhoushu	 = d.zhoushu;
 					});
 					frm.refresh_field("items");
 				}

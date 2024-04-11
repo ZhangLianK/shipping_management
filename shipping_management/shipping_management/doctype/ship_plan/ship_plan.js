@@ -19,15 +19,25 @@ frappe.ui.form.on('Ship Plan', {
 
         });
 
+
+        frm.add_custom_button(__('新建报号单'), function () {
+            frappe.route_options = {
+                    ship_plan: frm.doc.name,
+            };
+
+            frappe.new_doc("Scale List");
+
+        });
+
         frm.add_custom_button(__('物流计量单'), function () {
             frappe.route_options = {
                     ship_plan: frm.doc.name,
             };
 
-            frappe.set_route('/scale-item/view/report/明细报告');
+
+            frappe.set_route('/query-report/物流明细报告');
 
         });
-
 
         // Setting a query for the Sales Order field within the Ship Plan Item child table
         frm.set_query('sales_order', 'plan_items', function (doc, cdt, cdn) {
