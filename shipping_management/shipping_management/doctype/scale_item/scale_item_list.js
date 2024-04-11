@@ -200,6 +200,7 @@ frappe.listview_settings['Scale Item'] = {
                         options: "Ship Plan",
                         reqd:true,
                     },
+
                     {
                         fieldname: "from_addr",
                         label: __("装车地"),
@@ -216,6 +217,7 @@ frappe.listview_settings['Scale Item'] = {
                             scale_items: selected_items,
                             ship_plan: values.ship_plan,
                             from_addr: values.from_addr
+
                         },
                         callback: function (r) {
                             if (r.message) {
