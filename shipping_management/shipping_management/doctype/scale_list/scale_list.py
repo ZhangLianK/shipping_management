@@ -37,48 +37,48 @@ def get_scale_list_items():
 	#and docstatus is 1 and not in any scale list's item
 	#return the list of scale items
 	scale_list_items = frappe.db.sql("""select a.name, 
-	       	a.item, 
-	       	a.vehicle,
-			a.repeat,
-	       	a.target_weight as qty,
-			m.driver,
-	      	m.driver_id,
-	       	m.phone,
-			m.license_number,
-		    m.yayun,
-			m.yayun_cell_number,
-			m.yayun_pid,
-			m.guahao,
-			m.transport_license_number,
-			m.zhoushu
-		from `tabScale Item`  a
-			left outer join (
-					select v.name as vehicle,
-			d.full_name as driver,
-	      	d.pid as driver_id,
-	       	d.cell_number as phone,
-			d.license_number as license_number,
-		    e.yayun_name as yayun,
-			e.cell_number as yayun_cell_number,
-			e.pid as yayun_pid,
-			v.guahao as guahao,
-			v.transport_license_number as transport_license_number,
-			v.zhoushu	as 	  zhoushu
-								  
-								   from `tabVehicle` v
-						left outer join `tabDriver` d on v.driver = d.name
-						left outer join `tabYayun` e on v.yayun = e.name
-			) m
-			on m.vehicle = a.vehicle
-	       where a.ship_plan = %s 
-			and a.date = %s
-	       and a.docstatus = 1 
-	       and (a.name not in 
-				(select scale_item from `tabScale List Items`
-					inner join `tabScale List` on `tabScale List Items`.parent = `tabScale List`.name
-								  where `tabScale List`.docstatus = 1
-					)
-					or a.repeat = 1)""", args.ship_plan, args.date, as_dict=1)
+		a.item, 
+		a.vehicle,
+		a.repeat,
+		a.target_weight as qty,
+		m.driver,
+		m.driver_id,
+		m.phone,
+		m.license_number,
+		m.yayun,
+		m.yayun_cell_number,
+		m.yayun_pid,
+		m.guahao,
+		m.transport_license_number,
+		m.zhoushu
+	from `tabScale Item`  a
+		left outer join (
+				select v.name as vehicle,
+		d.full_name as driver,
+		d.pid as driver_id,
+		d.cell_number as phone,
+		d.license_number as license_number,
+		e.yayun_name as yayun,
+		e.cell_number as yayun_cell_number,
+		e.pid as yayun_pid,
+		v.guahao as guahao,
+		v.transport_license_number as transport_license_number,
+		v.zhoushu  as zhoushu
+							  
+							   from `tabVehicle` v
+					left outer join `tabDriver` d on v.driver = d.name
+					left outer join `tabYayun` e on v.yayun = e.name
+		) m
+		on m.vehicle = a.vehicle
+	   where a.ship_plan = %s 
+		and a.date = %s
+	   and a.docstatus = 1 
+	   and (a.name not in 
+			(select scale_item from `tabScale List Items`
+				inner join `tabScale List` on `tabScale List Items`.parent = `tabScale List`.name
+							  where `tabScale List`.docstatus = 1
+				)
+				or a.repeat = 1)""", (args.ship_plan, args.date), as_dict=1)
 	
 	#loop the scale_list_items and add the vehicle info and driver info and yayun info
 
@@ -101,14 +101,14 @@ def generate_and_download():
 
 		# Prepare data for Excel with headers
 		headers = [
-		    "单号","车号", "挂号", "司机" , "身份证", "手机", "预装量", "道路运输许可证",
-		    "从业资格证号", "轴数", "押运员", "押运身份证", "押运员电话"
+			"单号","车号", "挂号", "司机" , "身份证", "手机", "预装量", "道路运输许可证",
+			"从业资格证号", "轴数", "押运员", "押运身份证", "押运员电话"
 		]
 		data = [headers]
 
 		# Add scale item data to the list	
 		for item in scale_list_doc.items:
-		    # Construct row data
+			# Construct row data
 			row = [
 				item.scale_item,
 				item.vehicle,
@@ -143,7 +143,7 @@ def generate_and_download():
 
 
 def save_xlsx_and_get_url(xlsx_content, file_name, linked_doc_name):
-    """Save the xlsx file and return its URL."""
-    from frappe.utils.file_manager import save_file
-    _file = save_file(file_name, xlsx_content.getvalue(), "Scale List", linked_doc_name, is_private=1)
-    return _file.file_url
+	"""Save the xlsx file and return its URL."""
+	from frappe.utils.file_manager import save_file
+	_file = save_file(file_name, xlsx_content.getvalue(), "Scale List", linked_doc_name, is_private=1)
+	return _file.file_url
