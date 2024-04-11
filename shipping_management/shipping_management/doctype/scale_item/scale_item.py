@@ -1128,10 +1128,11 @@ def update_warehouse(scale_items,warehouse,type):
 		}
 
 @frappe.whitelist()
-def update_ship_plan(scale_items,ship_plan):
+def update_ship_plan(scale_items,ship_plan,from_addr):
 	try:
 		for scale_item in json.loads(scale_items):
 			scale_item_doc = frappe.get_doc("Scale Item", scale_item.get('name'),ignore_permissions=True)
+			scale_item_doc.from_addr = from_addr
 			scale_item_doc.ship_plan = ship_plan
 			scale_item_doc.save(ignore_permissions=True)
 		
