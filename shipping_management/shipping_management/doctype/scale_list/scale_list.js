@@ -9,7 +9,8 @@ frappe.ui.form.on('Scale List', {
 			frappe.call({
 				method: 'shipping_management.shipping_management.doctype.scale_list.scale_list.generate_and_download',
 				args: {
-					scale_list: frm.doc.name
+					scale_list: frm.doc.name,
+					date: frm.doc.date,
 				},
 				callback: function (r) {
 					if (r.message) {

@@ -71,13 +71,14 @@ def get_scale_list_items():
 			) m
 			on m.vehicle = a.vehicle
 	       where a.ship_plan = %s 
+			and a.date = %s
 	       and a.docstatus = 1 
 	       and (a.name not in 
 				(select scale_item from `tabScale List Items`
 					inner join `tabScale List` on `tabScale List Items`.parent = `tabScale List`.name
 								  where `tabScale List`.docstatus = 1
 					)
-					or a.repeat = 1)""", args.ship_plan, as_dict=1)
+					or a.repeat = 1)""", args.ship_plan, args.date, as_dict=1)
 	
 	#loop the scale_list_items and add the vehicle info and driver info and yayun info
 
