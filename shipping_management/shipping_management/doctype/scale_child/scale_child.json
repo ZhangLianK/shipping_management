@@ -134,6 +134,8 @@
    "options": "Sales Invoice"
   },
   {
+   "fetch_from": "vehicle.transporter",
+   "fetch_if_empty": 1,
    "fieldname": "transporter",
    "fieldtype": "Link",
    "label": "\u627f\u8fd0\u5546",
@@ -179,6 +181,7 @@
   },
   {
    "columns": 1,
+   "fetch_from": "vehicle.standard_qty",
    "fetch_if_empty": 1,
    "fieldname": "target_weight",
    "fieldtype": "Float",
@@ -195,7 +198,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-03-16 18:19:37.344676",
+ "modified": "2024-04-11 21:26:39.423021",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Child",

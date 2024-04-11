@@ -299,6 +299,13 @@ class ScaleItem(Document):
 			old_vehicle_plan_item.save(ignore_permissions=True)
 
 	def before_validate(self):
+		#check the self.vehicle and remove all spaces in the field
+		if self.vehicle:
+			self.vehicle = self.vehicle.strip()
+			self.vehicle = self.vehicle.replace(" ","")
+			#convert the string to upper case
+			self.vehicle = self.vehicle.upper()
+
 		if self.vehicle_plan:
 			vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", self.vehicle_plan)
 			self.ship_plan = vehicle_plan_item.ship_plan
