@@ -299,6 +299,13 @@ class ScaleItem(Document):
 			old_vehicle_plan_item.save(ignore_permissions=True)
 
 	def before_validate(self):
+		#check the self.vehicle and remove all spaces in the field
+		if self.vehicle:
+			self.vehicle = self.vehicle.strip()
+			self.vehicle = self.vehicle.replace(" ","")
+			#convert the string to upper case
+			self.vehicle = self.vehicle.upper()
+
 		if self.vehicle_plan:
 			vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", self.vehicle_plan)
 			self.ship_plan = vehicle_plan_item.ship_plan
@@ -1128,11 +1135,30 @@ def update_warehouse(scale_items,warehouse,type):
 		}
 
 @frappe.whitelist()
-def update_ship_plan(scale_items,ship_plan):
+def update_ship_plan(scale_items,ship_plan,from_addr):
 	try:
 		for scale_item in json.loads(scale_items):
 			scale_item_doc = frappe.get_doc("Scale Item", scale_item.get('name'),ignore_permissions=True)
+			scale_item_doc.from_addr = from_addr
 			scale_item_doc.ship_plan = ship_plan
+			scale_item_doc.save(ignore_permissions=True)
+		
+		frappe.response["message"] = {
+			"status": "success"
+		}
+	except Exception as e:
+		frappe.response["message"] = {
+			"status": "error",
+			"message": str(e)
+		}
+
+
+@frappe.whitelist()
+def update_repeat(scale_items):
+	try:
+		for scale_item in json.loads(scale_items):
+			scale_item_doc = frappe.get_doc("Scale Item", scale_item.get('name'),ignore_permissions=True)
+			scale_item_doc.repeat = 1
 			scale_item_doc.save(ignore_permissions=True)
 		
 		frappe.response["message"] = {

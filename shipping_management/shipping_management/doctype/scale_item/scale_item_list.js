@@ -200,6 +200,13 @@ frappe.listview_settings['Scale Item'] = {
                         options: "Ship Plan",
                         reqd:true,
                     },
+                    {
+                        fieldname: "from_addr",
+                        label: __("装车地"),
+                        fieldtype: "Small Text",
+                        options: "Scale Item",
+                        reqd:true,
+                    },
                 ],
                 primary_action_label: __("更新"),
                 primary_action(values) {
@@ -207,7 +214,8 @@ frappe.listview_settings['Scale Item'] = {
                         method: "shipping_management.shipping_management.doctype.scale_item.scale_item.update_ship_plan",
                         args: {
                             scale_items: selected_items,
-                            ship_plan: values.ship_plan
+                            ship_plan: values.ship_plan,
+                            from_addr: values.from_addr
                         },
                         callback: function (r) {
                             if (r.message) {
@@ -237,6 +245,41 @@ frappe.listview_settings['Scale Item'] = {
             );
             
             dialog.show();
+        });
+
+        listview.page.add_actions_menu_item(__("批量设置重新报号"), function () {
+            //get all selected scale items
+            let selected_items = listview.get_checked_items();
+            if (selected_items.length === 0) {
+                frappe.msgprint(__("请选择至少一条记录"));
+                return;
+            }
+
+            frappe.confirm("确定要设置重新报号吗？", () => {
+                // action to perform if Yes is selected
+                frappe.call({
+                    method: "shipping_management.shipping_management.doctype.scale_item.scale_item.update_repeat",
+                    args: {
+                        scale_items: selected_items,
+                    },
+                    callback: function (r) {
+                        if (r.message) {
+                            if(r.message.status === 'error'){
+                                frappe.msgprint(r.message.message);
+                                return;
+                            }
+                            frappe.msgprint(__("更新成功"));
+                            dialog.hide();
+                            listview.refresh();
+                            //clear the selected items to uncheck
+                            listview.clear_checked_items();
+                        }
+                    },
+                });
+            }, () => {
+                // action to perform if No is selected
+            })
+
         });
     },
 };
