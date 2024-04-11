@@ -79,7 +79,7 @@ def get_scale_list_items():
 							  where `tabScale List`.docstatus = 1
 				)
 				or a.repeat = 1)""", (args.ship_plan, args.date), as_dict=1)
-	
+
 	#loop the scale_list_items and add the vehicle info and driver info and yayun info
 
 
