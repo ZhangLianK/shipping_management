@@ -16,25 +16,21 @@
   "column_break_7lger",
   "naming_series",
   "column_break_gr1aw",
-  "market_segment",
   "section_break_glkhr",
   "type",
   "vehicle_selector",
   "vehicle",
+  "guahao",
   "driver",
   "yayun",
   "column_break_zlxzc",
   "date",
   "stock_date",
-  "transporter",
   "cell_number",
   "column_break_nzqdf",
   "company",
-  "bill_type",
-  "send_to_supplier",
   "repeat",
   "section_break_73rpu",
-  "item",
   "column_break_oelmk",
   "pot",
   "get_pot",
@@ -43,15 +39,13 @@
   "column_break_goao4",
   "price",
   "section_break_0bb8g",
-  "from_addr",
   "column_break_rt7w0",
-  "to_addr",
   "weight_list",
   "\u88c5\u8d27\u78c5\u5355_section",
-  "load_net_weight",
   "section_break_sovad",
   "load_gross_weight",
   "load_blank_weight",
+  "load_net_weight",
   "column_break_cl0hp",
   "load_gross_dt",
   "load_blank_dt",
@@ -72,29 +66,16 @@
   "\u5173\u8054\u4fe1\u606f_tab",
   "baohao_text",
   "column_break_n3j8m",
-  "ship_plan",
   "vehicle_plan",
-  "purchase_order",
-  "purchase_receipt",
-  "stock_dt",
   "transport_fee",
   "column_break_0pcxq",
-  "sales_order",
-  "order_note",
-  "sales_invoice",
-  "delivery_note",
   "verification_code",
   "\u8d39\u7528\u8be6\u60c5_tab",
   "from_dt",
-  "mileage_start",
   "start_img",
   "to_dt",
-  "mileage_end",
   "end_img",
   "tangbu_price",
-  "tangbu",
-  "fanfee",
-  "yayun_price",
   "yayunfee",
   "fakuan",
   "gaosufee",
@@ -103,9 +84,7 @@
   "column_break_deguh",
   "amount_ls",
   "column_break_wjmet",
-  "koukuan",
   "section_break_spdda",
-  "beizhu",
   "nonghu",
   "section_break_0owcq",
   "shuifen",
@@ -115,7 +94,42 @@
   "rongzhong",
   "column_break_2dsoz",
   "meibian",
-  "amended_from"
+  "amended_from",
+  "purchase_ship",
+  "transporter",
+  "from_addr",
+  "to_addr",
+  "ship_plan",
+  "purchase_order",
+  "purchase_receipt",
+  "stock_dt",
+  "card_number",
+  "plan_desc",
+  "sales_information",
+  "bill_type",
+  "sales_order",
+  "order_note",
+  "sales_invoice",
+  "delivery_note",
+  "fleet_information",
+  "mileage_start",
+  "mileage_end",
+  "tangbu",
+  "fanfee",
+  "yayun_price",
+  "id",
+  "baohao_information",
+  "driver_id",
+  "yayun_cell_phone",
+  "yayun_pid",
+  "transport_license_number",
+  "license_number",
+  "grain_price_parameters",
+  "beizhu",
+  "koukuan",
+  "related_information",
+  "item",
+  "market_segment"
  ],
  "fields": [
   {
@@ -228,14 +242,6 @@
    "label": "\u7ed3\u7b97\u7c7b\u578b",
    "mandatory_depends_on": "eval: doc.type == 'OUT' || doc.type == 'DIRC'",
    "options": "Scale Type"
-  },
-  {
-   "allow_on_submit": 1,
-   "default": "0",
-   "fieldname": "send_to_supplier",
-   "fieldtype": "Check",
-   "hidden": 1,
-   "label": "\u5df2\u62a5\u7ed9\u4f9b\u5e94\u5546"
   },
   {
    "fieldname": "section_break_73rpu",
@@ -583,6 +589,7 @@
    "label": "\u8d9f\u8865\u5355\u4ef7"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "yayun_price",
    "fieldtype": "Float",
    "label": "\u62bc\u8fd0\u5355\u4ef7"
@@ -790,13 +797,104 @@
    "default": "0",
    "fieldname": "repeat",
    "fieldtype": "Check",
+   "in_standard_filter": 1,
    "label": "\u91cd\u65b0\u62a5\u53f7"
+  },
+  {
+   "allow_on_submit": 1,
+   "columns": 1,
+   "fieldname": "guahao",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "\u6302\u53f7"
+  },
+  {
+   "fieldname": "purchase_ship",
+   "fieldtype": "Tab Break",
+   "label": "\u91c7\u8d2d\u7269\u6d41\u4fe1\u606f"
+  },
+  {
+   "allow_on_submit": 1,
+   "fetch_from": "ship_plan.card_number",
+   "fieldname": "card_number",
+   "fieldtype": "Link",
+   "label": "\u63d0\u8d27\u5c0f\u5361\u53f7",
+   "options": "Ship Plan"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "plan_desc",
+   "fieldtype": "Data",
+   "label": "\u8ba1\u5212\u6982\u8981"
+  },
+  {
+   "fieldname": "sales_information",
+   "fieldtype": "Tab Break",
+   "label": "\u9500\u552e\u4fe1\u606f"
+  },
+  {
+   "fieldname": "fleet_information",
+   "fieldtype": "Tab Break",
+   "label": "\u8f66\u961f\u4fe1\u606f"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "id",
+   "fieldtype": "Link",
+   "label": "id",
+   "options": "Vehicle"
+  },
+  {
+   "fieldname": "baohao_information",
+   "fieldtype": "Tab Break",
+   "label": "\u62a5\u53f7\u4fe1\u606f"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "driver_id",
+   "fieldtype": "Data",
+   "label": "\u8eab\u4efd\u8bc1"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "yayun_cell_phone",
+   "fieldtype": "Data",
+   "label": "\u62bc\u8fd0\u5458\u7535\u8bdd"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "yayun_pid",
+   "fieldtype": "Data",
+   "label": "\u62bc\u8fd0\u8eab\u4efd\u8bc1"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "transport_license_number",
+   "fieldtype": "Data",
+   "label": "\u9053\u8def\u8fd0\u8f93\u8bb8\u53ef\u8bc1"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "license_number",
+   "fieldtype": "Data",
+   "label": "\u4ece\u4e1a\u8d44\u683c\u8bc1\u53f7"
+  },
+  {
+   "fieldname": "grain_price_parameters",
+   "fieldtype": "Tab Break",
+   "label": "\u7cae\u98df\u4ef7\u683c\u53ca\u53c2\u6570"
+  },
+  {
+   "fieldname": "related_information",
+   "fieldtype": "Tab Break",
+   "label": "\u5173\u8054\u4fe1\u606f"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-11 18:21:39.339498",
+ "modified": "2024-04-13 09:01:00.486587",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
