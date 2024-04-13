@@ -1,0 +1,111 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-04-12 22:51:18.850506",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "date",
+  "column_break_nkg5w",
+  "order_note",
+  "column_break_k7hut",
+  "supplier",
+  "column_break_od12j",
+  "type",
+  "section_break_6gq0j",
+  "vehicle_text",
+  "column_break_bmeqt",
+  "recognize",
+  "section_break_sezzn",
+  "items"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "\u65e5\u671f"
+  },
+  {
+   "fieldname": "column_break_nkg5w",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "order_note",
+   "fieldtype": "Data",
+   "label": "\u8ba2\u5355\u5907\u6ce8"
+  },
+  {
+   "fieldname": "column_break_k7hut",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "\u4f9b\u5e94\u5546",
+   "options": "Supplier"
+  },
+  {
+   "fieldname": "section_break_6gq0j",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "vehicle_text",
+   "fieldtype": "Text",
+   "label": "\u8f66\u53f7\u6587\u672c"
+  },
+  {
+   "fieldname": "column_break_bmeqt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "recognize",
+   "fieldtype": "Button",
+   "label": "\u8bc6\u522b"
+  },
+  {
+   "fieldname": "section_break_sezzn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "\u8f66\u53f7\u5217\u8868",
+   "options": "Scale List Items"
+  },
+  {
+   "fieldname": "column_break_od12j",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Link",
+   "label": "\u7c7b\u578b",
+   "options": "Ship Type"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-04-13 09:01:01.199494",
+ "modified_by": "Administrator",
+ "module": "Shipping Management",
+ "name": "Scale Item Creator",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
