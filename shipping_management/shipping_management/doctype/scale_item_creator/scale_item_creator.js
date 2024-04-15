@@ -7,7 +7,7 @@ frappe.ui.form.on('Scale Item Creator', {
 	// }
 	recognize: function (frm) {
 		frappe.call({
-			method: "ali_dashscope.ali_dashscope.dashscope.dashscope.recoginize_vehicle",
+			method: "shipping_management.shipping_management.doctype.scale_item_creator.scale_item_creator.recoginize_vehicle_alias",
 			args: {
 				text: frm.doc.vehicle_text
 			},
@@ -44,6 +44,9 @@ frappe.ui.form.on('Scale Item Creator', {
 							fieldtype: "Data",
 						},
 						{
+							fieldtype: "Column Break",
+						},
+						{
 							label: __("司机"),
 							fieldname: "driver",
 							fieldtype: "Data",
@@ -61,6 +64,10 @@ frappe.ui.form.on('Scale Item Creator', {
 							fieldtype: "Data",
 
 						},
+						//add a column break
+						{
+							fieldtype: "Column Break",
+						},
 						{
 							label: __("押运员"),
 							fieldname: "yayun",
@@ -76,6 +83,33 @@ frappe.ui.form.on('Scale Item Creator', {
 							label: __("押运手机号"),
 							fieldname: "yayun_cell_number",
 							fieldtype: "Data",
+						},
+						//section break
+						{
+							fieldtype: "Section Break",
+						},
+						{
+							label: __("道路运输许可证"),
+							fieldname: "transport_license_number",
+							fieldtype: "Data",
+						},
+						{
+							label: __("自重"),
+							fieldname: "zizhong",
+							fieldtype: "Data",
+						},
+						{
+							label: __("轴数"),
+							fieldname: "zhoushu",
+							fieldtype: "Data",
+						},
+						{
+							fieldtype:"Column Break"
+						},
+						{
+							label: __("识别文本"),
+							fieldname: "text",
+							fieldtype: "Small Text",
 						}
 					],
 					primary_action_label: __("保存"),
@@ -94,6 +128,8 @@ frappe.ui.form.on('Scale Item Creator', {
 								yayun: dialog.get_value("yayun"),
 								yayun_pid: dialog.get_value("yayun_pid"),
 								yayun_cell_number: dialog.get_value("yayun_cell_number"),
+								transport_license_number: dialog.get_value("transport_license_number"),
+								zizhong: dialog.get_value("zizhong"),
 								date: frm.doc.date,
 								type: frm.doc.type,
 							},
