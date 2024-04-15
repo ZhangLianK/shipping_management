@@ -496,10 +496,10 @@ class ScaleItem(Document):
 
 		#create notification sms
 		#first get driver phone number
-		if self.driver:
-			driver_doc = frappe.get_doc("Driver", self.driver)
-			if self.cell_number and driver_doc.recv_sms:
-				self.send_notification_sms()
+		# if self.driver:
+		# 	driver_doc = frappe.get_doc("Driver", self.driver)
+		# 	if self.cell_number and driver_doc.recv_sms:
+		# 		self.send_notification_sms()
 		
 		if self.purchase_order and self.target_weight:
 			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order,ignore_permissions=True)

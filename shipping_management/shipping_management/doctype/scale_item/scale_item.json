@@ -25,22 +25,21 @@
   "yayun",
   "column_break_zlxzc",
   "date",
-  "stock_date",
   "cell_number",
   "column_break_nzqdf",
   "company",
   "repeat",
   "section_break_73rpu",
   "column_break_oelmk",
-  "pot",
   "get_pot",
   "column_break_vcrf3",
   "target_weight",
   "column_break_goao4",
-  "price",
   "section_break_0bb8g",
   "column_break_rt7w0",
   "weight_list",
+  "column_break_kjm0m",
+  "section_break_mvhwj",
   "\u88c5\u8d27\u78c5\u5355_section",
   "section_break_sovad",
   "load_gross_weight",
@@ -53,32 +52,27 @@
   "load_image_upload",
   "load_image",
   "\u5378\u8f66\u78c5\u5355_section",
-  "offload_net_weight",
   "section_break_m2czl",
   "offload_gross_weight",
-  "offload_blank_weight",
-  "column_break_wjsze",
   "offload_gross_dt",
+  "column_break_olw5z",
+  "offload_blank_weight",
+  "offload_net_weight",
+  "stock_date",
+  "pot",
   "offload_blank_dt",
   "column_break_qmy9k",
   "offload_image_upload",
   "offload_image",
   "\u5173\u8054\u4fe1\u606f_tab",
-  "baohao_text",
   "column_break_n3j8m",
   "vehicle_plan",
   "transport_fee",
   "column_break_0pcxq",
-  "verification_code",
   "\u8d39\u7528\u8be6\u60c5_tab",
-  "from_dt",
   "start_img",
-  "to_dt",
   "end_img",
   "tangbu_price",
-  "yayunfee",
-  "fakuan",
-  "gaosufee",
   "\u7cae\u98df\u68c0\u9a8c\u53c2\u6570_tab",
   "price_ls",
   "column_break_deguh",
@@ -96,40 +90,80 @@
   "meibian",
   "amended_from",
   "purchase_ship",
-  "transporter",
-  "from_addr",
-  "to_addr",
-  "ship_plan",
   "purchase_order",
+  "column_break_0tukv",
   "purchase_receipt",
-  "stock_dt",
-  "card_number",
+  "section_break_lhvjz",
+  "section_break_uzxlf",
+  "ship_plan",
+  "section_break_nuzxq",
   "plan_desc",
+  "section_break_lcag6",
+  "card_number",
+  "section_break_xg2ur",
+  "transporter",
+  "section_break_rzrdg",
+  "section_break_4wxox",
+  "price",
+  "column_break_thtno",
+  "deduction_price",
+  "column_break_j4cdy",
+  "section_break_g02qp",
+  "from_addr",
+  "column_break_tr3jo",
+  "to_addr",
+  "stock_dt",
   "sales_information",
+  "supplier",
   "bill_type",
   "sales_order",
   "order_note",
   "sales_invoice",
   "delivery_note",
   "fleet_information",
-  "mileage_start",
-  "mileage_end",
-  "tangbu",
-  "fanfee",
-  "yayun_price",
+  "verification_code",
+  "column_break_ivrgd",
   "id",
+  "column_break_f0pyn",
+  "section_break_9aluy",
+  "from_dt",
+  "column_break_i8iiu",
+  "to_dt",
+  "section_break_5n6ns",
+  "mileage_start",
+  "column_break_hmggr",
+  "mileage_end",
+  "column_break_gayhh",
+  "section_break_rddg1",
+  "tangbu",
+  "column_break_wnhhq",
+  "fanfee",
+  "column_break_dzvf7",
+  "section_break_6szkf",
+  "yayun_price",
+  "column_break_jh5ps",
+  "yayunfee",
+  "column_break_ctwth",
+  "section_break_4qg2a",
+  "fakuan",
+  "column_break_4ofvb",
+  "gaosufee",
+  "column_break_eod90",
+  "section_break_7be8n",
   "baohao_information",
   "driver_id",
   "yayun_cell_phone",
   "yayun_pid",
   "transport_license_number",
   "license_number",
+  "zhoushu",
   "grain_price_parameters",
   "beizhu",
   "koukuan",
   "related_information",
   "item",
-  "market_segment"
+  "market_segment",
+  "baohao_text"
  ],
  "fields": [
   {
@@ -195,11 +229,10 @@
    "allow_on_submit": 1,
    "columns": 1,
    "fieldname": "driver",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "\u53f8\u673a",
-   "options": "Driver"
+   "label": "\u53f8\u673a"
   },
   {
    "fieldname": "column_break_zlxzc",
@@ -296,7 +329,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "from_addr",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "\u63d0\u8d27\u5730"
@@ -317,7 +350,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "to_addr",
-   "fieldtype": "Small Text",
+   "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "\u9001\u8d27\u5730"
@@ -330,7 +363,7 @@
   {
    "fieldname": "\u88c5\u8d27\u78c5\u5355_section",
    "fieldtype": "Section Break",
-   "label": "\u88c5\u8d27\u78c5\u5355"
+   "label": "\u88c5\u8f66\u78c5\u5355"
   },
   {
    "allow_on_submit": 1,
@@ -423,6 +456,7 @@
    "allow_on_submit": 1,
    "fieldname": "transport_fee",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "\u8fd0\u8d39\u5355"
   },
   {
@@ -490,10 +524,6 @@
   {
    "fieldname": "section_break_m2czl",
    "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "column_break_wjsze",
-   "fieldtype": "Column Break"
   },
   {
    "allow_on_submit": 1,
@@ -586,6 +616,7 @@
   {
    "fieldname": "tangbu_price",
    "fieldtype": "Float",
+   "hidden": 1,
    "label": "\u8d9f\u8865\u5355\u4ef7"
   },
   {
@@ -597,7 +628,7 @@
   {
    "allow_on_submit": 1,
    "fieldname": "fanfee",
-   "fieldtype": "Float",
+   "fieldtype": "Data",
    "label": "\u996d\u8d39"
   },
   {
@@ -616,12 +647,14 @@
    "allow_on_submit": 1,
    "fieldname": "end_img",
    "fieldtype": "Attach Image",
+   "hidden": 1,
    "label": "\u91cc\u7a0b\u8868\u7ed3\u675f\u7167\u7247"
   },
   {
    "allow_on_submit": 1,
    "fieldname": "start_img",
    "fieldtype": "Attach Image",
+   "hidden": 1,
    "label": "\u91cc\u7a0b\u8868\u5f00\u59cb\u7167\u7247"
   },
   {
@@ -753,6 +786,7 @@
    "allow_on_submit": 1,
    "fieldname": "stock_dt",
    "fieldtype": "Datetime",
+   "in_list_view": 1,
    "label": "\u5165\u51fa\u5e93\u65f6\u95f4",
    "read_only": 1
   },
@@ -773,9 +807,8 @@
   {
    "allow_on_submit": 1,
    "fieldname": "yayun",
-   "fieldtype": "Link",
-   "label": "\u62bc\u8fd0\u5458",
-   "options": "Yayun"
+   "fieldtype": "Data",
+   "label": "\u62bc\u8fd0\u5458"
   },
   {
    "allow_on_submit": 1,
@@ -788,6 +821,7 @@
    "allow_on_submit": 1,
    "fieldname": "vehicle_plan",
    "fieldtype": "Link",
+   "hidden": 1,
    "in_standard_filter": 1,
    "label": "\u6d3e\u8f66\u8ba1\u5212",
    "options": "Vehicle Plan Item"
@@ -889,12 +923,158 @@
    "fieldname": "related_information",
    "fieldtype": "Tab Break",
    "label": "\u5173\u8054\u4fe1\u606f"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "deduction_price",
+   "fieldtype": "Data",
+   "label": "\u6263\u6b3e\u5355\u4ef7"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "supplier",
+   "fieldtype": "Data",
+   "label": "\u4f9b\u5e94\u5546"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "zhoushu",
+   "fieldtype": "Data",
+   "label": "\u8f74\u6570"
+  },
+  {
+   "fieldname": "section_break_lhvjz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_0tukv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_uzxlf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_nuzxq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_rzrdg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_4wxox",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_lcag6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_xg2ur",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_thtno",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_j4cdy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_g02qp",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_tr3jo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ivrgd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_f0pyn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_9aluy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_i8iiu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_5n6ns",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_hmggr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_gayhh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_rddg1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_wnhhq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_dzvf7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_6szkf",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_jh5ps",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_ctwth",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_4qg2a",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_4ofvb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_eod90",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_7be8n",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_kjm0m",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_mvhwj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_olw5z",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-13 09:01:00.486587",
+ "modified": "2024-04-15 16:44:13.836175",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
