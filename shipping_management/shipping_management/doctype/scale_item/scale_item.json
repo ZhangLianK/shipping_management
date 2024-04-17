@@ -24,24 +24,20 @@
   "naming_series",
   "column_break_gr1aw",
   "section_break_glkhr",
-  "vehicle_selector",
   "vehicle",
   "section_break_f3kte",
-  "target_weight",
   "guahao",
-  "section_break_spdq4",
-  "column_break_wwan6",
+  "column_break_d9xxu",
+  "target_weight",
+  "section_break_r7wiz",
   "driver",
-  "yayun",
-  "column_break_zlxzc",
+  "column_break_3on9p",
   "cell_number",
-  "column_break_nzqdf",
-  "section_break_73rpu",
-  "column_break_oelmk",
+  "column_break_e41gf",
+  "yayun",
+  "column_break_doiia",
+  "vehicle_selector",
   "get_pot",
-  "column_break_goao4",
-  "section_break_0bb8g",
-  "column_break_rt7w0",
   "weight_list",
   "pot",
   "column_break_rwvo0",
@@ -137,9 +133,7 @@
   "id",
   "column_break_f0pyn",
   "section_break_9aluy",
-  "from_dt",
   "column_break_i8iiu",
-  "to_dt",
   "section_break_5n6ns",
   "mileage_start",
   "column_break_hmggr",
@@ -150,17 +144,17 @@
   "column_break_wnhhq",
   "fanfee",
   "column_break_dzvf7",
-  "section_break_6szkf",
   "yayun_price",
-  "column_break_jh5ps",
+  "section_break_g8nhc",
   "yayunfee",
   "column_break_ctwth",
-  "section_break_4qg2a",
   "fakuan",
   "column_break_4ofvb",
   "gaosufee",
-  "column_break_eod90",
-  "section_break_7be8n",
+  "column_break_gdsym",
+  "from_dt",
+  "column_break_cswdr",
+  "to_dt",
   "baohao_information",
   "driver_id",
   "yayun_cell_phone",
@@ -233,15 +227,12 @@
   {
    "allow_on_submit": 1,
    "columns": 1,
+   "fetch_from": "id.id",
    "fieldname": "driver",
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "\u53f8\u673a"
-  },
-  {
-   "fieldname": "column_break_zlxzc",
-   "fieldtype": "Column Break"
   },
   {
    "allow_on_submit": 1,
@@ -282,10 +273,6 @@
    "options": "Scale Type"
   },
   {
-   "fieldname": "section_break_73rpu",
-   "fieldtype": "Section Break"
-  },
-  {
    "allow_on_submit": 1,
    "columns": 1,
    "fieldname": "item",
@@ -294,10 +281,6 @@
    "in_standard_filter": 1,
    "label": "\u7269\u6599",
    "options": "Item"
-  },
-  {
-   "fieldname": "column_break_oelmk",
-   "fieldtype": "Column Break"
   },
   {
    "allow_on_submit": 1,
@@ -325,10 +308,6 @@
    "mandatory_depends_on": "eval: doc.market_segment == '\u6210\u54c1\u6cb9'"
   },
   {
-   "fieldname": "section_break_0bb8g",
-   "fieldtype": "Section Break"
-  },
-  {
    "allow_on_submit": 1,
    "fieldname": "from_addr",
    "fieldtype": "Data",
@@ -344,10 +323,6 @@
    "options": "Scale Item",
    "print_hide": 1,
    "read_only": 1
-  },
-  {
-   "fieldname": "column_break_rt7w0",
-   "fieldtype": "Column Break"
   },
   {
    "allow_on_submit": 1,
@@ -538,10 +513,6 @@
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
   {
-   "fieldname": "column_break_goao4",
-   "fieldtype": "Column Break"
-  },
-  {
    "allow_on_submit": 1,
    "fieldname": "price",
    "fieldtype": "Float",
@@ -676,6 +647,7 @@
   {
    "fieldname": "vehicle_selector",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "\u9009\u62e9\u8f66\u8f86",
    "options": "Vehicle"
   },
@@ -749,10 +721,6 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "\u5165\u51fa\u5e93\u8fc7\u78c5\u65e5\u671f"
-  },
-  {
-   "fieldname": "column_break_nzqdf",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "column_break_wjmet",
@@ -871,6 +839,7 @@
   },
   {
    "allow_on_submit": 1,
+   "fetch_from": "vehicle_selector.id",
    "fieldname": "id",
    "fieldtype": "Link",
    "label": "id",
@@ -1026,32 +995,12 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "section_break_6szkf",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "column_break_jh5ps",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "column_break_ctwth",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "section_break_4qg2a",
-   "fieldtype": "Section Break"
-  },
-  {
    "fieldname": "column_break_4ofvb",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_eod90",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "section_break_7be8n",
-   "fieldtype": "Section Break"
   },
   {
    "fieldname": "column_break_kjm0m",
@@ -1082,10 +1031,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "column_break_wwan6",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "section_break_mbcwc",
    "fieldtype": "Column Break"
   },
@@ -1102,10 +1047,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "section_break_spdq4",
-   "fieldtype": "Section Break"
-  },
-  {
    "fieldname": "section_break_63sht",
    "fieldtype": "Section Break"
   },
@@ -1116,12 +1057,44 @@
   {
    "fieldname": "column_break_xphof",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_d9xxu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_r7wiz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_3on9p",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_e41gf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_g8nhc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_gdsym",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_cswdr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_doiia",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-16 16:08:40.127614",
+ "modified": "2024-04-17 10:38:43.286711",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
