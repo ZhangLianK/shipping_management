@@ -40,7 +40,7 @@ def get_scale_list_items():
 		a.item, 
 		a.vehicle,
 		a.repeat,
-		a.target_weight as qty,
+		a.target_weight,
 		m.driver,
 		m.driver_id,
 		m.phone,
