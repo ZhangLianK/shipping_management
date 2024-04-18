@@ -227,7 +227,6 @@
   {
    "allow_on_submit": 1,
    "columns": 1,
-   "fetch_from": "id.id",
    "fieldname": "driver",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -248,6 +247,7 @@
   },
   {
    "allow_on_submit": 1,
+   "fetch_from": "vehicle_plan.transporter",
    "fieldname": "transporter",
    "fieldtype": "Link",
    "in_standard_filter": 1,
@@ -1084,20 +1084,18 @@
   {
    "fieldname": "column_break_doiia",
    "fieldtype": "Section Break"
-
   },
   {
    "allow_on_submit": 1,
    "fieldname": "zizhong",
    "fieldtype": "Data",
    "label": "\u81ea\u91cd"
-
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-18 08:36:43.142423",
+ "modified": "2024-04-18 13:45:02.586109",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",

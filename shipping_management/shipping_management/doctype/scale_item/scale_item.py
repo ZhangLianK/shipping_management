@@ -298,6 +298,10 @@ class ScaleItem(Document):
 			old_vehicle_plan_item.assigned_qty = old_vehicle_plan_item.assigned_qty - old_target_weight
 			old_vehicle_plan_item.save(ignore_permissions=True)
 
+		if self.ship_plan and old_doc.ship_plan and self.ship_plan != old_doc.ship_plan and self.vehicle_plan:
+			old_ship_plan_item = frappe.get_doc("Ship Plan Item", old_doc.ship_plan,ignore_permissions=True)
+			old_ship_plan_item.assigned_qty = old_ship_plan_item.assigned_qty - old_target_weight
+			old_ship_plan_item.save(ignore_permissions=True)
 	def before_validate(self):
 		#check the self.vehicle and remove all spaces in the field
 		if self.vehicle:
