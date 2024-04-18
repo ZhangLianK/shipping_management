@@ -163,7 +163,6 @@
   "yayun_pid",
   "zhoushu",
   "zizhong",
-  "grain_price_parameters",
   "related_information",
   "item",
   "market_segment",
@@ -882,11 +881,6 @@
    "label": "\u4ece\u4e1a\u8d44\u683c\u8bc1\u53f7"
   },
   {
-   "fieldname": "grain_price_parameters",
-   "fieldtype": "Tab Break",
-   "label": "\u7cae\u98df\u4ef7\u683c\u53ca\u53c2\u6570"
-  },
-  {
    "fieldname": "related_information",
    "fieldtype": "Tab Break",
    "label": "\u5173\u8054\u4fe1\u606f"
@@ -1103,9 +1097,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
-
- "modified": "2024-04-17 15:06:43.362609",
-
+ "modified": "2024-04-18 08:36:43.142423",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
