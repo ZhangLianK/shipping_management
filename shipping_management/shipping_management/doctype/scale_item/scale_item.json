@@ -228,6 +228,7 @@
   {
    "allow_on_submit": 1,
    "columns": 1,
+   "fetch_from": "id.id",
    "fieldname": "driver",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -857,7 +858,7 @@
    "label": "\u8eab\u4efd\u8bc1"
   },
   {
-   "allow_on_submit": 1,
+   "allow_on_submit": 1,Develop
    "fieldname": "yayun_cell_phone",
    "fieldtype": "Data",
    "label": "\u62bc\u8fd0\u5458\u7535\u8bdd"
@@ -1089,18 +1090,22 @@
   {
    "fieldname": "column_break_doiia",
    "fieldtype": "Section Break"
+
   },
   {
    "allow_on_submit": 1,
    "fieldname": "zizhong",
    "fieldtype": "Data",
    "label": "\u81ea\u91cd"
+
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
+
  "modified": "2024-04-17 15:06:43.362609",
+
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
