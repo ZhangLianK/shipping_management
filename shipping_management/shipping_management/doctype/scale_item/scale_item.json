@@ -102,11 +102,11 @@
   "section_break_uzxlf",
   "ship_plan",
   "column_break_t8bm8",
-  "vehicle_plan",
+  "card_number",
   "column_break_mwx0k",
   "plan_desc",
   "section_break_lcag6",
-  "card_number",
+  "vehicle_plan",
   "section_break_xg2ur",
   "transporter",
   "section_break_rzrdg",
@@ -157,11 +157,12 @@
   "to_dt",
   "baohao_information",
   "driver_id",
-  "yayun_cell_phone",
-  "yayun_pid",
   "transport_license_number",
   "license_number",
+  "yayun_cell_phone",
+  "yayun_pid",
   "zhoushu",
+  "zizhong",
   "grain_price_parameters",
   "related_information",
   "item",
@@ -841,7 +842,7 @@
    "allow_on_submit": 1,
    "fetch_from": "vehicle_selector.id",
    "fieldname": "id",
-   "fieldtype": "Link",
+   "fieldtype": "Data",
    "label": "id",
    "options": "Vehicle"
   },
@@ -857,7 +858,7 @@
    "label": "\u8eab\u4efd\u8bc1"
   },
   {
-   "allow_on_submit": 1,
+   "allow_on_submit": 1,Develop
    "fieldname": "yayun_cell_phone",
    "fieldtype": "Data",
    "label": "\u62bc\u8fd0\u5458\u7535\u8bdd"
@@ -1089,12 +1090,22 @@
   {
    "fieldname": "column_break_doiia",
    "fieldtype": "Section Break"
+
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "zizhong",
+   "fieldtype": "Data",
+   "label": "\u81ea\u91cd"
+
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-17 10:38:43.286711",
+
+ "modified": "2024-04-17 15:06:43.362609",
+
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
