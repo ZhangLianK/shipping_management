@@ -153,7 +153,7 @@ frappe.ui.form.on('Serial Port Reader', {
                             // Prepare your HTML content with real data
                             let html_content = template.template_html.replace('${no}', 
                                     doc.scale_item.slice(1,5) +'-' +doc.scale_item.slice(8,12) ).replace('${date}', 
-                                        get_today()).replace('${v1}',
+                                        doc.gross_dt).replace('${v1}',
                                         template.v1).replace('${ve}',
                                         doc.vehicle).replace('${gr}',
                                         doc.gross_weight).replace('${bl}',
