@@ -86,7 +86,6 @@ class ScaleItem(Document):
 		)
 
 		if bypass_credit_limit_check_at_sales_order:
-
 			validate_against_credit_limit = True
 			extra_amount = total_qty_vehicle / sales_order_doc.total_qty * sales_order_doc.grand_total
 
@@ -298,6 +297,10 @@ class ScaleItem(Document):
 			old_vehicle_plan_item.assigned_qty = old_vehicle_plan_item.assigned_qty - old_target_weight
 			old_vehicle_plan_item.save(ignore_permissions=True)
 
+		if self.ship_plan and old_doc.ship_plan and self.ship_plan != old_doc.ship_plan and self.vehicle_plan:
+			old_ship_plan_item = frappe.get_doc("Ship Plan Item", old_doc.ship_plan,ignore_permissions=True)
+			old_ship_plan_item.assigned_qty = old_ship_plan_item.assigned_qty - old_target_weight
+			old_ship_plan_item.save(ignore_permissions=True)
 	def before_validate(self):
 		#check the self.vehicle and remove all spaces in the field
 		if self.vehicle:
@@ -496,10 +499,10 @@ class ScaleItem(Document):
 
 		#create notification sms
 		#first get driver phone number
-		if self.driver:
-			driver_doc = frappe.get_doc("Driver", self.driver)
-			if self.cell_number and driver_doc.recv_sms:
-				self.send_notification_sms()
+		# if self.driver:
+		# 	driver_doc = frappe.get_doc("Driver", self.driver)
+		# 	if self.cell_number and driver_doc.recv_sms:
+		# 		self.send_notification_sms()
 		
 		if self.purchase_order and self.target_weight:
 			purchase_order = frappe.get_doc("Purchase Order", self.purchase_order,ignore_permissions=True)
@@ -520,28 +523,6 @@ class ScaleItem(Document):
 			vehicle_plan_item = frappe.get_doc("Vehicle Plan Item", self.vehicle_plan,ignore_permissions=True)
 			vehicle_plan_item.assigned_qty = vehicle_plan_item.assigned_qty + self.target_weight
 			vehicle_plan_item.save(ignore_permissions=True)
-
-		if self.vehicle:
-			#check if the vehicle is exist in the vehicle master
-			if not frappe.db.exists("Vehicle", self.vehicle):
-			#try:
-			#	vehicle_doc = frappe.get_doc("Vehicle", self.vehicle,ignore_permissions=True)
-			#except:
-				#create new vehicle
-				vehicle_doc = frappe.new_doc("Vehicle")
-				vehicle_doc.license_plate = self.vehicle
-				vehicle_doc.make = "未知"
-				vehicle_doc.model = "未知"
-				vehicle_doc.last_odometer = 0
-				vehicle_doc.uom = "Litre"
-				vehicle_doc.fuel_type = "Diesel"
-				vehicle_doc.company = None
-				vehicle_doc.insert(
-					ignore_permissions=True, # ignore write permissions during insert
-					ignore_links=True, # ignore Link validation in the document
-					ignore_if_duplicate=True, # dont insert if DuplicateEntryError is thrown
-					ignore_mandatory=True) # insert even if mandatory fields are not set
-				vehicle_doc.db_set('company', None)
 	
 	def on_cancel(self):
 		self.cancel_vehicle_in_process()
