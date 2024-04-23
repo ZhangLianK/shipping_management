@@ -19,7 +19,8 @@
   "zhoushu",
   "yayun",
   "yayun_pid",
-  "yayun_cell_phone"
+  "yayun_cell_phone",
+  "zizhong"
  ],
  "fields": [
   {
@@ -110,12 +111,17 @@
    "fieldname": "yayun_cell_phone",
    "fieldtype": "Data",
    "label": "\u62bc\u8fd0\u5458\u7535\u8bdd"
+  },
+  {
+   "fieldname": "zizhong",
+   "fieldtype": "Float",
+   "label": "\u81ea\u91cd"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-04-11 20:00:44.453324",
+ "modified": "2024-04-14 20:41:37.401372",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale List Items",

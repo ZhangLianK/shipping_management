@@ -45,20 +45,20 @@
   "column_break_kjm0m",
   "section_break_mvhwj",
   "\u88c5\u8d27\u78c5\u5355_section",
-  "section_break_sovad",
+  "load_net_weight",
+  "section_break_x9s5i",
   "load_gross_weight",
   "load_blank_weight",
-  "load_net_weight",
-  "column_break_cl0hp",
+  "column_break_ywsne",
   "load_gross_dt",
   "load_blank_dt",
-  "column_break_ltsmb",
+  "column_break_dzzt2",
   "load_image_upload",
   "load_image",
   "\u5378\u8f66\u78c5\u5355_section",
-  "section_break_m2czl",
-  "offload_gross_weight",
   "offload_net_weight",
+  "section_break_gja9n",
+  "offload_gross_weight",
   "offload_blank_weight",
   "column_break_1pxia",
   "offload_gross_dt",
@@ -365,10 +365,6 @@
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
   },
   {
-   "fieldname": "column_break_cl0hp",
-   "fieldtype": "Column Break"
-  },
-  {
    "allow_on_submit": 1,
    "fieldname": "load_image_upload",
    "fieldtype": "Attach Image",
@@ -473,10 +469,6 @@
    "options": "Sales Invoice"
   },
   {
-   "fieldname": "section_break_sovad",
-   "fieldtype": "Section Break"
-  },
-  {
    "allow_on_submit": 1,
    "fieldname": "load_gross_dt",
    "fieldtype": "Datetime",
@@ -489,14 +481,6 @@
    "fieldtype": "Datetime",
    "label": "\u7a7a\u91cd\u65f6\u95f4",
    "read_only_depends_on": "eval:\ndoc.status == '6 \u5df2\u5b8c\u6210' || doc.status == '9 \u5df2\u53d6\u6d88';"
-  },
-  {
-   "fieldname": "column_break_ltsmb",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "section_break_m2czl",
-   "fieldtype": "Section Break"
   },
   {
    "allow_on_submit": 1,
@@ -1090,12 +1074,28 @@
    "fieldname": "zizhong",
    "fieldtype": "Data",
    "label": "\u81ea\u91cd"
+  },
+  {
+   "fieldname": "section_break_x9s5i",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_ywsne",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_dzzt2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_gja9n",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-04-18 13:45:02.586109",
+ "modified": "2024-04-23 11:26:50.183615",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item",
