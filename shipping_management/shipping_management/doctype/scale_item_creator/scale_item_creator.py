@@ -14,6 +14,7 @@ def create_scale_item():
 	args = frappe.form_dict
 	#create scale items from the args
 	doc = frappe.new_doc("Scale Item")
+	print(args)	
 	doc.update(args)
 	doc.save()
 	return doc
@@ -38,7 +39,7 @@ def recoginize_vehicle_alias(text):
 		  	"guahao": plate_number["guahao"],
 			"driver": driver["name"],
 			"cell_number": driver["cell_number"],
-			"pid": driver["pid"],
+			"driver_id": driver["driver_id"],
 			"yayun": yayun["yayun"],
 			"yayun_pid": yayun["yayun_pid"],
 			"yayun_cell_number": yayun["yayun_cell_number"],
@@ -92,40 +93,48 @@ def find_driver_info(text):
 			cell_number = matchs[0][1]
 		elif len(matchs[0][2]) == 11:
 			cell_number = matchs[0][2]
+		else:
+			cell_number = ""
 		
 		if len(matchs[0][1]) == 18:
 			pid = matchs[0][1]
 		elif len(matchs[0][2]) == 18:
 			pid = matchs[0][2]
-		return {"name": matchs[0][0], "cell_number": cell_number, "pid": pid}
+		else:
+			pid = ""
+		return {"name": matchs[0][0], "cell_number": cell_number, "driver_id": pid}
 	else:
 		# 如果没有找到匹配项，单独匹配身份证号 返回第一个符合条件的
 		pattern = r"(\d{17}[Xx]|\d{18})"
 		matchs = re.findall(pattern, text)
 		if matchs:
-			pid = matchs[0]
+			driver_id = matchs[0]
 			#using pid to find the driver name and cell number from latest scale item with same pid
-			scale_doc = frappe.get_last_doc("Scale Item", filters={"pid": pid})
+			try:
+				scale_doc = frappe.get_last_doc("Scale Item", filters={"driver_id": driver_id})
+			except:
+				scale_doc = None
 			if scale_doc:
-				if text.includes(scale_doc.driver):
+				if text.find(scale_doc.driver) != -1:
 					driver = scale_doc.driver
 				else:
 					driver = ""
 				
-				if text.includes(scale_doc.cell_number):
+				if text.find(scale_doc.cell_number) != -1:
 					cell_number = scale_doc.cell_number
 				else:
 					cell_number = ""
 				
-				return {"name": driver, "cell_number": cell_number, "pid": pid}
+				return {"name": driver, "cell_number": cell_number, "driver_id": driver_id}
 
   
-		return {"name": "", "cell_number": "", "pid": ""}
+		return {"name": "", "cell_number": "", "driver_id": ""}
 	
 def find_yayun_info(text):
 	# 正则表达式匹配规则
 	# 押关键字后可能有任意非关键信息字符，直到遇到姓名（2到4个汉字）
 	# 然后跳过任意非数字字符，匹配18位身份证号和11位手机号
+	yayun_pid = ""
 	pattern = r"押.*?([\u4e00-\u9fa5]{2,4}).*?(\d+[Xx]|\d+).*?(\d+[Xx]|\d+)"
 	
 	# 搜索文本
@@ -137,15 +146,42 @@ def find_yayun_info(text):
 			cell_number = matchs[0][1]
 		elif len(matchs[0][2]) == 11:
 			cell_number = matchs[0][2]
+		else:
+			cell_number = ""
 		
 		if len(matchs[0][1]) == 18:
 			pid = matchs[0][1]
 		elif len(matchs[0][2]) == 18:
 			pid = matchs[0][2]
+		else:
+			pid = ""
 		return {"yayun": matchs[0][0], "yayun_cell_number": cell_number, "yayun_pid": pid}
 	else:
-		# 如果没有找到匹配项，返回None
-		return {"yayun": "", "yayun_cell_number": "", "yayun_pid": ""}
+		# 如果没有找到匹配项，单独匹配身份证号
+		pattern = r"(\d{17}[Xx]|\d{18})"
+		matchs = re.findall(pattern, text)
+		print(matchs)
+		if matchs.__len__() == 2:
+			yayun_pid = matchs[1]
+			#using pid to find the yayun name and cell number from latest scale item with same pid
+			try:
+				scale_doc = frappe.get_last_doc("Scale Item", filters={"yayun_pid": yayun_pid})
+			except:
+				scale_doc = None
+			if scale_doc:
+				if text.find(scale_doc.yayun) != -1:
+					yayun = scale_doc.yayun
+				else:
+					yayun = ""
+				
+				if text.find(scale_doc.yayun_cell_number) != -1:
+					yayun_cell_number = scale_doc.yayun_cell_number
+				else:
+					yayun_cell_number = ""
+				
+				return {"yayun": yayun, "yayun_cell_number": yayun_cell_number, "yayun_pid": yayun_pid}
+			
+		return {"yayun": "", "yayun_cell_number": "", "yayun_pid": yayun_pid if yayun_pid else ""}
 
 def find_transport_license_number(text):
 	# 正则表达式匹配规则
@@ -226,11 +262,12 @@ def preprocess_text(text):
 	text = text.replace("电话", "|")
 	text = text.replace("联系", "|")
 	text = text.replace("身份证", "|")
-	text = text.replace("\n", "")
+	text = text.replace("\n", "|")
 	text = text.replace("：", "")
 	text = text.replace(":", "")
 	text = text.replace("驾驶员", "司机").replace("提货人", "司机")
 	text = text.replace("号", "")  # 这里添加去除‘号’
+	text = text.replace("压", "押")
 	text = text.replace("押运员", "押")
 	text = text.replace("押运", "押")
 	text = text.replace("车辆", "押")

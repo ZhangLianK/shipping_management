@@ -14,15 +14,19 @@
   "supplier",
   "column_break_od12j",
   "type",
+  "column_break_jg01u",
+  "item",
   "section_break_6gq0j",
   "vehicle_text",
   "column_break_bmeqt",
   "recognize",
+  "refresh_list",
   "section_break_sezzn",
   "items"
  ],
  "fields": [
   {
+   "default": "Today",
    "fieldname": "date",
    "fieldtype": "Date",
    "label": "\u65e5\u671f"
@@ -83,12 +87,28 @@
    "fieldtype": "Link",
    "label": "\u7c7b\u578b",
    "options": "Ship Type"
+  },
+  {
+   "fieldname": "column_break_jg01u",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "\u54c1\u540d",
+   "options": "Item"
+  },
+  {
+   "fieldname": "refresh_list",
+   "fieldtype": "Button",
+   "label": "\u5237\u65b0"
   }
  ],
+ "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-04-13 09:01:01.199494",
+ "modified": "2024-04-17 16:17:37.674311",
  "modified_by": "Administrator",
  "module": "Shipping Management",
  "name": "Scale Item Creator",
